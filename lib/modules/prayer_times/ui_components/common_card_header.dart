@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 
 class CommonCardHeader extends StatefulWidget {
   const CommonCardHeader({Key? key}) : super(key: key);
@@ -10,10 +12,11 @@ class CommonCardHeader extends StatefulWidget {
 class _CommonCardHeaderState extends State<CommonCardHeader> {
   @override
   Widget build(BuildContext context) {
+    var t = AppLocalizations.of(context);
     return Column(
       children: <Widget>[
           Text(
-            "Monday\n02 February 2022",
+            "${t!.monday}\n02 February 2022",
             textAlign: TextAlign.center,
             style: Theme.of(context).textTheme.headline5,
           ),
