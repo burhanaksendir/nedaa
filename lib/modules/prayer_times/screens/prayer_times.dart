@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:iathan/widgets/prayer_times_card.dart';
+import 'package:iathan/modules/prayer_times/ui_components/main_prayer_card.dart';
+import 'package:iathan/modules/prayer_times/ui_components/today_prayers_card.dart';
+import 'package:page_view_indicators/animated_circle_page_indicator.dart';
 
 class PrayerTimes extends StatefulWidget {
   const PrayerTimes({Key? key}) : super(key: key);
@@ -9,6 +11,7 @@ class PrayerTimes extends StatefulWidget {
 }
 
 class _PrayerTimesState extends State<PrayerTimes> {
+  final _currentPageNotifier = ValueNotifier<int>(0);
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -18,60 +21,33 @@ class _PrayerTimesState extends State<PrayerTimes> {
             itemBuilder: (context, index) {
               switch (index) {
                 case 0:
-                  return PrayerTimesCard(
-                    child: Column(
-                      children: [
-                        Text(
-                          "Monday\n02 February 2022",
-                          textAlign: TextAlign.center,
-                          style: Theme.of(context).textTheme.headline5,
-                        ),
-                        const SizedBox(height: 20),
-                        Text(
-                          "Kuala Lumpur",
-                          style: Theme.of(context).textTheme.headline5,
-                        ),
-                        const Divider(
-                          thickness: 1,
-                          height: 108,
-                          color: Colors.black,
-                        ),
-                        Text(
-                          "Fajr",
-                          style: Theme.of(context).textTheme.headline4,
-                        ),
-                        const SizedBox(height: 16),
-                        Text(
-                          "in",
-                          style: Theme.of(context).textTheme.headline5,
-                        ),
-                        const SizedBox(height: 16),
-                        Text(
-                          "1:00:00",
-                          style: Theme.of(context).textTheme.headline4,
-                        ),
-                        const SizedBox(height: 16),
-                        Text(
-                          "6:00 am",
-                          style: Theme.of(context).textTheme.headline4,
-                        ),
-                      ],
-                    ),
-                  );
+                  return const MainPrayerCard();
                 case 1:
-                  return PrayerTimesCard(
-                    child: Container(
-                      color: Colors.green,
-                    ),
-                  );
+                  return const TodayPrayersCard();
                 default:
                   throw Exception('Invalid index');
               }
             },
             itemCount: 2,
+            onPageChanged: (int index) {
+              _currentPageNotifier.value = index;
+            },
           ),
         ),
-        // TODO: add page indicator
+        Padding(
+          padding: const EdgeInsets.only(bottom: 16),
+          child: AnimatedCirclePageIndicator(
+            itemCount: 2,
+            currentPageNotifier: _currentPageNotifier,
+            borderWidth: 1,
+            spacing: 6,
+            radius: 8,
+            activeRadius: 6,
+            borderColor: Colors.black,
+            fillColor: Colors.white,
+            activeColor: Colors.grey,
+          ),
+        ),
       ],
     );
   }
