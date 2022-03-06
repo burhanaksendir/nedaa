@@ -19,7 +19,7 @@ class _MainPrayerCardState extends State<MainPrayerCard> {
           const CommonCardHeader(),
           Text(
             "Fajr",
-            style: Theme.of(context).textTheme.headline4,
+            style: Theme.of(context).textTheme.headline5,
           ),
           const SizedBox(height: 16),
           Text(
@@ -29,12 +29,12 @@ class _MainPrayerCardState extends State<MainPrayerCard> {
           const SizedBox(height: 16),
           Text(
             "1:00:00",
-            style: Theme.of(context).textTheme.headline4,
+            style: Theme.of(context).textTheme.headline5,
           ),
           const SizedBox(height: 16),
           Text(
             "6:00 am",
-            style: Theme.of(context).textTheme.headline4,
+            style: Theme.of(context).textTheme.headline5,
           ),
         ],
       ),
