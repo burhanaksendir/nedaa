@@ -43,6 +43,7 @@ dependencies:
   csc_picker: ^0.2.6
   geolocator: ^8.2.0
   geocoding: ^2.0.2
+  audioplayers: ^0.20.1
 
 dev_dependencies:
   flutter_test:
@@ -66,6 +67,9 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+
+  assets:
+    - assets/knock.mp3
 
   # To add assets to your application, add an assets section, like this:
   # assets:
