@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:iathan/modules/settings/screens/settings.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../modules/prayer_times/screens/prayer_times.dart';
 
 class MainScreen extends StatefulWidget {
@@ -26,6 +26,7 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var t = AppLocalizations.of(context);
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -33,14 +34,14 @@ class _MainScreenState extends State<MainScreen> {
         ),
         body: _getCurrentScreen(),
         bottomNavigationBar: BottomNavigationBar(
-          items: const [
+          items: [
             BottomNavigationBarItem(
-              icon: Icon(Icons.home),
-              label: "Home",
+              icon: const Icon(Icons.home),
+              label: t!.homePage,
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.settings),
-              label: "Settings",
+              icon: const Icon(Icons.settings),
+              label: t.settings,
             ),
           ],
           onTap: (index) {

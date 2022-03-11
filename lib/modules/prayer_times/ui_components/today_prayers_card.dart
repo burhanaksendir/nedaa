@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../../widgets/prayer_times_card.dart';
 import 'common_card_header.dart';
 
@@ -35,6 +35,7 @@ class _TodayPrayersCardState extends State<TodayPrayersCard> {
 
   @override
   Widget build(BuildContext context) {
+    var t = AppLocalizations.of(context);
     return PrayerTimesCard(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -42,12 +43,12 @@ class _TodayPrayersCardState extends State<TodayPrayersCard> {
           const CommonCardHeader(),
 
           //TODO: Add Prayer Times
-          _buildPrayerRow('Fajr', '5:00 AM'),
-          _buildPrayerRow("Sunrise", "7:00 AM"),
-          _buildPrayerRow('Dhuhr', '12:00 PM'),
-          _buildPrayerRow('Asr', '3:00 PM'),
-          _buildPrayerRow('Maghrib', '6:00 PM'),
-          _buildPrayerRow('Isha', '9:00 PM'),
+          _buildPrayerRow(t!.fajr, '5:00 AM'),
+          _buildPrayerRow(t.sunrise, "7:00 AM"),
+          _buildPrayerRow(t.duhur, '12:00 PM'),
+          _buildPrayerRow(t.asr, '3:00 PM'),
+          _buildPrayerRow(t.maghrib, '6:00 PM'),
+          _buildPrayerRow(t.isha, '9:00 PM'),
         ],
       ),
     );
