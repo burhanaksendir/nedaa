@@ -2,6 +2,7 @@ import 'package:csc_picker/csc_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CurrentLocationPicker extends StatefulWidget {
   const CurrentLocationPicker({Key? key}) : super(key: key);
@@ -28,6 +29,9 @@ class _CurrentLocationPickerState extends State<CurrentLocationPicker> {
       if (reqPermission == LocationPermission.deniedForever) {
         await Geolocator.openAppSettings();
       }
+      else {
+        _getCurrentLocation();
+      }
     } else if (permission == LocationPermission.deniedForever) {
       await Geolocator.openAppSettings();
     }
@@ -47,9 +51,11 @@ class _CurrentLocationPickerState extends State<CurrentLocationPicker> {
 
   @override
   Widget build(BuildContext context) {
+    var t = AppLocalizations.of(context);
+
     return Scaffold(
       appBar: AppBar(
-        title: Text('Current Location Picker'),
+        title: Text(t!.currentLocation),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -64,49 +70,21 @@ class _CurrentLocationPickerState extends State<CurrentLocationPicker> {
             ///Enable (get flag with country name) / Disable (Disable flag) / ShowInDropdownOnly (display flag in dropdown only) [OPTIONAL PARAMETER]
             flagState: CountryFlag.SHOW_IN_DROP_DOWN_ONLY,
 
-            ///Dropdown box decoration to style your dropdown selector [OPTIONAL PARAMETER] (USE with disabledDropdownDecoration)
-            dropdownDecoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(10)),
-                color: Colors.white,
-                border: Border.all(color: Colors.grey.shade300, width: 1)),
-
-            ///Disabled Dropdown box decoration to style your dropdown selector [OPTIONAL PARAMETER]  (USE with disabled dropdownDecoration)
-            disabledDropdownDecoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(10)),
-                color: Colors.grey.shade300,
-                border: Border.all(color: Colors.grey.shade300, width: 1)),
-
             ///placeholders for dropdown search field
-            countrySearchPlaceholder: "Country",
-            stateSearchPlaceholder: "State",
-            citySearchPlaceholder: "City",
+            countrySearchPlaceholder: t.country,
+            stateSearchPlaceholder: t.state,
+            citySearchPlaceholder: t.city,
 
             ///labels for dropdown
-            countryDropdownLabel: "*Country",
-            stateDropdownLabel: "*State",
-            cityDropdownLabel: "*City",
+            countryDropdownLabel: t.country,
+            stateDropdownLabel: t.state,
+            cityDropdownLabel: t.city,
 
             ///Default Country
             //defaultCountry: DefaultCountry.India,
 
             ///Disable country dropdown (Note: use it with default country)
             //disableCountry: true,
-
-            ///selected item style [OPTIONAL PARAMETER]
-            selectedItemStyle: TextStyle(
-              color: Colors.black,
-              fontSize: 14,
-            ),
-
-            ///DropdownDialog Heading style [OPTIONAL PARAMETER]
-            dropdownHeadingStyle: TextStyle(
-                color: Colors.black, fontSize: 17, fontWeight: FontWeight.bold),
-
-            ///DropdownDialog Item style [OPTIONAL PARAMETER]
-            dropdownItemStyle: TextStyle(
-              color: Colors.black,
-              fontSize: 14,
-            ),
 
             ///Dialog box radius [OPTIONAL PARAMETER]
             dropdownDialogRadius: 10.0,
@@ -144,18 +122,20 @@ class _CurrentLocationPickerState extends State<CurrentLocationPicker> {
           ButtonBar(
             alignment: MainAxisAlignment.center,
             children: [
-              RaisedButton(
-                child: const Text('Get Current Location'),
+              ElevatedButton(
+                child: Text(t.getCurrentLocation),
                 onPressed: () async {
                   _checkPermission();
                 },
               ),
             ],
           ),
-          Text(
-            '$countryValue, $cityValue',
-            style: TextStyle(fontSize: 20),
-          ),
+          cityValue.isNotEmpty && countryValue.isNotEmpty
+              ? Text(
+                  '$cityValue, $countryValue',
+                  style: Theme.of(context).textTheme.headline6,
+                )
+              : const SizedBox(),
         ]),
       ),
     );

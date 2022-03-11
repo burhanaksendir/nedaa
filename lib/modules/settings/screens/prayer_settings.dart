@@ -1,7 +1,7 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:settings_ui/settings_ui.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class PrayerSettingsScreen extends StatefulWidget {
   PrayerSettingsScreen(this.prayer, {Key? key}) : super(key: key);
@@ -57,6 +57,7 @@ class _PrayerSettingsScreenState extends State<PrayerSettingsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var t = AppLocalizations.of(context);
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.prayer),
@@ -74,7 +75,7 @@ class _PrayerSettingsScreenState extends State<PrayerSettingsScreen> {
                       _vibrateEnable = value;
                     });
                   },
-                  title: const Text('Vibrate'),
+                  title: Text(t!.vibrate),
                   leading: const Icon(Icons.vibration),
                 ),
               ],
@@ -88,14 +89,14 @@ class _PrayerSettingsScreenState extends State<PrayerSettingsScreen> {
                       _soundEnable = value;
                     });
                   },
-                  title: const Text('Sound'),
+                  title: Text(t.alertOn),
                   leading: const Icon(Icons.volume_up),
                 ),
               ],
             ),
             if (_soundEnable)
               SettingsSection(
-                title: const Text('Ringtones'),
+                title: const Text(''),
                 tiles: [
                   _ringtoneTile("knock, knock", 0),
                   _ringtoneTile("Ringtone 1", 1),

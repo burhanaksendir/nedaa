@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:iathan/modules/settings/screens/prayer_settings.dart';
 import 'package:settings_ui/settings_ui.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 
 class NotificationScreen extends StatefulWidget {
   const NotificationScreen({Key? key}) : super(key: key);
@@ -13,7 +15,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
   AbstractSettingsTile _buildPrayerSettingsTile(String prayer) {
     return SettingsTile(
       title: Text(prayer),
-      trailing: const Text("No alarm"),
+      trailing: const Text(""),
       onPressed: (context) {
         Navigator.push(
           context,
@@ -27,23 +29,24 @@ class _NotificationScreenState extends State<NotificationScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var t = AppLocalizations.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Notification'),
+        title: Text(t!.notification),
       ),
       body: Padding(
         padding: const EdgeInsets.only(top: 8.0),
         child: SettingsList(
           sections: [
             SettingsSection(
-              title: const Text('Prayer notifications'),
+              title: Text(t.prayersAlerts),
               tiles: [
-                _buildPrayerSettingsTile("Fajr"),
-                _buildPrayerSettingsTile("Sunrise"),
-                _buildPrayerSettingsTile("Dhuhr"),
-                _buildPrayerSettingsTile("Asr"),
-                _buildPrayerSettingsTile("Maghrib"),
-                _buildPrayerSettingsTile("Isha"),
+                _buildPrayerSettingsTile(t.fajr),
+                _buildPrayerSettingsTile(t.sunrise),
+                _buildPrayerSettingsTile(t.duhur),
+                _buildPrayerSettingsTile(t.asr),
+                _buildPrayerSettingsTile(t.maghrib),
+                _buildPrayerSettingsTile(t.isha),
               ],
             ),
           ],

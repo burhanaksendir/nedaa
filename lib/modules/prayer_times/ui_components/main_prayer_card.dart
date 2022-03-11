@@ -16,8 +16,8 @@ class _MainPrayerCardState extends State<MainPrayerCard> {
   Widget build(BuildContext context) {
     return PrayerTimesCard(
       child: Column(
-        children: [
-          const CommonCardHeader(),
+        children: const [
+          CommonCardHeader(),
           PrayerTimer(),
         ],
       ),
