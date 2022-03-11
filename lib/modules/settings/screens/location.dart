@@ -14,7 +14,7 @@ class _LocationSettingsState extends State<LocationSettings> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Location'),
+        title: const Text('Location'),
       ),
       body: Padding(
         padding: const EdgeInsets.only(top: 8.0),

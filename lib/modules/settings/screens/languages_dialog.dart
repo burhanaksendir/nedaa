@@ -6,9 +6,8 @@ class LanguageDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // ignore: prefer_const_literals_to_create_immutables
     return SimpleDialog(
-      title: Text('Language'),
+      title: const Text('Language'),
       children:  supportedLocales.entries.map((entry) {
         return SimpleDialogOption(
           onPressed: () {

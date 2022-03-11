@@ -19,15 +19,15 @@ class _PrayerSettingsScreenState extends State<PrayerSettingsScreen> {
   bool _vibrateEnable = false;
   bool _soundEnable = false;
 
-  int _selectedRington = 0;
+  int _selectedRingtone = 0;
 
-  _ringtonTile(String title, int index) {
+  _ringtoneTile(String title, int index) {
     return SettingsTile(
       title: Text(title),
-      trailing: _selectedRington == index ? const Icon(Icons.check) : null,
+      trailing: _selectedRingtone == index ? const Icon(Icons.check) : null,
       onPressed: (context) async {
         setState(() {
-          _selectedRington = index;
+          _selectedRingtone = index;
         });
 
         // TODO: replace with audio file based on title?
@@ -75,7 +75,7 @@ class _PrayerSettingsScreenState extends State<PrayerSettingsScreen> {
                     });
                   },
                   title: const Text('Vibrate'),
-                  leading: Icon(Icons.vibration),
+                  leading: const Icon(Icons.vibration),
                 ),
               ],
             ),
@@ -89,7 +89,7 @@ class _PrayerSettingsScreenState extends State<PrayerSettingsScreen> {
                     });
                   },
                   title: const Text('Sound'),
-                  leading: Icon(Icons.volume_up),
+                  leading: const Icon(Icons.volume_up),
                 ),
               ],
             ),
@@ -97,9 +97,9 @@ class _PrayerSettingsScreenState extends State<PrayerSettingsScreen> {
               SettingsSection(
                 title: const Text('Ringtones'),
                 tiles: [
-                  _ringtonTile("knock, knock", 0),
-                  _ringtonTile("Rington 1", 1),
-                  _ringtonTile("Rington 2", 2),
+                  _ringtoneTile("knock, knock", 0),
+                  _ringtoneTile("Ringtone 1", 1),
+                  _ringtoneTile("Ringtone 2", 2),
                 ],
               ),
           ],
