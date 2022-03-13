@@ -6,6 +6,7 @@ import 'package:iathan/modules/settings/screens/location.dart';
 import 'package:iathan/modules/settings/screens/notification.dart';
 import 'package:iathan/modules/settings/screens/theme_dialog.dart';
 import 'package:settings_ui/settings_ui.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class Settings extends StatefulWidget {
   const Settings({Key? key}) : super(key: key);
@@ -20,13 +21,14 @@ class _SettingsState extends State<Settings> {
 
   @override
   Widget build(BuildContext context) {
+    var t = AppLocalizations.of(context);
     return SettingsList(
       sections: [
         SettingsSection(
-          title: Text('Settings'),
+          title: Text(t!.settings),
           tiles: [
             SettingsTile(
-              title: Text('Language'),
+              title: Text(t.language),
               trailing: Text('English'),
               leading: Icon(Icons.language),
               onPressed: (context) async {
@@ -39,8 +41,8 @@ class _SettingsState extends State<Settings> {
               },
             ),
             SettingsTile(
-              title: const Text('Theme'),
-              trailing: const Text('Default'),
+              title: Text(t.theme),
+              trailing: Text(t.defaultString),
               leading: const Icon(Icons.color_lens),
               onPressed: (context) async {
                 final calculationMethod = await showCupertinoDialog(
@@ -51,7 +53,7 @@ class _SettingsState extends State<Settings> {
               },
             ),
             SettingsTile(
-              title: const Text('Location'),
+              title: Text(t.location),
               trailing: const Text('Kuala Lumpur'),
               leading: const Icon(Icons.room),
               onPressed: (context) {
@@ -61,7 +63,7 @@ class _SettingsState extends State<Settings> {
               },
             ),
             SettingsTile(
-              title: const Text('Notification'),
+              title: Text(t.notification),
               leading: const Icon(Icons.notifications),
               onPressed: (context) {
                 Navigator.of(context).push(MaterialPageRoute(
@@ -70,7 +72,7 @@ class _SettingsState extends State<Settings> {
               },
             ),
             SettingsTile(
-              title: const Text('Calculation Method'),
+              title: Text(t.calculationMethods),
               trailing: const Text('Default'),
               leading: const Icon(Icons.access_time_filled),
               onPressed: (context) async {
@@ -84,7 +86,7 @@ class _SettingsState extends State<Settings> {
           ],
         ),
         SettingsSection(
-          title: const Text('Contact Us'),
+          title: Text(t.contactUs),
           tiles: [
             // TODO: forward to creating new email
             SettingsTile(
