@@ -1,5 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:iathan/constants/app_constans.dart';
+import 'package:iathan/modules/settings/screens/bloc/settings_bloc.dart';
+import 'package:iathan/modules/settings/screens/bloc/settings_event.dart';
 import 'package:iathan/modules/settings/screens/calculation_methods_dialog.dart';
 import 'package:iathan/modules/settings/screens/languages_dialog.dart';
 import 'package:iathan/modules/settings/screens/location.dart';
@@ -22,6 +26,12 @@ class _SettingsState extends State<Settings> {
   @override
   Widget build(BuildContext context) {
     var t = AppLocalizations.of(context);
+    var _currentState = context.watch<SettingsBloc>().state;
+    var _stateLocale = _currentState.appLanguage!.languageCode;
+
+    var _currentLocale = supportedLocales[_stateLocale];
+    var _currentTheme = _currentState.appTheme;
+    debugPrint(_currentTheme!.name);
     return SettingsList(
       sections: [
         SettingsSection(
@@ -29,27 +39,32 @@ class _SettingsState extends State<Settings> {
           tiles: [
             SettingsTile(
               title: Text(t.language),
-              trailing: Text('English'),
+              trailing: Text(_currentLocale!),
               leading: Icon(Icons.language),
               onPressed: (context) async {
-                //TODO: Use bloc to set language
                 final language = await showCupertinoDialog(
                   barrierDismissible: true,
                   context: context,
                   builder: (context) => const LanguageDialog(),
                 );
+                context
+                    .read<SettingsBloc>()
+                    .add(LanguageEvent(Locale(language ?? "en")));
               },
             ),
             SettingsTile(
               title: Text(t.theme),
-              trailing: Text(t.defaultString),
+              trailing: Text(_currentTheme.name),
               leading: const Icon(Icons.color_lens),
               onPressed: (context) async {
-                final calculationMethod = await showCupertinoDialog(
+                final themeMode = await showCupertinoDialog(
                   barrierDismissible: true,
                   context: context,
                   builder: (context) => const ThemeDialog(),
                 );
+                context
+                    .read<SettingsBloc>()
+                    .add(ThemeEvent(themeMode ?? ThemeMode.system));
               },
             ),
             SettingsTile(

@@ -28,8 +28,7 @@ class _CurrentLocationPickerState extends State<CurrentLocationPicker> {
       LocationPermission reqPermission = await Geolocator.requestPermission();
       if (reqPermission == LocationPermission.deniedForever) {
         await Geolocator.openAppSettings();
-      }
-      else {
+      } else {
         _getCurrentLocation();
       }
     } else if (permission == LocationPermission.deniedForever) {
