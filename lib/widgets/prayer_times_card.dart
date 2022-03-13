@@ -10,10 +10,20 @@ class PrayerTimesCard extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(32),
       child: Card(
-        child: Padding(
-          padding: const EdgeInsets.all(32.0),
-          child: child,
-        ),
+        child: Stack(children: [
+          Center(
+            child: Opacity(
+              opacity: 0.1,
+              child: Image.asset(
+                'assets/images/iAthanLogo.png',
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(32.0),
+            child: child,
+          ),
+        ]),
         elevation: 4,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(32),

@@ -40,7 +40,6 @@ class _TodayPrayersCardState extends State<TodayPrayersCard> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           const CommonCardHeader(),
-          // const SizedBox(height: 6),
 
           //TODO: Add Prayer Times
           _buildPrayerRow('Fajr', '5:00 AM'),

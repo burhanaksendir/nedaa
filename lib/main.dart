@@ -1,10 +1,20 @@
+import 'package:flex_color_scheme/flex_color_scheme.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:iathan/screens/main.dart';
+import 'package:iathan/constants/app_constans.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:iathan/constants/theme.dart';
+import 'package:iathan/screens/main_screen.dart';
+import 'package:device_preview/device_preview.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    DevicePreview(
+      enabled: !kReleaseMode,
+      builder: (context) => const MyApp(), // Wrap your app
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -20,22 +30,18 @@ class MyApp extends StatelessWidget {
             .countryCode); // => UK or empty for non-country-specific locales
         return AppLocalizations.of(context)!.appTitle;
       },
+      builder: DevicePreview.appBuilder,
       localizationsDelegates: const [
         AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
-      supportedLocales: const [
-        /* Flutter try to match the locale of the device,
-        if it's not found in the list of supported locales. 
-        the default locale is the first one in the list.*/
-        Locale('en', ''),
-        Locale('ar', ''),
-      ],
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
+      supportedLocales: supportedLocales.keys.map((e) => Locale(e, '')),
+      theme: CustomTheme.light,
+      darkTheme: CustomTheme.dark,
+      themeMode: ThemeMode.system,
+      initialRoute: '/',
       routes: {
         '/': (context) => const MainScreen(),
       },
