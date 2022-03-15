@@ -11,7 +11,7 @@ class CalculationMethodsDialog extends StatelessWidget {
     var t = AppLocalizations.of(context);
     var locale = Localizations.localeOf(context);
     var methods =
-        calculation_methods[locale.languageCode] ?? calculation_methods['en']!;
+        calculationMethods[locale.languageCode] ?? calculationMethods['en']!;
 
     return SimpleDialog(
       title: Text(t!.calculationMethods),

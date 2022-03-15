@@ -4,9 +4,9 @@ import 'package:settings_ui/settings_ui.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class PrayerSettingsScreen extends StatefulWidget {
-  PrayerSettingsScreen(this.prayer, {Key? key}) : super(key: key);
+  const PrayerSettingsScreen(this.prayer, {Key? key}) : super(key: key);
 
-  String prayer;
+  final String prayer;
 
   @override
   State<PrayerSettingsScreen> createState() => _PrayerSettingsScreenState();

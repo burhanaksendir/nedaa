@@ -37,7 +37,7 @@ class _SettingsState extends State<Settings> {
     var _currentCalculationMethod = _currentUserState.calculationMethod;
     var locale = Localizations.localeOf(context);
     var methods =
-        calculation_methods[locale.languageCode] ?? calculation_methods['en']!;
+        calculationMethods[locale.languageCode] ?? calculationMethods['en']!;
 
     var _currentCalculationMethodName =
         methods[_currentCalculationMethod?.index];
