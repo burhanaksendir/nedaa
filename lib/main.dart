@@ -1,4 +1,3 @@
-import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -7,8 +6,8 @@ import 'package:iathan/constants/app_constans.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:iathan/constants/theme.dart';
-import 'package:iathan/modules/settings/screens/bloc/settings_bloc.dart';
-import 'package:iathan/modules/settings/screens/bloc/settings_state.dart';
+import 'package:iathan/modules/settings/bloc/settings_bloc.dart';
+import 'package:iathan/modules/settings/bloc/user_settings_bloc.dart';
 import 'package:iathan/screens/main_screen.dart';
 import 'package:device_preview/device_preview.dart';
 
@@ -29,8 +28,16 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => SettingsBloc(),
+    return MultiBlocProvider(
+      // create: (context) => SettingsBloc(),
+      providers: [
+        BlocProvider(
+          create: (context) => SettingsBloc(),
+        ),
+        BlocProvider(
+          create: (context) => UserSettingsBloc(),
+        ),
+      ],
       child: BlocBuilder<SettingsBloc, SettingsState>(
         builder: (BuildContext context, SettingsState settingsState) {
           return MaterialApp(

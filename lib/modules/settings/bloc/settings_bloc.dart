@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:iathan/modules/settings/screens/bloc/settings_event.dart';
-import 'package:iathan/modules/settings/screens/bloc/settings_state.dart';
 import 'package:intl/intl.dart';
 
 class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
@@ -14,4 +12,25 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     on<ThemeEvent>((event, emit) => emit(
         SettingsState(appTheme: event.theme, appLanguage: state.appLanguage)));
   }
+}
+
+class SettingsState {
+  final Locale? appLanguage;
+  final ThemeMode? appTheme;
+
+  SettingsState({this.appLanguage, this.appTheme});
+}
+
+class SettingsEvent {}
+
+class LanguageEvent extends SettingsEvent {
+  final Locale appLanguage;
+
+  LanguageEvent(this.appLanguage);
+}
+
+class ThemeEvent extends SettingsEvent {
+  final ThemeMode theme;
+
+  ThemeEvent(this.theme);
 }

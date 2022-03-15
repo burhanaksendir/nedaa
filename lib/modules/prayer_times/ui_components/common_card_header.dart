@@ -1,6 +1,7 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:iathan/modules/settings/bloc/user_settings_bloc.dart';
 import 'package:intl/intl.dart';
 
 class CommonCardHeader extends StatefulWidget {
@@ -16,6 +17,9 @@ class _CommonCardHeaderState extends State<CommonCardHeader> {
     var t = AppLocalizations.of(context);
     final todaysDate =
         DateFormat('EEEE\n d MMMM y', t!.localeName).format(DateTime.now());
+    var _currentUserState = context.watch<UserSettingsBloc>().state;
+    var _currentUserCity = _currentUserState.location?.cityAddress;
+
     return Column(
       children: <Widget>[
         Text(
@@ -25,7 +29,7 @@ class _CommonCardHeaderState extends State<CommonCardHeader> {
         ),
         const SizedBox(height: 20),
         Text(
-          "Kuala Lumpur",
+          _currentUserCity ?? '',
           style: Theme.of(context).textTheme.headline5,
         ),
         const Divider(
