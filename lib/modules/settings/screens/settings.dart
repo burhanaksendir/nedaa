@@ -1,5 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:iathan/constants/app_constans.dart';
+import 'package:iathan/constants/calculation_methods.dart';
+import 'package:iathan/modules/settings/bloc/settings_bloc.dart';
+import 'package:iathan/modules/settings/bloc/user_settings_bloc.dart';
 import 'package:iathan/modules/settings/screens/calculation_methods_dialog.dart';
 import 'package:iathan/modules/settings/screens/languages_dialog.dart';
 import 'package:iathan/modules/settings/screens/location.dart';
@@ -22,6 +27,22 @@ class _SettingsState extends State<Settings> {
   @override
   Widget build(BuildContext context) {
     var t = AppLocalizations.of(context);
+    var _currentAppState = context.watch<SettingsBloc>().state;
+    var _stateLocale = _currentAppState.appLanguage!.languageCode;
+
+    var _currentLocale = supportedLocales[_stateLocale];
+    var _currentTheme = _currentAppState.appTheme;
+
+    var _currentUserState = context.watch<UserSettingsBloc>().state;
+    var _currentCalculationMethod = _currentUserState.calculationMethod;
+    var locale = Localizations.localeOf(context);
+    var methods =
+        calculationMethods[locale.languageCode] ?? calculationMethods['en']!;
+
+    var _currentCalculationMethodName =
+        methods[_currentCalculationMethod?.index];
+    var _currentUserCity = _currentUserState.location?.cityAddress;
+
     return SettingsList(
       sections: [
         SettingsSection(
@@ -29,32 +50,37 @@ class _SettingsState extends State<Settings> {
           tiles: [
             SettingsTile(
               title: Text(t.language),
-              trailing: Text('English'),
-              leading: Icon(Icons.language),
+              trailing: Text(_currentLocale!),
+              leading: const Icon(Icons.language),
               onPressed: (context) async {
-                //TODO: Use bloc to set language
                 final language = await showCupertinoDialog(
                   barrierDismissible: true,
                   context: context,
                   builder: (context) => const LanguageDialog(),
                 );
+                context
+                    .read<SettingsBloc>()
+                    .add(LanguageEvent(Locale(language ?? "en")));
               },
             ),
             SettingsTile(
               title: Text(t.theme),
-              trailing: Text(t.defaultString),
+              trailing: Text(_currentTheme!.name),
               leading: const Icon(Icons.color_lens),
               onPressed: (context) async {
-                final calculationMethod = await showCupertinoDialog(
+                final themeMode = await showCupertinoDialog(
                   barrierDismissible: true,
                   context: context,
                   builder: (context) => const ThemeDialog(),
                 );
+                context
+                    .read<SettingsBloc>()
+                    .add(ThemeEvent(themeMode ?? ThemeMode.system));
               },
             ),
             SettingsTile(
               title: Text(t.location),
-              trailing: const Text('Kuala Lumpur'),
+              trailing: Text(_currentUserCity ?? ""),
               leading: const Icon(Icons.room),
               onPressed: (context) {
                 Navigator.of(context).push(MaterialPageRoute(
@@ -73,7 +99,7 @@ class _SettingsState extends State<Settings> {
             ),
             SettingsTile(
               title: Text(t.calculationMethods),
-              trailing: const Text('Default'),
+              trailing: Text(_currentCalculationMethodName ?? t.defaultString),
               leading: const Icon(Icons.access_time_filled),
               onPressed: (context) async {
                 final calculationMethod = await showCupertinoDialog(
@@ -81,6 +107,9 @@ class _SettingsState extends State<Settings> {
                   context: context,
                   builder: (context) => const CalculationMethodsDialog(),
                 );
+                context.read<UserSettingsBloc>().add(
+                      CalculationMethodEvent(calculationMethod),
+                    );
               },
             ),
           ],

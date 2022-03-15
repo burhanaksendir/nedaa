@@ -1,6 +1,11 @@
 import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/material.dart';
 
+const pageTransition = PageTransitionsTheme(builders: {
+  TargetPlatform.android: CupertinoPageTransitionsBuilder(),
+  TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+});
+
 var _light = FlexThemeData.light(
   colors: const FlexSchemeColor(
     primary: Color(0xff327d77),
@@ -40,7 +45,7 @@ var _light = FlexThemeData.light(
     blendTextTheme: true,
     popupMenuOpacity: 0.95,
   ),
-);
+).copyWith(pageTransitionsTheme: pageTransition);
 
 var _dark = FlexThemeData.dark(
   colors: const FlexSchemeColor(
@@ -81,7 +86,7 @@ var _dark = FlexThemeData.dark(
     blendTextTheme: true,
     popupMenuOpacity: 0.95,
   ),
-);
+).copyWith(pageTransitionsTheme: pageTransition);
 
 class CustomTheme {
   static final ThemeData light = _light;

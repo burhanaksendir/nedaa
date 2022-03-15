@@ -1,4 +1,4 @@
-const _methods_english = {
+const _methodsEnglish = {
   0: "Shia Ithna-Ashari, Leva Institute, Qum",
   1: "University of Islamic Sciences, Karachi",
   2: "Islamic Society of North America (ISNA)",
@@ -16,7 +16,7 @@ const _methods_english = {
   15: "Moonsighting Committee Worldwide (Moonsighting.com)",
 };
 
-const _methods_arabic = {
+const _methodsArabic = {
   0: "الشيعة اثنا عشرية ، معهد ليفا ، قم",
   1: "جامعة العلوم الإسلامية بكراتشي",
   2: "الجمعية الإسلامية لأمريكا الشمالية (ISNA)",
@@ -34,7 +34,7 @@ const _methods_arabic = {
   15: "لجنة مراقبة القمر العالمية (Moonsighting.com)",
 };
 
-const calculation_methods = {
-  'en': _methods_english,
-  'ar': _methods_arabic,
+const calculationMethods = {
+  'en': _methodsEnglish,
+  'ar': _methodsArabic,
 };

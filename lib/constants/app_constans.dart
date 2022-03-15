@@ -1,4 +1,4 @@
 const Map<String, String> supportedLocales = {
-  "en":"English",
-  "ar":"العربية",
+  "en": "English",
+  "ar": "العربية",
 };
