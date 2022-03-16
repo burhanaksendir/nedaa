@@ -21,7 +21,7 @@ class _PrayerSettingsScreenState extends State<PrayerSettingsScreen> {
 
   int _selectedRingtone = 0;
 
-  _ringtoneTile(String title, int index) {
+  _ringtoneTile(AppLocalizations t, String title, int index) {
     return SettingsTile(
       title: Text(title),
       trailing: _selectedRingtone == index ? const Icon(Icons.check) : null,
@@ -41,7 +41,7 @@ class _PrayerSettingsScreenState extends State<PrayerSettingsScreen> {
           context: context,
           builder: (context) {
             return TextButton(
-              child: const Text("Stop"),
+              child: Text(t.stop),
               onPressed: () {
                 if (player.state == PlayerState.PLAYING) {
                   player.stop();
@@ -98,9 +98,9 @@ class _PrayerSettingsScreenState extends State<PrayerSettingsScreen> {
               SettingsSection(
                 title: const Text(''),
                 tiles: [
-                  _ringtoneTile("knock, knock", 0),
-                  _ringtoneTile("Ringtone 1", 1),
-                  _ringtoneTile("Ringtone 2", 2),
+                  _ringtoneTile(t, "knock, knock", 0),
+                  _ringtoneTile(t, "Ringtone 1", 1),
+                  _ringtoneTile(t, "Ringtone 2", 2),
                 ],
               ),
           ],
