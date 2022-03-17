@@ -9,11 +9,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:iathan/main.dart';
+import 'package:iathan/modules/settings/repositories/settings_repository.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
     // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+    SettingsRepository settingsRepository = SettingsRepository(
+      await SharedPreferences.getInstance(),
+    );
+    await tester.pumpWidget(MyApp(
+      settingsRepository: settingsRepository,
+    ));
 
     // Verify that our counter starts at 0.
     expect(find.text('0'), findsOneWidget);
