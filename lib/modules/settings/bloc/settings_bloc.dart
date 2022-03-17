@@ -4,8 +4,6 @@ import 'package:iathan/modules/settings/repositories/settings_repository.dart';
 
 class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
   static ThemeMode _getThemeFromString(String? theme) {
-    debugPrint(theme.runtimeType.toString());
-    debugPrint(theme);
     switch (theme) {
       case 'ThemeMode.light':
         return ThemeMode.light;
