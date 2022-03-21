@@ -5,6 +5,7 @@ import 'package:iathan/constants/app_constans.dart';
 import 'package:iathan/constants/calculation_methods.dart';
 import 'package:iathan/modules/settings/bloc/settings_bloc.dart';
 import 'package:iathan/modules/settings/bloc/user_settings_bloc.dart';
+import 'package:iathan/modules/settings/models/calcualtiom_method.dart';
 import 'package:iathan/modules/settings/screens/calculation_methods_dialog.dart';
 import 'package:iathan/modules/settings/screens/languages_dialog.dart';
 import 'package:iathan/modules/settings/screens/location.dart';
@@ -58,9 +59,11 @@ class _SettingsState extends State<Settings> {
                   context: context,
                   builder: (context) => const LanguageDialog(),
                 );
-                context
-                    .read<SettingsBloc>()
-                    .add(LanguageEvent(Locale(language ?? "en")));
+                if (language is String) {
+                  context
+                      .read<SettingsBloc>()
+                      .add(LanguageEvent(Locale(language)));
+                }
               },
             ),
             SettingsTile(
@@ -73,9 +76,9 @@ class _SettingsState extends State<Settings> {
                   context: context,
                   builder: (context) => const ThemeDialog(),
                 );
-                context
-                    .read<SettingsBloc>()
-                    .add(ThemeEvent(themeMode ?? ThemeMode.system));
+                if (themeMode is ThemeMode) {
+                  context.read<SettingsBloc>().add(ThemeEvent(themeMode));
+                }
               },
             ),
             SettingsTile(
@@ -83,18 +86,22 @@ class _SettingsState extends State<Settings> {
               trailing: Text(_currentUserCity ?? ""),
               leading: const Icon(Icons.room),
               onPressed: (context) {
-                Navigator.of(context).push(MaterialPageRoute(
-                  builder: (_) => const LocationSettings(),
-                ));
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => const LocationSettings(),
+                  ),
+                );
               },
             ),
             SettingsTile(
               title: Text(t.notification),
               leading: const Icon(Icons.notifications),
               onPressed: (context) {
-                Navigator.of(context).push(MaterialPageRoute(
-                  builder: (_) => const NotificationScreen(),
-                ));
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => const NotificationScreen(),
+                  ),
+                );
               },
             ),
             SettingsTile(
@@ -107,9 +114,11 @@ class _SettingsState extends State<Settings> {
                   context: context,
                   builder: (context) => const CalculationMethodsDialog(),
                 );
-                context.read<UserSettingsBloc>().add(
-                      CalculationMethodEvent(calculationMethod),
-                    );
+                if (calculationMethod is CalculationMethod) {
+                  context
+                      .read<UserSettingsBloc>()
+                      .add(CalculationMethodEvent(calculationMethod));
+                }
               },
             ),
           ],
