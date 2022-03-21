@@ -27,6 +27,14 @@ class SettingsRepository {
     await _sharedPref.setInt(key, value);
   }
 
+  bool? _getBool(String key) {
+    return _sharedPref.getBool(key);
+  }
+
+  Future<void> _setBool(String key, bool value) async {
+    await _sharedPref.setBool(key, value);
+  }
+
   ThemeMode getTheme() {
     var theme = _getString('theme');
     switch (theme) {
@@ -89,5 +97,13 @@ class SettingsRepository {
 
   setUserLocation(UserLocation location) async {
     await _setString('location', json.encode(location.toJson()));
+  }
+
+  bool getKeepUpdatingLocation() {
+    return _getBool('keepUpdatingLocation') ?? false;
+  }
+
+  setKeepUpdatingLocation(bool keepUpdating) async {
+    await _setBool('keepUpdatingLocation', keepUpdating);
   }
 }
