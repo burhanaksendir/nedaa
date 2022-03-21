@@ -1,4 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:iathan/constants/calculation_methods.dart';
+import 'package:iathan/modules/settings/models/calcualtiom_method.dart';
+import 'package:iathan/modules/settings/models/user_location.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SettingsRepository {
@@ -12,6 +17,14 @@ class SettingsRepository {
 
   Future<void> _setString(String key, String value) async {
     await _sharedPref.setString(key, value);
+  }
+
+  int? _getInt(String key) {
+    return _sharedPref.getInt(key);
+  }
+
+  Future<void> _setInt(String key, int value) async {
+    await _sharedPref.setInt(key, value);
   }
 
   ThemeMode getTheme() {
@@ -46,5 +59,35 @@ class SettingsRepository {
 
   setLanguage(Locale language) async {
     await _setString('language', language.languageCode);
+  }
+
+  CalculationMethod getCalculationMethod() {
+    var methodIndex = _getInt('calculationMethod') ?? -1;
+
+    var methods = calculationMethods[getLanguage().languageCode]!;
+    var methodName =
+        (methods.length > methodIndex) ? methods[methodIndex]! : methods[-1]!;
+    return CalculationMethod(methodIndex, methodName);
+  }
+
+  setCalculationMethod(CalculationMethod method) async {
+    await _setInt('calculationMethod', method.index);
+  }
+
+  UserLocation getUserLocation() {
+    var location = _getString('location');
+    if (location == null) {
+      return UserLocation();
+    }
+
+    var map = json.decode(location);
+    if (map is Map<String, dynamic>) {
+      return UserLocation.fromJson(map);
+    }
+    return UserLocation();
+  }
+
+  setUserLocation(UserLocation location) async {
+    await _setString('location', json.encode(location.toJson()));
   }
 }

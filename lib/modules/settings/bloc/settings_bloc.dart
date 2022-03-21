@@ -6,8 +6,9 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
   SettingsBloc(this.settingsRepository)
       : super(
           SettingsState(
-              appLanguage: settingsRepository.getLanguage(),
-              appTheme: settingsRepository.getTheme()),
+            appLanguage: settingsRepository.getLanguage(),
+            appTheme: settingsRepository.getTheme(),
+          ),
         ) {
     on<LanguageEvent>(
       (event, emit) => {

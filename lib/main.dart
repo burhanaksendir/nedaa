@@ -45,7 +45,8 @@ class MyApp extends StatelessWidget {
                 SettingsBloc(context.read<SettingsRepository>()),
           ),
           BlocProvider(
-            create: (context) => UserSettingsBloc(),
+            create: (context) =>
+                UserSettingsBloc(context.read<SettingsRepository>()),
           ),
         ],
         child: BlocBuilder<SettingsBloc, SettingsState>(

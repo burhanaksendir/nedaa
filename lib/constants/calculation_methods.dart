@@ -1,4 +1,5 @@
 const _methodsEnglish = {
+  -1: 'Default',
   0: "Shia Ithna-Ashari, Leva Institute, Qum",
   1: "University of Islamic Sciences, Karachi",
   2: "Islamic Society of North America (ISNA)",
@@ -17,6 +18,7 @@ const _methodsEnglish = {
 };
 
 const _methodsArabic = {
+  -1: 'الإفتراضي',
   0: "الشيعة اثنا عشرية ، معهد ليفا ، قم",
   1: "جامعة العلوم الإسلامية بكراتشي",
   2: "الجمعية الإسلامية لأمريكا الشمالية (ISNA)",
