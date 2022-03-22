@@ -29,6 +29,7 @@ class _PrayerSettingsScreenState extends State<PrayerSettingsScreen> {
         setState(() {
           _selectedRingtone = index;
         });
+        // context.read<UserSettingsBloc>().add(KeepUpdatingLocationEvent(value));
 
         // TODO: replace with audio file based on title?
         AudioPlayer player = await _audioCache.play('knock.mp3');
@@ -37,7 +38,7 @@ class _PrayerSettingsScreenState extends State<PrayerSettingsScreen> {
           Navigator.pop(context);
         });
 
-        showModalBottomSheet(
+       await showModalBottomSheet(
           context: context,
           builder: (context) {
             return TextButton(
@@ -51,6 +52,7 @@ class _PrayerSettingsScreenState extends State<PrayerSettingsScreen> {
             );
           },
         );
+        await player.stop();
       },
     );
   }
@@ -58,6 +60,7 @@ class _PrayerSettingsScreenState extends State<PrayerSettingsScreen> {
   @override
   Widget build(BuildContext context) {
     var t = AppLocalizations.of(context);
+    // var _currentUserState = context.watch<UserSettingsBloc>().state;
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.prayer),

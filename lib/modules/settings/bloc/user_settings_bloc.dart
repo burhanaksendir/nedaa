@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iathan/modules/settings/models/calcualtiom_method.dart';
+import 'package:iathan/modules/settings/models/notification_settings.dart';
 import 'package:iathan/modules/settings/models/user_location.dart';
 import 'package:iathan/modules/settings/repositories/settings_repository.dart';
 
@@ -42,6 +43,17 @@ class UserSettingsBloc extends Bloc<UserSettingsEvent, UserSettingsState> {
       );
       settingsRepository.setKeepUpdatingLocation(event.keepUpdating);
     });
+    on<PrayerNotificationEvent>((event, emit) {
+      emit(
+        UserSettingsState(
+          location: state.location,
+          calculationMethod: state.calculationMethod,
+          keepUpdatingLocation: state.keepUpdatingLocation,
+          notificationSettings: event.notificationSettings,
+        ),
+      );
+      settingsRepository.setNotificationSettings(event.notificationSettings);
+    });
   }
 
   final SettingsRepository settingsRepository;
@@ -51,9 +63,13 @@ class UserSettingsState {
   final UserLocation? location;
   final CalculationMethod? calculationMethod;
   final bool? keepUpdatingLocation;
+  final NotificationSettings? notificationSettings;
 
   UserSettingsState(
-      {this.location, this.calculationMethod, this.keepUpdatingLocation});
+      {this.location,
+      this.calculationMethod,
+      this.keepUpdatingLocation,
+      this.notificationSettings});
 }
 
 class UserSettingsEvent {}
@@ -74,4 +90,10 @@ class KeepUpdatingLocationEvent extends UserSettingsEvent {
   final bool keepUpdating;
 
   KeepUpdatingLocationEvent(this.keepUpdating);
+}
+
+class PrayerNotificationEvent extends UserSettingsEvent {
+  final NotificationSettings notificationSettings;
+
+  PrayerNotificationEvent(this.notificationSettings);
 }

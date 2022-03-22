@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:iathan/constants/calculation_methods.dart';
 import 'package:iathan/modules/settings/models/calcualtiom_method.dart';
+import 'package:iathan/modules/settings/models/notification_settings.dart';
 import 'package:iathan/modules/settings/models/user_location.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -105,5 +106,9 @@ class SettingsRepository {
 
   setKeepUpdatingLocation(bool keepUpdating) async {
     await _setBool('keepUpdatingLocation', keepUpdating);
+  }
+
+  setNotificationSettings(NotificationSettings notificationSettings) async {
+    
   }
 }
