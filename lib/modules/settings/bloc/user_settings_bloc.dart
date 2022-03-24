@@ -1,6 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iathan/modules/settings/models/calcualtiom_method.dart';
 import 'package:iathan/modules/settings/models/notification_settings.dart';
+import 'package:iathan/modules/settings/models/prayer_type.dart';
 import 'package:iathan/modules/settings/models/user_location.dart';
 import 'package:iathan/modules/settings/repositories/settings_repository.dart';
 
@@ -11,6 +12,7 @@ class UserSettingsBloc extends Bloc<UserSettingsEvent, UserSettingsState> {
             location: settingsRepository.getUserLocation(),
             calculationMethod: settingsRepository.getCalculationMethod(),
             keepUpdatingLocation: settingsRepository.getKeepUpdatingLocation(),
+            notificationSettings: settingsRepository.getNotificationSettings(),
           ),
         ) {
     on<UserLocationEvent>(
@@ -44,15 +46,16 @@ class UserSettingsBloc extends Bloc<UserSettingsEvent, UserSettingsState> {
       settingsRepository.setKeepUpdatingLocation(event.keepUpdating);
     });
     on<PrayerNotificationEvent>((event, emit) {
+      state.notificationSettings[event.prayerType] = event.notificationSettings;
       emit(
         UserSettingsState(
           location: state.location,
           calculationMethod: state.calculationMethod,
           keepUpdatingLocation: state.keepUpdatingLocation,
-          notificationSettings: event.notificationSettings,
+          notificationSettings: state.notificationSettings,
         ),
       );
-      settingsRepository.setNotificationSettings(event.notificationSettings);
+      settingsRepository.setNotificationSettings(state.notificationSettings);
     });
   }
 
@@ -63,13 +66,13 @@ class UserSettingsState {
   final UserLocation? location;
   final CalculationMethod? calculationMethod;
   final bool? keepUpdatingLocation;
-  final NotificationSettings? notificationSettings;
+  final Map<PrayerType, NotificationSettings> notificationSettings;
 
   UserSettingsState(
       {this.location,
       this.calculationMethod,
       this.keepUpdatingLocation,
-      this.notificationSettings});
+      this.notificationSettings = const {}});
 }
 
 class UserSettingsEvent {}
@@ -94,6 +97,7 @@ class KeepUpdatingLocationEvent extends UserSettingsEvent {
 
 class PrayerNotificationEvent extends UserSettingsEvent {
   final NotificationSettings notificationSettings;
+  final PrayerType prayerType;
 
-  PrayerNotificationEvent(this.notificationSettings);
+  PrayerNotificationEvent(this.prayerType, this.notificationSettings);
 }

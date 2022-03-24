@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:iathan/modules/settings/models/prayer_type.dart';
 import 'package:iathan/modules/settings/screens/prayer_settings.dart';
 import 'package:settings_ui/settings_ui.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -11,15 +12,16 @@ class NotificationScreen extends StatefulWidget {
 }
 
 class _NotificationScreenState extends State<NotificationScreen> {
-  AbstractSettingsTile _buildPrayerSettingsTile(String prayer) {
+  AbstractSettingsTile _buildPrayerSettingsTile(
+      PrayerType prayerType, String prayerName) {
     return SettingsTile(
-      title: Text(prayer),
+      title: Text(prayerName),
       trailing: const Text(""),
       onPressed: (context) {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => PrayerSettingsScreen(prayer),
+            builder: (context) => PrayerSettingsScreen(prayerType, prayerName),
           ),
         );
       },
@@ -40,12 +42,12 @@ class _NotificationScreenState extends State<NotificationScreen> {
             SettingsSection(
               title: Text(t.prayersAlerts),
               tiles: [
-                _buildPrayerSettingsTile(t.fajr),
-                _buildPrayerSettingsTile(t.sunrise),
-                _buildPrayerSettingsTile(t.duhur),
-                _buildPrayerSettingsTile(t.asr),
-                _buildPrayerSettingsTile(t.maghrib),
-                _buildPrayerSettingsTile(t.isha),
+                _buildPrayerSettingsTile(PrayerType.fajr, t.fajr),
+                _buildPrayerSettingsTile(PrayerType.sunrise, t.sunrise),
+                _buildPrayerSettingsTile(PrayerType.duhur, t.duhur),
+                _buildPrayerSettingsTile(PrayerType.asr, t.asr),
+                _buildPrayerSettingsTile(PrayerType.maghrib, t.maghrib),
+                _buildPrayerSettingsTile(PrayerType.isha, t.isha),
               ],
             ),
           ],

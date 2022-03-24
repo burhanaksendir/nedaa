@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:iathan/constants/calculation_methods.dart';
 import 'package:iathan/modules/settings/models/calcualtiom_method.dart';
 import 'package:iathan/modules/settings/models/notification_settings.dart';
+import 'package:iathan/modules/settings/models/prayer_type.dart';
 import 'package:iathan/modules/settings/models/user_location.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -108,7 +109,27 @@ class SettingsRepository {
     await _setBool('keepUpdatingLocation', keepUpdating);
   }
 
-  setNotificationSettings(NotificationSettings notificationSettings) async {
-    
+  setNotificationSettings(
+      Map<PrayerType, NotificationSettings> notificationSettings) async {
+    var map = json.encode(notificationSettings
+        .map((key, value) => MapEntry(key.name, value.toJson())));
+    await _setString('notificationSettings', map);
+  }
+
+  Map<PrayerType, NotificationSettings> getNotificationSettings() {
+    var settings = _getString('notificationSettings');
+    if (settings == null) {
+      return {};
+    }
+
+    var map = json.decode(settings);
+
+    if (map is Map<String, dynamic>) {
+      return map.map(
+        (key, value) => MapEntry(PrayerType.values.byName(key),
+            NotificationSettings.fromJson(value)),
+      );
+    }
+    return {};
   }
 }

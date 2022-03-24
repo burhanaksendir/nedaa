@@ -1,4 +1,4 @@
-enum prayer_type {
+enum PrayerType {
   fajr,
   sunrise,
   duhur,
