@@ -1,12 +1,19 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:iathan/modules/settings/models/notification_settings.dart';
+import 'package:iathan/modules/settings/models/prayer_type.dart';
 import 'package:settings_ui/settings_ui.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class PrayerSettingsScreen extends StatefulWidget {
-  const PrayerSettingsScreen(this.prayer, {Key? key}) : super(key: key);
+import '../bloc/user_settings_bloc.dart';
 
-  final String prayer;
+class PrayerSettingsScreen extends StatefulWidget {
+  const PrayerSettingsScreen(this.prayerType, this.prayerName, {Key? key})
+      : super(key: key);
+
+  final PrayerType prayerType;
+  final String prayerName;
 
   @override
   State<PrayerSettingsScreen> createState() => _PrayerSettingsScreenState();
@@ -16,28 +23,31 @@ class _PrayerSettingsScreenState extends State<PrayerSettingsScreen> {
   // or as a local variable
   final _audioCache = AudioCache();
 
-  bool _vibrateEnable = false;
-  bool _soundEnable = false;
-
-  int _selectedRingtone = 0;
-
-  _ringtoneTile(AppLocalizations t, String title, int index) {
+  _ringtoneTile(
+      BuildContext context,
+      AppLocalizations t,
+      NotificationSettings notificationSettings,
+      String title,
+      String ringtoneFile) {
     return SettingsTile(
       title: Text(title),
-      trailing: _selectedRingtone == index ? const Icon(Icons.check) : null,
+      // trailing: _selectedRingtone == index ? const Icon(Icons.check) : null,
+      trailing: title == notificationSettings.ringtoneName
+          ? const Icon(Icons.check)
+          : null,
       onPressed: (context) async {
-        setState(() {
-          _selectedRingtone = index;
-        });
+        notificationSettings.ringtoneName = title;
+        context.read<UserSettingsBloc>().add(
+              PrayerNotificationEvent(widget.prayerType, notificationSettings),
+            );
 
-        // TODO: replace with audio file based on title?
-        AudioPlayer player = await _audioCache.play('knock.mp3');
+        AudioPlayer player = await _audioCache.play(ringtoneFile);
 
         player.onPlayerCompletion.listen((event) {
           Navigator.pop(context);
         });
 
-        showModalBottomSheet(
+        await showModalBottomSheet(
           context: context,
           builder: (context) {
             return TextButton(
@@ -51,6 +61,7 @@ class _PrayerSettingsScreenState extends State<PrayerSettingsScreen> {
             );
           },
         );
+        await player.stop();
       },
     );
   }
@@ -58,9 +69,14 @@ class _PrayerSettingsScreenState extends State<PrayerSettingsScreen> {
   @override
   Widget build(BuildContext context) {
     var t = AppLocalizations.of(context);
+
+    var _currentUserState = context.watch<UserSettingsBloc>().state;
+    var _prayerNotificationSettings =
+        _currentUserState.notificationSettings[widget.prayerType]!;
+
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.prayer),
+        title: Text(widget.prayerName),
       ),
       body: Padding(
         padding: const EdgeInsets.only(top: 8.0),
@@ -69,11 +85,13 @@ class _PrayerSettingsScreenState extends State<PrayerSettingsScreen> {
             SettingsSection(
               tiles: [
                 SettingsTile.switchTile(
-                  initialValue: _vibrateEnable,
+                  initialValue: _prayerNotificationSettings.vibration,
                   onToggle: (value) {
-                    setState(() {
-                      _vibrateEnable = value;
-                    });
+                    _prayerNotificationSettings.vibration = value;
+                    context.read<UserSettingsBloc>().add(
+                          PrayerNotificationEvent(
+                              widget.prayerType, _prayerNotificationSettings),
+                        );
                   },
                   title: Text(t!.vibrate),
                   leading: const Icon(Icons.vibration),
@@ -83,24 +101,44 @@ class _PrayerSettingsScreenState extends State<PrayerSettingsScreen> {
             SettingsSection(
               tiles: [
                 SettingsTile.switchTile(
-                  initialValue: _soundEnable,
+                  initialValue: _prayerNotificationSettings.sound,
                   onToggle: (value) {
-                    setState(() {
-                      _soundEnable = value;
-                    });
+                    _prayerNotificationSettings.sound = value;
+
+                    context.read<UserSettingsBloc>().add(
+                          PrayerNotificationEvent(
+                              widget.prayerType, _prayerNotificationSettings),
+                        );
                   },
                   title: Text(t.alertOn),
                   leading: const Icon(Icons.volume_up),
                 ),
               ],
             ),
-            if (_soundEnable)
+            if (_prayerNotificationSettings.sound)
               SettingsSection(
-                title: const Text(''),
                 tiles: [
-                  _ringtoneTile(t, "knock, knock", 0),
-                  _ringtoneTile(t, "Ringtone 1", 1),
-                  _ringtoneTile(t, "Ringtone 2", 2),
+                  _ringtoneTile(
+                    context,
+                    t,
+                    _prayerNotificationSettings,
+                    "knock, knock",
+                    "knock.mp3",
+                  ),
+                  _ringtoneTile(
+                    context,
+                    t,
+                    _prayerNotificationSettings,
+                    "Athan 1",
+                    "athan8.mp3",
+                  ),
+                  _ringtoneTile(
+                    context,
+                    t,
+                    _prayerNotificationSettings,
+                    "Athan 2",
+                    "athan6.mp3",
+                  ),
                 ],
               ),
           ],

@@ -1,17 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
+import 'package:iathan/modules/settings/repositories/settings_repository.dart';
 
 class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
-  SettingsBloc()
-      : super(SettingsState(
-            appLanguage: Locale(Intl.getCurrentLocale().split("_")[0]),
-            appTheme: ThemeMode.system)) {
-    on<LanguageEvent>((event, emit) => emit(SettingsState(
-        appLanguage: event.appLanguage, appTheme: state.appTheme)));
-    on<ThemeEvent>((event, emit) => emit(
-        SettingsState(appTheme: event.theme, appLanguage: state.appLanguage)));
+  SettingsBloc(this.settingsRepository)
+      : super(
+          SettingsState(
+            appLanguage: settingsRepository.getLanguage(),
+            appTheme: settingsRepository.getTheme(),
+          ),
+        ) {
+    on<LanguageEvent>(
+      (event, emit) => {
+        emit(SettingsState(
+            appLanguage: event.appLanguage, appTheme: state.appTheme)),
+        settingsRepository.setLanguage(event.appLanguage)
+      },
+    );
+    on<ThemeEvent>(
+      (event, emit) => {
+        emit(SettingsState(
+            appLanguage: state.appLanguage, appTheme: event.theme)),
+        settingsRepository.setTheme(event.theme)
+      },
+    );
   }
+
+  final SettingsRepository settingsRepository;
 }
 
 class SettingsState {

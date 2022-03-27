@@ -9,4 +9,20 @@ class UserLocation {
   UserLocation({this.location, this.country, this.state, this.city});
 
   String? get cityAddress => city ?? state;
+
+  Map<String, dynamic> toJson() => {
+        'location': location?.toJson(),
+        'country': country,
+        'state': state,
+        'city': city,
+      };
+
+  factory UserLocation.fromJson(Map<String, dynamic> json) => UserLocation(
+        location: json['location'] == null
+            ? null
+            : Location.fromMap(json['location'] as Map<String, dynamic>),
+        country: json['country'] as String?,
+        state: json['state'] as String?,
+        city: json['city'] as String?,
+      );
 }

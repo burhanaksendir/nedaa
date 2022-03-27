@@ -48,6 +48,7 @@ dependencies:
   device_preview: ^1.0.0
   auto_size_text: ^3.0.0
   flutter_bloc: ^8.0.1
+  shared_preferences: ^2.0.13
 
 dev_dependencies:
   flutter_test:
@@ -74,6 +75,8 @@ flutter:
 
   assets:
     - assets/knock.mp3
+    - assets/athan6.mp3
+    - assets/athan8.mp3
     - assets/images/
 
   # To add assets to your application, add an assets section, like this:
