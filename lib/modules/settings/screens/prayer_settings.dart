@@ -23,8 +23,12 @@ class _PrayerSettingsScreenState extends State<PrayerSettingsScreen> {
   // or as a local variable
   final _audioCache = AudioCache();
 
-  _ringtoneTile(BuildContext context, AppLocalizations t,
-      NotificationSettings notificationSettings, String title, int index) {
+  _ringtoneTile(
+      BuildContext context,
+      AppLocalizations t,
+      NotificationSettings notificationSettings,
+      String title,
+      String ringtoneFile) {
     return SettingsTile(
       title: Text(title),
       // trailing: _selectedRingtone == index ? const Icon(Icons.check) : null,
@@ -37,8 +41,7 @@ class _PrayerSettingsScreenState extends State<PrayerSettingsScreen> {
               PrayerNotificationEvent(widget.prayerType, notificationSettings),
             );
 
-        // TODO: replace with audio file based on title?
-        AudioPlayer player = await _audioCache.play('knock.mp3');
+        AudioPlayer player = await _audioCache.play(ringtoneFile);
 
         player.onPlayerCompletion.listen((event) {
           Navigator.pop(context);
@@ -115,12 +118,27 @@ class _PrayerSettingsScreenState extends State<PrayerSettingsScreen> {
             if (_prayerNotificationSettings.sound)
               SettingsSection(
                 tiles: [
-                  _ringtoneTile(context, t, _prayerNotificationSettings,
-                      "knock, knock", 0),
                   _ringtoneTile(
-                      context, t, _prayerNotificationSettings, "Ringtone 1", 1),
+                    context,
+                    t,
+                    _prayerNotificationSettings,
+                    "knock, knock",
+                    "knock.mp3",
+                  ),
                   _ringtoneTile(
-                      context, t, _prayerNotificationSettings, "Ringtone 2", 2),
+                    context,
+                    t,
+                    _prayerNotificationSettings,
+                    "Athan 1",
+                    "athan8.mp3",
+                  ),
+                  _ringtoneTile(
+                    context,
+                    t,
+                    _prayerNotificationSettings,
+                    "Athan 2",
+                    "athan6.mp3",
+                  ),
                 ],
               ),
           ],
