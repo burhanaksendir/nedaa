@@ -24,33 +24,42 @@ class _MainScreenState extends State<MainScreen> {
     }
   }
 
+  getIcon() {
+    if (_selectedIndex == 1) {
+      return IconButton(
+        icon: const Icon(Icons.home),
+        onPressed: () {
+          setState(() {
+            _selectedIndex = 0;
+          });
+        },
+      );
+    } else if (_selectedIndex == 0) {
+      return IconButton(
+        icon: const Icon(Icons.settings),
+        onPressed: () {
+          setState(() {
+            _selectedIndex = 1;
+          });
+        },
+      );
+    } else {
+      throw Exception('Unknown screen index');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     var t = AppLocalizations.of(context);
     return SafeArea(
       child: Scaffold(
+        extendBody: true,
         appBar: AppBar(
-          title: const Text('iAthan'),
+          title: Text(t!.appTitle),
+          actions: [getIcon()],
+          centerTitle: true,
         ),
         body: _getCurrentScreen(),
-        bottomNavigationBar: BottomNavigationBar(
-          items: [
-            BottomNavigationBarItem(
-              icon: const Icon(Icons.home),
-              label: t!.homePage,
-            ),
-            BottomNavigationBarItem(
-              icon: const Icon(Icons.settings),
-              label: t.settings,
-            ),
-          ],
-          onTap: (index) {
-            setState(() {
-              _selectedIndex = index;
-            });
-          },
-          currentIndex: _selectedIndex,
-        ),
       ),
     );
   }
