@@ -122,14 +122,18 @@ class SettingsRepository {
       return {};
     }
 
-    var map = json.decode(settings);
+    var jsonMap = json.decode(settings);
 
-    if (map is Map<String, dynamic>) {
-      return map.map(
-        (key, value) => MapEntry(PrayerType.values.byName(key),
-            NotificationSettings.fromJson(value)),
-      );
+    var settingsMap = <PrayerType, NotificationSettings>{};
+
+    for (var type in PrayerType.values) {
+      if (jsonMap.containsKey(type.name)) {
+        settingsMap[type] = NotificationSettings.fromJson(jsonMap[type.name]);
+      } else {
+        settingsMap[type] = NotificationSettings.defaultValue();
+      }
     }
-    return {};
+
+    return settingsMap;
   }
 }

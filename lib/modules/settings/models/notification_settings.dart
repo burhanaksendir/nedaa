@@ -4,6 +4,13 @@ class NotificationSettings {
       required this.vibration,
       required this.ringtoneName});
 
+  NotificationSettings.defaultValue()
+      : this(
+          sound: true,
+          vibration: false,
+          ringtoneName: 'knock, knock',
+        );
+
   bool sound;
   bool vibration;
   String ringtoneName;

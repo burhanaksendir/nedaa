@@ -23,14 +23,6 @@ class _PrayerSettingsScreenState extends State<PrayerSettingsScreen> {
   // or as a local variable
   final _audioCache = AudioCache();
 
-  NotificationSettings _defaultNotificationSettings() {
-    return NotificationSettings(
-      vibration: false,
-      sound: true,
-      ringtoneName: 'knock, knock',
-    );
-  }
-
   _ringtoneTile(BuildContext context, AppLocalizations t,
       NotificationSettings notificationSettings, String title, int index) {
     return SettingsTile(
@@ -77,8 +69,7 @@ class _PrayerSettingsScreenState extends State<PrayerSettingsScreen> {
 
     var _currentUserState = context.watch<UserSettingsBloc>().state;
     var _prayerNotificationSettings =
-        _currentUserState.notificationSettings[widget.prayerType] ??
-            _defaultNotificationSettings();
+        _currentUserState.notificationSettings[widget.prayerType]!;
 
     return Scaffold(
       appBar: AppBar(
