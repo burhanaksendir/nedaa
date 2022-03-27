@@ -11,43 +11,6 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  int _selectedIndex = 0;
-
-  Widget _getCurrentScreen() {
-    switch (_selectedIndex) {
-      case 0:
-        return const PrayerTimes();
-      case 1:
-        return const Settings();
-      default:
-        throw Exception('Unknown screen index');
-    }
-  }
-
-  getIcon() {
-    if (_selectedIndex == 1) {
-      return IconButton(
-        icon: const Icon(Icons.home),
-        onPressed: () {
-          setState(() {
-            _selectedIndex = 0;
-          });
-        },
-      );
-    } else if (_selectedIndex == 0) {
-      return IconButton(
-        icon: const Icon(Icons.settings),
-        onPressed: () {
-          setState(() {
-            _selectedIndex = 1;
-          });
-        },
-      );
-    } else {
-      throw Exception('Unknown screen index');
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     var t = AppLocalizations.of(context);
@@ -56,10 +19,24 @@ class _MainScreenState extends State<MainScreen> {
         extendBody: true,
         appBar: AppBar(
           title: Text(t!.appTitle),
-          actions: [getIcon()],
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.settings),
+              onPressed: () {
+                setState(() {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const Settings(),
+                    ),
+                  );
+                });
+              },
+            )
+          ],
           centerTitle: true,
         ),
-        body: _getCurrentScreen(),
+        body: const PrayerTimes(),
       ),
     );
   }
