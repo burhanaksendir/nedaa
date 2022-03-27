@@ -8,8 +8,9 @@ class PrayerTimesCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(32),
+      padding: const EdgeInsets.all(8),
       child: Card(
+        color: Colors.transparent,
         child: Stack(children: [
           Center(
             child: Opacity(
@@ -24,7 +25,7 @@ class PrayerTimesCard extends StatelessWidget {
             child: child,
           ),
         ]),
-        elevation: 4,
+        elevation: 0,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(32),
         ),

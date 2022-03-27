@@ -11,46 +11,32 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  int _selectedIndex = 0;
-
-  Widget _getCurrentScreen() {
-    switch (_selectedIndex) {
-      case 0:
-        return const PrayerTimes();
-      case 1:
-        return const Settings();
-      default:
-        throw Exception('Unknown screen index');
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     var t = AppLocalizations.of(context);
     return SafeArea(
       child: Scaffold(
+        extendBody: true,
         appBar: AppBar(
-          title: const Text('iAthan'),
-        ),
-        body: _getCurrentScreen(),
-        bottomNavigationBar: BottomNavigationBar(
-          items: [
-            BottomNavigationBarItem(
-              icon: const Icon(Icons.home),
-              label: t!.homePage,
-            ),
-            BottomNavigationBarItem(
+          title: Text(t!.appTitle),
+          actions: [
+            IconButton(
               icon: const Icon(Icons.settings),
-              label: t.settings,
-            ),
+              onPressed: () {
+                setState(() {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const Settings(),
+                    ),
+                  );
+                });
+              },
+            )
           ],
-          onTap: (index) {
-            setState(() {
-              _selectedIndex = index;
-            });
-          },
-          currentIndex: _selectedIndex,
+          centerTitle: true,
         ),
+        body: const PrayerTimes(),
       ),
     );
   }
