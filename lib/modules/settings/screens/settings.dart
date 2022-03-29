@@ -136,12 +136,12 @@ class _SettingsState extends State<Settings> {
               tiles: [
                 // TODO: forward to creating new email
                 SettingsTile(
-                  title: const Text('support@nedaa.app'),
+                  title: const Text('support@nedaa.io'),
                   leading: const Icon(Icons.email),
                 ),
                 // TODO: forward to open the page in the browser
                 SettingsTile(
-                  title: const Text('https://nedaa.app'),
+                  title: const Text('https://nedaa.io'),
                   leading: const Icon(Icons.public),
                 ),
               ],
