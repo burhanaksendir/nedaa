@@ -118,11 +118,11 @@ class SettingsRepository {
 
   Map<PrayerType, NotificationSettings> getNotificationSettings() {
     var settings = _getString('notificationSettings');
-    if (settings == null) {
-      return {};
-    }
 
-    var jsonMap = json.decode(settings);
+    var jsonMap = {};
+    if (settings != null) {
+      jsonMap = json.decode(settings);
+    }
 
     var settingsMap = <PrayerType, NotificationSettings>{};
 
@@ -133,7 +133,6 @@ class SettingsRepository {
         settingsMap[type] = NotificationSettings.defaultValue();
       }
     }
-
     return settingsMap;
   }
 }

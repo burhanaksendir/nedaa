@@ -21,6 +21,7 @@ class UserSettingsBloc extends Bloc<UserSettingsEvent, UserSettingsState> {
           location: event.location,
           calculationMethod: state.calculationMethod,
           keepUpdatingLocation: state.keepUpdatingLocation,
+          notificationSettings: state.notificationSettings,
         ));
         settingsRepository.setUserLocation(event.location);
       },
@@ -31,6 +32,7 @@ class UserSettingsBloc extends Bloc<UserSettingsEvent, UserSettingsState> {
           location: state.location,
           calculationMethod: event.calculationMethod,
           keepUpdatingLocation: state.keepUpdatingLocation,
+          notificationSettings: state.notificationSettings,
         ),
       );
       settingsRepository.setCalculationMethod(event.calculationMethod);
@@ -41,6 +43,7 @@ class UserSettingsBloc extends Bloc<UserSettingsEvent, UserSettingsState> {
           location: state.location,
           calculationMethod: state.calculationMethod,
           keepUpdatingLocation: event.keepUpdating,
+          notificationSettings: state.notificationSettings,
         ),
       );
       settingsRepository.setKeepUpdatingLocation(event.keepUpdating);
