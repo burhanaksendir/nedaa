@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:iathan/constants/app_constans.dart';
+import 'package:nedaa/constants/app_constans.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class LanguageDialog extends StatelessWidget {

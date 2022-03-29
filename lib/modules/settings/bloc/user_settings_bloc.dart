@@ -1,9 +1,9 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:iathan/modules/settings/models/calcualtiom_method.dart';
-import 'package:iathan/modules/settings/models/notification_settings.dart';
-import 'package:iathan/modules/settings/models/prayer_type.dart';
-import 'package:iathan/modules/settings/models/user_location.dart';
-import 'package:iathan/modules/settings/repositories/settings_repository.dart';
+import 'package:nedaa/modules/settings/models/calcualtiom_method.dart';
+import 'package:nedaa/modules/settings/models/notification_settings.dart';
+import 'package:nedaa/modules/settings/models/prayer_type.dart';
+import 'package:nedaa/modules/settings/models/user_location.dart';
+import 'package:nedaa/modules/settings/repositories/settings_repository.dart';
 
 class UserSettingsBloc extends Bloc<UserSettingsEvent, UserSettingsState> {
   UserSettingsBloc(this.settingsRepository)

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:iathan/modules/settings/models/prayer_type.dart';
-import 'package:iathan/modules/settings/screens/prayer_settings.dart';
+import 'package:nedaa/modules/settings/models/prayer_type.dart';
+import 'package:nedaa/modules/settings/screens/prayer_settings.dart';
 import 'package:settings_ui/settings_ui.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
