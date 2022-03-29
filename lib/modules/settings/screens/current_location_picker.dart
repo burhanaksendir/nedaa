@@ -4,8 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:iathan/modules/settings/bloc/user_settings_bloc.dart';
-import 'package:iathan/modules/settings/models/user_location.dart';
+import 'package:nedaa/modules/settings/bloc/user_settings_bloc.dart';
+import 'package:nedaa/modules/settings/models/user_location.dart';
 
 class CurrentLocationPicker extends StatefulWidget {
   const CurrentLocationPicker({Key? key}) : super(key: key);

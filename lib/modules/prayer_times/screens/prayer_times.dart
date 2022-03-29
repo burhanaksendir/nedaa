@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:iathan/modules/prayer_times/ui_components/main_prayer_card.dart';
-import 'package:iathan/modules/prayer_times/ui_components/today_prayers_card.dart';
+import 'package:nedaa/modules/prayer_times/ui_components/main_prayer_card.dart';
+import 'package:nedaa/modules/prayer_times/ui_components/today_prayers_card.dart';
 import 'package:page_view_indicators/animated_circle_page_indicator.dart';
 
 class PrayerTimes extends StatefulWidget {

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:iathan/modules/settings/screens/settings.dart';
+import 'package:nedaa/modules/settings/screens/settings.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../modules/prayer_times/screens/prayer_times.dart';
 

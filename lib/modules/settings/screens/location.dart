@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:iathan/modules/settings/bloc/user_settings_bloc.dart';
-import 'package:iathan/modules/settings/screens/current_location_picker.dart';
+import 'package:nedaa/modules/settings/bloc/user_settings_bloc.dart';
+import 'package:nedaa/modules/settings/screens/current_location_picker.dart';
 import 'package:settings_ui/settings_ui.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 

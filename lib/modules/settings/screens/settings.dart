@@ -1,16 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:iathan/constants/app_constans.dart';
-import 'package:iathan/constants/calculation_methods.dart';
-import 'package:iathan/modules/settings/bloc/settings_bloc.dart';
-import 'package:iathan/modules/settings/bloc/user_settings_bloc.dart';
-import 'package:iathan/modules/settings/models/calcualtiom_method.dart';
-import 'package:iathan/modules/settings/screens/calculation_methods_dialog.dart';
-import 'package:iathan/modules/settings/screens/languages_dialog.dart';
-import 'package:iathan/modules/settings/screens/location.dart';
-import 'package:iathan/modules/settings/screens/notification.dart';
-import 'package:iathan/modules/settings/screens/theme_dialog.dart';
+import 'package:nedaa/constants/app_constans.dart';
+import 'package:nedaa/constants/calculation_methods.dart';
+import 'package:nedaa/modules/settings/bloc/settings_bloc.dart';
+import 'package:nedaa/modules/settings/bloc/user_settings_bloc.dart';
+import 'package:nedaa/modules/settings/models/calcualtiom_method.dart';
+import 'package:nedaa/modules/settings/screens/calculation_methods_dialog.dart';
+import 'package:nedaa/modules/settings/screens/languages_dialog.dart';
+import 'package:nedaa/modules/settings/screens/location.dart';
+import 'package:nedaa/modules/settings/screens/notification.dart';
+import 'package:nedaa/modules/settings/screens/theme_dialog.dart';
 import 'package:settings_ui/settings_ui.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -136,12 +136,12 @@ class _SettingsState extends State<Settings> {
               tiles: [
                 // TODO: forward to creating new email
                 SettingsTile(
-                  title: const Text('support@iathan.app'),
+                  title: const Text('support@nedaa.app'),
                   leading: const Icon(Icons.email),
                 ),
                 // TODO: forward to open the page in the browser
                 SettingsTile(
-                  title: const Text('https://iathan.app'),
+                  title: const Text('https://nedaa.app'),
                   leading: const Icon(Icons.public),
                 ),
               ],

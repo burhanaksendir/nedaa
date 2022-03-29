@@ -16,7 +16,7 @@ class PrayerTimesCard extends StatelessWidget {
             child: Opacity(
               opacity: 0.1,
               child: Image.asset(
-                'assets/images/iAthanLogo.png',
+                'assets/images/nedaanLogo.png',
               ),
             ),
           ),

@@ -8,8 +8,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:iathan/main.dart';
-import 'package:iathan/modules/settings/repositories/settings_repository.dart';
+import 'package:nedaa/main.dart';
+import 'package:nedaa/modules/settings/repositories/settings_repository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {

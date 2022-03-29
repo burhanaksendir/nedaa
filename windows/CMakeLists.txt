@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.14)
-project(iathan LANGUAGES CXX)
+project(nedaa LANGUAGES CXX)
 
-set(BINARY_NAME "iathan")
+set(BINARY_NAME "nedaa")
 
 cmake_policy(SET CMP0063 NEW)
 
