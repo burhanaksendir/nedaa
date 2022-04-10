@@ -52,5 +52,22 @@
     <string>This app needs access to location when open.</string>
     <key>NSLocationAlwaysUsageDescription</key>
     <string>This app needs access to location when in the background.</string>
+    <key>LSApplicationQueriesSchemes</key>
+    <array>
+      <string>googlegmail</string>
+      <string>x-dispatch</string>
+      <string>readdle-spark</string>
+      <string>airmail</string>
+      <string>ms-outlook</string>
+      <string>ymail</string>
+      <string>fastmail</string>
+      <string>superhuman</string>
+      <string>protonmail</string>
+    </array>
+    <key>LSApplicationQueriesSchemes</key>
+    <array>
+      <string>https</string>
+      <string>http</string>
+    </array>
   </dict>
 </plist>
