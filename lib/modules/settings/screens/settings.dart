@@ -164,6 +164,7 @@ class _SettingsState extends State<Settings> {
                           return MailAppPickerDialog(
                             mailApps: result.options,
                             title: t.selectMailApp,
+                            emailContent: emailContent,
                           );
                         },
                       );
