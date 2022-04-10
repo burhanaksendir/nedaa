@@ -82,7 +82,7 @@ class _CurrentLocationPickerState extends State<CurrentLocationPicker> {
     if ((cityValue.isNotEmpty || stateValue.isNotEmpty) &&
         countryValue.isNotEmpty) {
       Future<List<Location>> locations =
-          locationFromAddress('${cityValue}, ${stateValue}, ${countryValue}');
+          locationFromAddress(cityValue + ', ' + stateValue + ', ' + countryValue);
       Location location = await locations.then((value) => value[0]);
       context.read<UserSettingsBloc>().add(
             UserLocationEvent(
