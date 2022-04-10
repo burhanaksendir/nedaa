@@ -11,6 +11,7 @@
     "dark": "Dark",
     "defaultString": "Default",
     "duhur": "Duhur",
+    "error": "Error",
     "fajr": "Fajr",
     "friday": "Friday",
     "getCurrentLocation": "Get Current Location",
@@ -29,6 +30,7 @@
     "ok": "OK",
     "prayersAlerts": "Prayers Alerts",
     "saturday": "Saturday",
+    "selectMailApp": "Select Mail App",
     "settings": "Settings",
     "since": "since",
     "state": "State",
@@ -39,6 +41,7 @@
     "theme": "Theme",
     "thursday": "Thursday",
     "tuesday": "Tuesday",
+    "unableToLunchLink": "Unable to launch link",
     "until": "Until",
     "vibrate": "Vibrate",
     "wednesday": "Wednesday"

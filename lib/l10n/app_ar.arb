@@ -11,6 +11,7 @@
   "dark": "داكن",
   "defaultString": "الافتراضي",
   "duhur": "الظهر",
+  "error": "خطأ",
   "fajr": "الفجر",
   "friday": "الجمعة",
   "getCurrentLocation": "تحديد الموقع الحالي",
@@ -29,6 +30,7 @@
   "ok": "حسنا",
   "prayersAlerts": "تنبيهات الصلوات",
   "saturday": "السبت",
+  "selectMailApp": "يرجى تحديد تطبيق بريد إلكتروني",
   "settings": "الإعدادات",
   "since": "منذ",
   "state": "الولاية",
@@ -39,6 +41,7 @@
   "theme": "نمط",
   "thursday": "الخميس",
   "tuesday": "الثلاثاء",
+  "unableToLunchLink": "لا يمكن فتح الرابط",
   "until": "حتى",
   "vibrate": "إهتزاز",
   "wednesday": "الأربعاء"

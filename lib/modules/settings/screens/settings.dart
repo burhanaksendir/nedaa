@@ -150,7 +150,6 @@ class _SettingsState extends State<Settings> {
                     var result = await OpenMailApp.composeNewEmailInMailApp(
                       emailContent: emailContent,
                     );
-
                     // If no mail apps found, show error
                     if (!result.didOpen && !result.canOpen) {
                       showNoMailAppsDialog(context);
@@ -164,16 +163,32 @@ class _SettingsState extends State<Settings> {
                         builder: (_) {
                           return MailAppPickerDialog(
                             mailApps: result.options,
+                            title: t.selectMailApp,
                           );
                         },
                       );
                     }
                   },
                 ),
-                // TODO: forward to open the page in the browser
                 SettingsTile(
                   onPressed: (context) async {
-                    if (!await launch(website)) throw ' $website';
+                    if (!await launch(website)) {
+                      showDialog(
+                        context: context,
+                        builder: (_) {
+                          return AlertDialog(
+                            title: Text(t.error),
+                            content: Text(t.unableToLunchLink),
+                            actions: [
+                              TextButton(
+                                child: Text(t.ok),
+                                onPressed: () => Navigator.of(context).pop(),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    }
                   },
                   title: RichText(
                     text: const TextSpan(
