@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nedaa/modules/prayer_times/ui_components/main_prayer_card.dart';
 import 'package:nedaa/modules/prayer_times/ui_components/today_prayers_card.dart';
+import 'package:nedaa/modules/settings/bloc/user_settings_bloc.dart';
 import 'package:page_view_indicators/animated_circle_page_indicator.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class PrayerTimes extends StatefulWidget {
   const PrayerTimes({Key? key}) : super(key: key);
@@ -12,43 +15,70 @@ class PrayerTimes extends StatefulWidget {
 
 class _PrayerTimesState extends State<PrayerTimes> {
   final _currentPageNotifier = ValueNotifier<int>(0);
+  final RefreshController _refreshController =
+      RefreshController(initialRefresh: false);
+
+  Widget _buildPrayerTimesView() {
+    return Column(children: [
+      Expanded(
+        child: PageView.builder(
+          itemBuilder: (context, index) {
+            switch (index) {
+              case 0:
+                return const MainPrayerCard();
+              case 1:
+                return const TodayPrayersCard();
+              default:
+                throw Exception('Invalid index');
+            }
+          },
+          itemCount: 2,
+          onPageChanged: (int index) {
+            _currentPageNotifier.value = index;
+          },
+        ),
+      ),
+      Padding(
+        padding: const EdgeInsets.only(bottom: 16),
+        child: AnimatedCirclePageIndicator(
+          itemCount: 2,
+          currentPageNotifier: _currentPageNotifier,
+          borderWidth: 1,
+          spacing: 6,
+          radius: 8,
+          activeRadius: 6,
+          borderColor: const Color(0xFF327D77),
+          fillColor: Colors.white,
+          activeColor: const Color(0xFF87C7BE),
+        ),
+      ),
+    ]);
+  }
+
+  void _onRefresh(_userSettings) async {
+    // monitor network fetch
+    await Future.delayed(const Duration(milliseconds: 1000));
+    _refreshController.refreshCompleted();
+    // _refreshController.refreshFailed();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Expanded(
-          child: PageView.builder(
-            itemBuilder: (context, index) {
-              switch (index) {
-                case 0:
-                  return const MainPrayerCard();
-                case 1:
-                  return const TodayPrayersCard();
-                default:
-                  throw Exception('Invalid index');
-              }
-            },
-            itemCount: 2,
-            onPageChanged: (int index) {
-              _currentPageNotifier.value = index;
-            },
+    var _userSettings = context.watch<UserSettingsBloc>().state;
+    return SmartRefresher(
+      onRefresh: () => _onRefresh(_userSettings),
+      controller: _refreshController,
+      child: CustomScrollView(
+        physics: const AlwaysScrollableScrollPhysics(),
+        slivers: <Widget>[
+          SliverFillViewport(
+            delegate: SliverChildBuilderDelegate(
+              (_, __) => _buildPrayerTimesView(),
+              childCount: 1,
+            ),
           ),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(bottom: 16),
-          child: AnimatedCirclePageIndicator(
-            itemCount: 2,
-            currentPageNotifier: _currentPageNotifier,
-            borderWidth: 1,
-            spacing: 6,
-            radius: 8,
-            activeRadius: 6,
-            borderColor: const Color(0xFF327D77),
-            fillColor: Colors.white,
-            activeColor: const Color(0xFF87C7BE),
-          ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
