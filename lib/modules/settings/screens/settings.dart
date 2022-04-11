@@ -11,8 +11,10 @@ import 'package:nedaa/modules/settings/screens/languages_dialog.dart';
 import 'package:nedaa/modules/settings/screens/location.dart';
 import 'package:nedaa/modules/settings/screens/notification.dart';
 import 'package:nedaa/modules/settings/screens/theme_dialog.dart';
+import 'package:open_mail_app/open_mail_app.dart';
 import 'package:settings_ui/settings_ui.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class Settings extends StatefulWidget {
   const Settings({Key? key}) : super(key: key);
@@ -24,6 +26,8 @@ class Settings extends StatefulWidget {
 class _SettingsState extends State<Settings> {
   bool lockInBackground = false;
   bool notificationsEnabled = false;
+  static const email = 'support@nedaa.io';
+  static const website = 'https://nedaa.io';
 
   @override
   Widget build(BuildContext context) {
@@ -134,14 +138,68 @@ class _SettingsState extends State<Settings> {
             SettingsSection(
               title: Text(t.contactUs),
               tiles: [
-                // TODO: forward to creating new email
                 SettingsTile(
-                  title: const Text('support@nedaa.io'),
+                  title: const Text(email),
                   leading: const Icon(Icons.email),
+                  onPressed: (context) async {
+                    EmailContent emailContent = EmailContent(to: [
+                      email,
+                    ]);
+                    // Android: Will open mail app or show native picker.
+                    // iOS: Will open mail app if single mail app found.
+                    var result = await OpenMailApp.composeNewEmailInMailApp(
+                      emailContent: emailContent,
+                    );
+                    // If no mail apps found, show error
+                    if (!result.didOpen && !result.canOpen) {
+                      showNoMailAppsDialog(context);
+
+                      // iOS: if multiple mail apps found, show dialog to select.
+                      // There is no native intent/default app system in iOS so
+                      // you have to do it yourself.
+                    } else if (!result.didOpen && result.canOpen) {
+                      showDialog(
+                        context: context,
+                        builder: (_) {
+                          return MailAppPickerDialog(
+                            mailApps: result.options,
+                            title: t.selectMailApp,
+                            emailContent: emailContent,
+                          );
+                        },
+                      );
+                    }
+                  },
                 ),
-                // TODO: forward to open the page in the browser
                 SettingsTile(
-                  title: const Text('https://nedaa.io'),
+                  onPressed: (context) async {
+                    if (!await launch(website)) {
+                      showDialog(
+                        context: context,
+                        builder: (_) {
+                          return AlertDialog(
+                            title: Text(t.error),
+                            content: Text(t.unableToLunchLink),
+                            actions: [
+                              TextButton(
+                                child: Text(t.ok),
+                                onPressed: () => Navigator.of(context).pop(),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    }
+                  },
+                  title: RichText(
+                    text: const TextSpan(
+                      text: website,
+                      style: TextStyle(
+                        color: Colors.blue,
+                        decoration: TextDecoration.underline,
+                      ),
+                    ),
+                  ),
                   leading: const Icon(Icons.public),
                 ),
               ],
@@ -151,4 +209,23 @@ class _SettingsState extends State<Settings> {
       ),
     );
   }
+}
+
+void showNoMailAppsDialog(BuildContext context) {
+  showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text(""),
+          content: Text(AppLocalizations.of(context)!.noMailAppFound),
+          actions: <Widget>[
+            TextButton(
+              child: Text(AppLocalizations.of(context)!.ok),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            )
+          ],
+        );
+      });
 }
