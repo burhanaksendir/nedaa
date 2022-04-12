@@ -44,7 +44,7 @@ dependencies:
   geolocator: ^8.2.0
   geocoding: ^2.0.2
   audioplayers: ^0.20.1
-  flex_color_scheme: ^4.2.0
+  flex_color_scheme: ^5.0.0-dev.2
   device_preview: ^1.0.0
   auto_size_text: ^3.0.0
   flutter_bloc: ^8.0.1
