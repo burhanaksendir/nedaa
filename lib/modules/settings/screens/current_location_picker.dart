@@ -115,9 +115,9 @@ class _CurrentLocationPickerState extends State<CurrentLocationPicker> {
         padding: const EdgeInsets.all(8.0),
         child: Column(children: [
           CSCPicker(
-            currentCity: _userLocation?.city,
-            currentState: _userLocation?.state,
-            currentCountry: _userLocation?.country,
+            currentCity: _userLocation.city,
+            currentState: _userLocation.state,
+            currentCountry: _userLocation.country,
 
             ///Enable disable state dropdown [OPTIONAL PARAMETER]
             showStates: true,

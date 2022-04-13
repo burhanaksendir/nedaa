@@ -25,4 +25,13 @@ class DayPrayerTimes {
 
     return DayPrayerTimes(prayerTimes, date, calculationMethod);
   }
+
+  // toJson
+  Map<String, dynamic> toJson() {
+    return {
+      'prayerTimes': prayerTimes,
+      'date': date,
+      'calculationMethod': calculationMethod,
+    };
+  }
 }

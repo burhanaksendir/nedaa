@@ -66,13 +66,13 @@ class UserSettingsBloc extends Bloc<UserSettingsEvent, UserSettingsState> {
 }
 
 class UserSettingsState {
-  final UserLocation? location;
+  final UserLocation location;
   final CalculationMethod? calculationMethod;
   final bool? keepUpdatingLocation;
   final Map<PrayerType, NotificationSettings> notificationSettings;
 
   UserSettingsState(
-      {this.location,
+      {required this.location,
       this.calculationMethod,
       this.keepUpdatingLocation,
       this.notificationSettings = const {}});

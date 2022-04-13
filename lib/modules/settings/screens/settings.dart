@@ -46,7 +46,7 @@ class _SettingsState extends State<Settings> {
 
     var _currentCalculationMethodName =
         methods[_currentCalculationMethod?.index];
-    var _currentUserCity = _currentUserState.location?.cityAddress;
+    var _currentUserCity = _currentUserState.location.cityAddress;
 
     return SafeArea(
       child: Scaffold(
