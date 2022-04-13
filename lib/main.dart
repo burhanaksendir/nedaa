@@ -12,6 +12,7 @@ import 'package:nedaa/modules/settings/repositories/settings_repository.dart';
 import 'package:nedaa/screens/main_screen.dart';
 import 'package:device_preview/device_preview.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -21,11 +22,21 @@ void main() async {
   SettingsRepository settingsRepository = SettingsRepository(
     await SharedPreferences.getInstance(),
   );
-  runApp(
-    DevicePreview(
-      enabled: !kReleaseMode,
-      builder: (context) =>
-          MyApp(settingsRepository: settingsRepository), // Wrap your app
+
+  await SentryFlutter.init(
+    (options) {
+      options.dsn = const String.fromEnvironment('SENTRY_DSN');
+      // Set tracesSampleRate to 1.0 to capture 100% of transactions for performance monitoring.
+      // We recommend adjusting this value in production.
+      options.tracesSampleRate = 1.0;
+    },
+    appRunner: () => runApp(
+      DevicePreview(
+        enabled: !kReleaseMode,
+        builder: (context) => MyApp(
+          settingsRepository: settingsRepository,
+        ),
+      ),
     ),
   );
 }
