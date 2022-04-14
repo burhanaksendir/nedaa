@@ -56,10 +56,10 @@ jobs:
      # with:
       #  name: release-apk
       #  path: build/app/outputs/apk/release/app-release.apk
-      - name: notification
-        if: cancelled() == false
-        uses: xinthink/action-telegram@v1.1
-        with:
-          botToken: '${{ secrets.BotToken }}'
-          chatId: '${{ secrets.ChatID }}'
-          jobStatus: '${{ job.status }}' 
+    - name: notification
+      if: cancelled() == false
+      uses: xinthink/action-telegram@v1.1
+      with:
+        botToken: '${{ secrets.BotToken }}'
+        chatId: '${{ secrets.ChatID }}'
+        jobStatus: '${{ job.status }}' 
