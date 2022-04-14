@@ -63,3 +63,4 @@ jobs:
         botToken: '${{ secrets.BotToken }}'
         chatId: '${{ secrets.ChatID }}'
         jobStatus: '${{ job.status }}' 
+        skipsuccess: 'false'
