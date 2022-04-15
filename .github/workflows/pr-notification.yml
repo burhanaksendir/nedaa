@@ -1,0 +1,20 @@
+name: Telegram Pull Request Notifier
+
+on:
+  pull_request:
+    types: [opened, review_requested]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v3
+      
+      # Send a telegram message on pr open or review request
+      - name: Pull Request Telegram
+        uses: F2had/pr-telegram-action@v0.0.1-alpha
+        with: 
+          bot_token: '${{ secrets.BotToken }}'
+          chat_id: '${{ secrets.CHATID }}'
