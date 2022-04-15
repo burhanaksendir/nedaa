@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:nedaa/constants/calculation_methods.dart';
-import 'package:nedaa/modules/settings/models/calcualtiom_method.dart';
+import 'package:nedaa/modules/settings/models/calcualtion_method.dart';
 
 class CalculationMethodsDialog extends StatelessWidget {
   const CalculationMethodsDialog({Key? key}) : super(key: key);
@@ -18,7 +18,7 @@ class CalculationMethodsDialog extends StatelessWidget {
       children: methods.entries.map((entry) {
         return SimpleDialogOption(
           onPressed: () {
-            Navigator.pop(context, CalculationMethod(entry.key, entry.value));
+            Navigator.pop(context, CalculationMethod(entry.key));
           },
           child: Text(entry.value),
         );

@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:nedaa/modules/prayer_times/bloc/prayer_times_bloc.dart';
 import 'package:nedaa/modules/prayer_times/ui_components/main_prayer_card.dart';
 import 'package:nedaa/modules/prayer_times/ui_components/today_prayers_card.dart';
 import 'package:nedaa/modules/settings/bloc/user_settings_bloc.dart';
-import 'package:nedaa/modules/settings/models/prayer_type.dart';
-import 'package:nedaa/utils/services/rest_api_service.dart';
 import 'package:page_view_indicators/animated_circle_page_indicator.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
@@ -57,64 +56,24 @@ class _PrayerTimesState extends State<PrayerTimes> {
     ]);
   }
 
-  void _onRefresh(UserSettingsState _userSettings) async {
-    // monitor network fetch
-    //latitude-=3&longitude-=3method=3=iso8601
-    var _userLocation = _userSettings.location;
-    if (_userLocation != null) {
-      var calculationMethodIndex = _userSettings.calculationMethod?.index ?? -1;
-      print('Cal method index: $calculationMethodIndex');
-      var _calculationMethod =
-          calculationMethodIndex != -1 ? '&method=$calculationMethodIndex' : '';
-      var getParams =
-          'iso8601=true&latitude=${_userLocation.location?.latitude ?? 0}&longitude=${_userLocation.location?.longitude ?? 0}$_calculationMethod';
-      var allDays = await getPrayerTimes(getParams)
-          .then((value) => value)
-          .catchError((error) => _refreshController.refreshFailed());
-      var todayTimes = allDays.firstWhere((e) {
-        var todaysDate = DateTime.now();
-        return e.date.day == todaysDate.day &&
-            e.date.month == todaysDate.month &&
-            e.date.year == todaysDate.year;
-      });
-      var fajr = todayTimes.prayerTimes[PrayerType.fajr]?.toLocal();
-      var sunrise = todayTimes.prayerTimes[PrayerType.sunrise]?.toLocal();
-      var dhuhr = todayTimes.prayerTimes[PrayerType.duhur]?.toLocal();
-      var asr = todayTimes.prayerTimes[PrayerType.asr]?.toLocal();
-      var maghrib = todayTimes.prayerTimes[PrayerType.maghrib]?.toLocal();
-      var isha = todayTimes.prayerTimes[PrayerType.isha]?.toLocal();
+  void _onRefresh(
+      UserSettingsState _userSettings, PrayerTimesBloc _prayerTimesBloc) async {
+    _prayerTimesBloc.add(FetchPrayerTimesEvent(
+      _userSettings.location,
+      _userSettings.calculationMethod,
+    ));
 
-      showDialog(
-          context: context,
-          builder: (context) {
-            return AlertDialog(
-              title: const Text('Prayer Times'),
-              content: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text('Fajr: ${fajr?.hour}:${fajr?.minute}'),
-                  Text('Sunrise: ${sunrise?.hour}:${sunrise?.minute}'),
-                  Text('Dhuhr: ${dhuhr?.hour}:${dhuhr?.minute}'),
-                  Text('Asr: ${asr?.hour}:${asr?.minute}'),
-                  Text('Maghrib: ${maghrib?.hour}:${maghrib?.minute}'),
-                  Text('Isha: ${isha?.hour}:${isha?.minute}'),
-                  Text('Calculation Method: ${_userSettings.calculationMethod?.name}'),
-                ],
-              ),
-            );
-          });
-
-      _refreshController.refreshCompleted();
-    } else {
-      _refreshController.refreshFailed();
-    }
+    // TODO: this will complete quickly, but we can use Bloc state changes
+    //       to listen to the completion of the fetching process
+    _refreshController.refreshCompleted();
   }
 
   @override
   Widget build(BuildContext context) {
     var _userSettings = context.watch<UserSettingsBloc>().state;
+    var _prayerTimesBloc = context.read<PrayerTimesBloc>();
     return SmartRefresher(
-      onRefresh: () => _onRefresh(_userSettings),
+      onRefresh: () => _onRefresh(_userSettings, _prayerTimesBloc),
       controller: _refreshController,
       child: CustomScrollView(
         physics: const AlwaysScrollableScrollPhysics(),

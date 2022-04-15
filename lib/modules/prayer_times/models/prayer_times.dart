@@ -1,5 +1,5 @@
 import 'package:intl/intl.dart';
-import 'package:nedaa/modules/settings/models/calcualtiom_method.dart';
+import 'package:nedaa/modules/settings/models/calcualtion_method.dart';
 import 'package:nedaa/modules/settings/models/prayer_type.dart';
 
 class DayPrayerTimes {
@@ -21,7 +21,7 @@ class DayPrayerTimes {
     var date =
         DateFormat('dd-MM-yyyy').parse(json['date']['gregorian']['date']);
     var calculationMethodId = json['meta']['method']['id'];
-    var calculationMethod = CalculationMethod(calculationMethodId, "");
+    var calculationMethod = CalculationMethod(calculationMethodId);
 
     return DayPrayerTimes(prayerTimes, date, calculationMethod);
   }

@@ -1,8 +1,6 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:nedaa/constants/calculation_methods.dart';
-import 'package:nedaa/modules/settings/models/calcualtiom_method.dart';
+import 'package:nedaa/modules/settings/models/calcualtion_method.dart';
 import 'package:nedaa/modules/settings/models/notification_settings.dart';
 import 'package:nedaa/modules/settings/models/prayer_type.dart';
 import 'package:nedaa/modules/settings/models/user_location.dart';
@@ -74,10 +72,7 @@ class SettingsRepository {
   CalculationMethod getCalculationMethod() {
     var methodIndex = _getInt('calculationMethod') ?? -1;
 
-    var methods = calculationMethods[getLanguage().languageCode]!;
-    var methodName =
-        (methods.length > methodIndex) ? methods[methodIndex]! : methods[-1]!;
-    return CalculationMethod(methodIndex, methodName);
+    return CalculationMethod(methodIndex);
   }
 
   setCalculationMethod(CalculationMethod method) async {
