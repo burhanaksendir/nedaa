@@ -15,6 +15,7 @@ import 'package:nedaa/screens/main_screen.dart';
 import 'package:device_preview/device_preview.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
+import 'package:timezone/standalone.dart' as tz;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -24,6 +25,8 @@ void main() async {
   SettingsRepository settingsRepository = SettingsRepository(
     await SharedPreferences.getInstance(),
   );
+
+  await tz.initializeTimeZone('data/latest_all.tzf');
 
   await SentryFlutter.init(
     (options) {

@@ -6,9 +6,11 @@ class DayPrayerTimes {
   final Map<PrayerType, DateTime> prayerTimes;
   final DateTime date;
   final CalculationMethod calculationMethod;
+  final String timeZoneName;
   // TODO: add hijri date
 
-  DayPrayerTimes(this.prayerTimes, this.date, this.calculationMethod);
+  DayPrayerTimes(
+      this.prayerTimes, this.timeZoneName, this.date, this.calculationMethod);
 
   factory DayPrayerTimes.fromJson(Map<String, dynamic> json) {
     var prayerTimes = <PrayerType, DateTime>{};
@@ -23,7 +25,9 @@ class DayPrayerTimes {
     var calculationMethodId = json['meta']['method']['id'];
     var calculationMethod = CalculationMethod(calculationMethodId);
 
-    return DayPrayerTimes(prayerTimes, date, calculationMethod);
+    var timezone = json['meta']['timezone'];
+
+    return DayPrayerTimes(prayerTimes, timezone, date, calculationMethod);
   }
 
   // toJson

@@ -6,6 +6,7 @@ import 'package:nedaa/modules/prayer_times/bloc/prayer_times_bloc.dart';
 import 'package:nedaa/modules/settings/models/prayer_type.dart';
 import '../../../widgets/prayer_times_card.dart';
 import 'common_card_header.dart';
+import 'package:timezone/standalone.dart' as tz;
 
 class TodayPrayersCard extends StatefulWidget {
   const TodayPrayersCard({Key? key}) : super(key: key);
@@ -55,14 +56,18 @@ class _TodayPrayersCardState extends State<TodayPrayersCard> {
     };
 
     if (prayerTimes != null) {
+      tz.Location? location;
       prayersTranslation.forEach((key, value) {
+        location ??= tz.getLocation(prayerTimes.timeZoneName);
+
+        var datetime = tz.TZDateTime.from(
+          prayerTimes.prayerTimes[key] ?? DateTime.now(),
+          location!,
+        );
         columnChildren.add(
           _buildPrayerRow(
             value,
-            // TODO: use user timezone
-            formatted.format(
-              prayerTimes.prayerTimes[key]?.toLocal() ?? DateTime.now(),
-            ),
+            formatted.format(datetime),
           ),
         );
       });
