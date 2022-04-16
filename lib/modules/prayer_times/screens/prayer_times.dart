@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:nedaa/modules/prayer_times/bloc/prayer_times_bloc.dart';
 import 'package:nedaa/modules/prayer_times/ui_components/main_prayer_card.dart';
 import 'package:nedaa/modules/prayer_times/ui_components/today_prayers_card.dart';
 import 'package:nedaa/modules/settings/bloc/user_settings_bloc.dart';
@@ -55,18 +56,24 @@ class _PrayerTimesState extends State<PrayerTimes> {
     ]);
   }
 
-  void _onRefresh(_userSettings) async {
-    // monitor network fetch
-    await Future.delayed(const Duration(milliseconds: 1000));
+  void _onRefresh(
+      UserSettingsState _userSettings, PrayerTimesBloc _prayerTimesBloc) async {
+    _prayerTimesBloc.add(FetchPrayerTimesEvent(
+      _userSettings.location,
+      _userSettings.calculationMethod,
+    ));
+
+    // TODO: this will complete quickly, but we can use Bloc state changes
+    //       to listen to the completion of the fetching process
     _refreshController.refreshCompleted();
-    // _refreshController.refreshFailed();
   }
 
   @override
   Widget build(BuildContext context) {
     var _userSettings = context.watch<UserSettingsBloc>().state;
+    var _prayerTimesBloc = context.read<PrayerTimesBloc>();
     return SmartRefresher(
-      onRefresh: () => _onRefresh(_userSettings),
+      onRefresh: () => _onRefresh(_userSettings, _prayerTimesBloc),
       controller: _refreshController,
       child: CustomScrollView(
         physics: const AlwaysScrollableScrollPhysics(),

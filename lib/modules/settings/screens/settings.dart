@@ -3,9 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nedaa/constants/app_constans.dart';
 import 'package:nedaa/constants/calculation_methods.dart';
+import 'package:nedaa/modules/prayer_times/bloc/prayer_times_bloc.dart';
 import 'package:nedaa/modules/settings/bloc/settings_bloc.dart';
 import 'package:nedaa/modules/settings/bloc/user_settings_bloc.dart';
-import 'package:nedaa/modules/settings/models/calcualtiom_method.dart';
+import 'package:nedaa/modules/settings/models/calcualtion_method.dart';
 import 'package:nedaa/modules/settings/screens/calculation_methods_dialog.dart';
 import 'package:nedaa/modules/settings/screens/languages_dialog.dart';
 import 'package:nedaa/modules/settings/screens/location.dart';
@@ -45,8 +46,8 @@ class _SettingsState extends State<Settings> {
         calculationMethods[locale.languageCode] ?? calculationMethods['en']!;
 
     var _currentCalculationMethodName =
-        methods[_currentCalculationMethod?.index];
-    var _currentUserCity = _currentUserState.location?.cityAddress;
+        methods[_currentCalculationMethod.index];
+    var _currentUserCity = _currentUserState.location.cityAddress;
 
     return SafeArea(
       child: Scaffold(
@@ -127,9 +128,13 @@ class _SettingsState extends State<Settings> {
                       builder: (context) => const CalculationMethodsDialog(),
                     );
                     if (calculationMethod is CalculationMethod) {
-                      context
-                          .read<UserSettingsBloc>()
+                      var userSettingsBloc = context.read<UserSettingsBloc>();
+
+                      userSettingsBloc
                           .add(CalculationMethodEvent(calculationMethod));
+
+                      context.read<PrayerTimesBloc>().add(FetchPrayerTimesEvent(
+                          userSettingsBloc.state.location, calculationMethod));
                     }
                   },
                 ),

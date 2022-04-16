@@ -1,5 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:nedaa/modules/settings/models/calcualtiom_method.dart';
+import 'package:nedaa/modules/settings/models/calcualtion_method.dart';
 import 'package:nedaa/modules/settings/models/notification_settings.dart';
 import 'package:nedaa/modules/settings/models/prayer_type.dart';
 import 'package:nedaa/modules/settings/models/user_location.dart';
@@ -66,15 +66,15 @@ class UserSettingsBloc extends Bloc<UserSettingsEvent, UserSettingsState> {
 }
 
 class UserSettingsState {
-  final UserLocation? location;
-  final CalculationMethod? calculationMethod;
-  final bool? keepUpdatingLocation;
+  final UserLocation location;
+  final CalculationMethod calculationMethod;
+  final bool keepUpdatingLocation;
   final Map<PrayerType, NotificationSettings> notificationSettings;
 
   UserSettingsState(
-      {this.location,
-      this.calculationMethod,
-      this.keepUpdatingLocation,
+      {required this.location,
+      required this.calculationMethod,
+      required this.keepUpdatingLocation,
       this.notificationSettings = const {}});
 }
 

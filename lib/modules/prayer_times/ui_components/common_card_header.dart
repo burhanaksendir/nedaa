@@ -18,7 +18,7 @@ class _CommonCardHeaderState extends State<CommonCardHeader> {
     final todaysDate =
         DateFormat('EEEE\n d MMMM y', t!.localeName).format(DateTime.now());
     var _currentUserState = context.watch<UserSettingsBloc>().state;
-    var _currentUserCity = _currentUserState.location?.cityAddress;
+    var _currentUserCity = _currentUserState.location.cityAddress;
 
     return Column(
       children: <Widget>[
