@@ -14,7 +14,7 @@ jobs:
       
       # Send a telegram message on pr open or review request
       - name: Pull Request Telegram
-        uses: F2had/pr-telegram-action@v0.0.1-alpha
+        uses: F2had/pr-telegram-action@v0.0.1.7-beta
         with: 
           bot_token: '${{ secrets.BotToken }}'
           chat_id: '${{ secrets.CHATID }}'
