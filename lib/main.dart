@@ -15,7 +15,7 @@ import 'package:nedaa/screens/main_screen.dart';
 import 'package:device_preview/device_preview.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
-import 'package:timezone/standalone.dart' as tz;
+import 'package:timezone/data/latest_all.dart' as tz;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -26,7 +26,7 @@ void main() async {
     await SharedPreferences.getInstance(),
   );
 
-  await tz.initializeTimeZone('data/latest_all.tzf');
+  tz.initializeTimeZones();
 
   await SentryFlutter.init(
     (options) {
@@ -77,14 +77,14 @@ class MyApp extends StatelessWidget {
                 // calculation method to the default value we got from the API
                 // if it is not set yet
                 ..stream.forEach((state) {
-                  if (state.prayerTimes != null) {
+                  if (state.todayPrayerTimes != null) {
                     var userSettingsBloc = context.read<UserSettingsBloc>();
                     var oldCalculationMethod =
                         userSettingsBloc.state.calculationMethod;
                     if (oldCalculationMethod.index == -1) {
                       userSettingsBloc.add(
                         CalculationMethodEvent(
-                          state.prayerTimes!.calculationMethod,
+                          state.todayPrayerTimes!.calculationMethod,
                         ),
                       );
                     }

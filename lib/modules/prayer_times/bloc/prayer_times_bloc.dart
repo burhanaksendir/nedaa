@@ -11,10 +11,17 @@ class PrayerTimesBloc extends Bloc<PrayerTimesEvent, PrayerTimesState> {
         ) {
     on<FetchPrayerTimesEvent>((event, emit) async {
       try {
-        var todayPrayerTimes = await prayerTimesRepository.getTodayPrayerTimes(
-            event.location, event.method);
-        emit(PrayerTimesState(prayerTimes: todayPrayerTimes));
+        var currentPrayerTimesState =
+            await prayerTimesRepository.getCurrentPrayerTimesState(
+          event.location,
+          event.method,
+        );
+        emit(PrayerTimesState(
+          todayPrayerTimes: currentPrayerTimesState.today,
+          tomorrowPrayerTimes: currentPrayerTimesState.tomorrow,
+        ));
       } catch (e) {
+        // TODO: use failed state to display error
         emit(FailedPrayerTimesState(
             "Failed to fetch prayer times: ${e.toString()}"));
       }
@@ -25,15 +32,16 @@ class PrayerTimesBloc extends Bloc<PrayerTimesEvent, PrayerTimesState> {
 }
 
 class PrayerTimesState {
-  DayPrayerTimes? prayerTimes;
+  DayPrayerTimes? todayPrayerTimes;
+  DayPrayerTimes? tomorrowPrayerTimes;
 
-  PrayerTimesState({this.prayerTimes});
+  PrayerTimesState({this.todayPrayerTimes, this.tomorrowPrayerTimes});
 }
 
 class FailedPrayerTimesState extends PrayerTimesState {
   String error;
 
-  FailedPrayerTimesState(this.error) : super(prayerTimes: null);
+  FailedPrayerTimesState(this.error) : super();
 }
 
 class PrayerTimesEvent {}

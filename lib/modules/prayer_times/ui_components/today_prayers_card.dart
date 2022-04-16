@@ -40,7 +40,7 @@ class _TodayPrayersCardState extends State<TodayPrayersCard> {
 
   @override
   Widget build(BuildContext context) {
-    var prayerTimes = context.watch<PrayerTimesBloc>().state.prayerTimes;
+    var prayerTimes = context.watch<PrayerTimesBloc>().state.todayPrayerTimes;
     var t = AppLocalizations.of(context);
 
     var columnChildren = <Widget>[const CommonCardHeader()];

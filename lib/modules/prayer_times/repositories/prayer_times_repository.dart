@@ -4,9 +4,18 @@ import 'package:nedaa/modules/settings/models/user_location.dart';
 import 'package:nedaa/utils/helper.dart';
 import 'package:nedaa/utils/services/rest_api_service.dart';
 
+class CurrentPrayerTimesState {
+  DayPrayerTimes today;
+  DayPrayerTimes tomorrow;
+
+  CurrentPrayerTimesState(this.today, this.tomorrow);
+}
+
 class PrayerTimesRepository {
-  Future<DayPrayerTimes> getTodayPrayerTimes(
-      UserLocation location, CalculationMethod method) async {
+  Future<CurrentPrayerTimesState> getCurrentPrayerTimesState(
+    UserLocation location,
+    CalculationMethod method,
+  ) async {
     List<DayPrayerTimes> monthData;
     if (location.location != null) {
       monthData = await getPrayerTimes(location.location!, method);
@@ -16,6 +25,10 @@ class PrayerTimesRepository {
     } else {
       throw Exception('No location provided');
     }
-    return getTodaysTimings(monthData);
+    var todayPrayerTimes = getTodaysTimings(monthData);
+    // TODO: fix tomorrow prayer times overflow
+    var tomorrowPrayerTimes = getNextDayTimings(monthData);
+
+    return CurrentPrayerTimesState(todayPrayerTimes, tomorrowPrayerTimes);
   }
 }
