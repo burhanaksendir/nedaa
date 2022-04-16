@@ -5,13 +5,10 @@ on:
     types: [opened, review_requested]
 
 jobs:
-  build:
+  notification:
     runs-on: ubuntu-latest
 
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v3
-      
       # Send a telegram message on pr open or review request
       - name: Pull Request Telegram
         uses: F2had/pr-telegram-action@v0.0.1.7-beta
