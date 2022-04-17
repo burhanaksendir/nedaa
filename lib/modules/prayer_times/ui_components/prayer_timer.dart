@@ -40,7 +40,7 @@ class _PrayerTimerState extends State<PrayerTimer> {
       PrayerType.isha: t.isha,
     };
 
-    var formatted = DateFormat("hh:mm a");
+    var formatted = DateFormat("hh:mm a", t.localeName);
 
     return Column(
       children: <Widget>[
@@ -59,8 +59,7 @@ class _PrayerTimerState extends State<PrayerTimer> {
             // TODO: Replace with our own counter?
             : SlideCountdownSeparated(
                 duration: nextPrayer.timezonedTime.difference(
-                  DateTime.now(),
-                ),
+                    getCurrentTimeWithTimeZone(nextPrayer.timeZoneName)),
                 textStyle: Theme.of(context).textTheme.headline5 ??
                     const TextStyle(color: Colors.black),
                 decoration: BoxDecoration(
@@ -68,9 +67,9 @@ class _PrayerTimerState extends State<PrayerTimer> {
                   borderRadius: BorderRadius.circular(8),
                 ),
               ),
-        const SizedBox(height: 16),
+        const SizedBox(height: 8),
         Text(
-          formatted.format(nextPrayer?.timezonedTime ?? DateTime(0, 0, 0, 6)),
+          formatted.format(nextPrayer?.timezonedTime ?? DateTime.now()),
           style: Theme.of(context).textTheme.headline5,
         ),
       ],
