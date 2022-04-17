@@ -37,8 +37,7 @@ DayPrayerTimes getNextDayTimings(List<DayPrayerTimes> allDays) {
 
 PrayerTime getNextPrayer(
     DayPrayerTimes todayPrayerTimes, DayPrayerTimes tomorrowPrayerTimes) {
-
-      var now = getCurrentTimeWithTimeZone(todayPrayerTimes.timeZoneName);
+  var now = getCurrentTimeWithTimeZone(todayPrayerTimes.timeZoneName);
 
   var nextPrayer = PrayerType.values
       .map((prayerType) => PrayerTime(
@@ -67,12 +66,8 @@ PrayerTime getNextPrayer(
   return nextPrayer;
 }
 
-tz.TZDateTime getDateWithTimeZone(String timeZoneName, DateTime date) {
-  var location = tz.getLocation(timeZoneName);
-  return tz.TZDateTime.from(date, location);
-}
+tz.TZDateTime getDateWithTimeZone(String timeZoneName, DateTime date) =>
+    tz.TZDateTime.from(date, tz.getLocation(timeZoneName));
 
-tz.TZDateTime getCurrentTimeWithTimeZone(String timeZoneName) {
-  var location = tz.getLocation(timeZoneName);
-  return tz.TZDateTime.now(location);
-}
+tz.TZDateTime getCurrentTimeWithTimeZone(String timeZoneName) =>
+    tz.TZDateTime.now(tz.getLocation(timeZoneName));

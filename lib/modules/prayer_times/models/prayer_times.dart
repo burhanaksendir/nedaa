@@ -48,6 +48,5 @@ class PrayerTime {
 
   PrayerTime(this.time, this.timeZoneName, this.prayerType);
 
-  DateTime get timezonedTime =>
-      getDateWithTimeZone(timeZoneName, time);
+  DateTime get timezonedTime => getDateWithTimeZone(timeZoneName, time);
 }
