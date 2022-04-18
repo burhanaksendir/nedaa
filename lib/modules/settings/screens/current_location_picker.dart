@@ -44,7 +44,7 @@ class _CurrentLocationPickerState extends State<CurrentLocationPicker> {
   _getCurrentLocation(BuildContext context) async {
     Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.low);
-    _updateUserLocation(position.latitude, position.longitude);
+    _updateUserLocation(context, position.latitude, position.longitude);
   }
 
   Widget _getUserLocationString(UserLocation? location) {
@@ -60,9 +60,12 @@ class _CurrentLocationPickerState extends State<CurrentLocationPicker> {
     }
   }
 
-  _updateUserLocation(double latitude, double longitude) async {
+  _updateUserLocation(
+      BuildContext context, double latitude, double longitude) async {
+    var t = AppLocalizations.of(context);
+
     List<Placemark> placemarks =
-        await placemarkFromCoordinates(latitude, longitude);
+        await placemarkFromCoordinates(latitude, longitude, localeIdentifier: t!.localeName);
     Placemark placemark = placemarks[0];
     setState(() {
       cityValue = placemark.locality!;
@@ -90,13 +93,13 @@ class _CurrentLocationPickerState extends State<CurrentLocationPicker> {
         userLocation, userSettingsState.calculationMethod));
   }
 
-  _getCoordinatesFromAddress() async {
+  _getCoordinatesFromAddress(BuildContext context) async {
     if ((cityValue.isNotEmpty || stateValue.isNotEmpty) &&
         countryValue.isNotEmpty) {
       var address = "$cityValue, $stateValue, $countryValue";
       try {
         Location location = await _geoCodingAddress(address);
-        _updateUserLocation(location.latitude, location.longitude);
+        _updateUserLocation(context, location.latitude, location.longitude);
         return;
       } catch (e) {
         debugPrint(e.toString());
@@ -105,8 +108,8 @@ class _CurrentLocationPickerState extends State<CurrentLocationPicker> {
       var response = await getCoordinatesFromAddress(address);
       var location = json.decode(response.body);
 
-      _updateUserLocation(
-          location['latitude'] as double, location['longitude'] as double);
+      _updateUserLocation(context, location['latitude'] as double,
+          location['longitude'] as double);
     }
   }
 
@@ -187,7 +190,7 @@ class _CurrentLocationPickerState extends State<CurrentLocationPicker> {
                 setState(() {
                   stateValue = value;
                   cityValue = "";
-                  _getCoordinatesFromAddress();
+                  _getCoordinatesFromAddress(context);
                 });
               }
             },
@@ -197,7 +200,7 @@ class _CurrentLocationPickerState extends State<CurrentLocationPicker> {
               if (value != null) {
                 setState(() {
                   cityValue = value;
-                  _getCoordinatesFromAddress();
+                  _getCoordinatesFromAddress(context);
                 });
               }
             },
