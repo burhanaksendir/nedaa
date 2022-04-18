@@ -1,12 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:nedaa/constants/app_constans.dart';
 import 'package:nedaa/constants/calculation_methods.dart';
 import 'package:nedaa/modules/prayer_times/bloc/prayer_times_bloc.dart';
 import 'package:nedaa/modules/settings/bloc/settings_bloc.dart';
 import 'package:nedaa/modules/settings/bloc/user_settings_bloc.dart';
 import 'package:nedaa/modules/settings/models/calcualtion_method.dart';
+import 'package:nedaa/modules/settings/models/user_location.dart';
 import 'package:nedaa/modules/settings/screens/calculation_methods_dialog.dart';
 import 'package:nedaa/modules/settings/screens/languages_dialog.dart';
 import 'package:nedaa/modules/settings/screens/location.dart';
@@ -30,6 +32,25 @@ class _SettingsState extends State<Settings> {
   static const email = 'support@nedaa.io';
   static const website = 'https://nedaa.io';
 
+  _updateAddressTranslation(BuildContext context, Location _currentUserLocation,
+      String language) async {
+    Placemark placemark = await placemarkFromCoordinates(
+            _currentUserLocation.latitude, _currentUserLocation.longitude,
+            localeIdentifier: language)
+        .then((value) => value[0]);
+
+    context.read<UserSettingsBloc>().add(
+          UserLocationEvent(
+            UserLocation(
+              location: _currentUserLocation,
+              city: placemark.locality,
+              country: placemark.country,
+              state: placemark.administrativeArea,
+            ),
+          ),
+        );
+  }
+
   @override
   Widget build(BuildContext context) {
     var t = AppLocalizations.of(context);
@@ -48,6 +69,8 @@ class _SettingsState extends State<Settings> {
     var _currentCalculationMethodName =
         methods[_currentCalculationMethod.index];
     var _currentUserCity = _currentUserState.location.cityAddress;
+
+    var _currentUserLocation = _currentUserState.location.location;
 
     return SafeArea(
       child: Scaffold(
@@ -75,6 +98,10 @@ class _SettingsState extends State<Settings> {
                       context
                           .read<SettingsBloc>()
                           .add(LanguageEvent(Locale(language)));
+
+                      // update address language
+                      _updateAddressTranslation(
+                          context, _currentUserLocation!, language);
                     }
                   },
                 ),
