@@ -64,8 +64,9 @@ class _CurrentLocationPickerState extends State<CurrentLocationPicker> {
       BuildContext context, double latitude, double longitude) async {
     var t = AppLocalizations.of(context);
 
-    List<Placemark> placemarks =
-        await placemarkFromCoordinates(latitude, longitude, localeIdentifier: t!.localeName);
+    List<Placemark> placemarks = await placemarkFromCoordinates(
+        latitude, longitude,
+        localeIdentifier: t!.localeName);
     Placemark placemark = placemarks[0];
     setState(() {
       cityValue = placemark.locality!;
