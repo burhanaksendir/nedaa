@@ -108,7 +108,6 @@ class _CurrentLocationPickerState extends State<CurrentLocationPicker> {
 
       var response = await getCoordinatesFromAddress(address);
       var location = json.decode(response.body);
-
       _updateUserLocation(context, location['latitude'] as double,
           location['longitude'] as double);
     }
@@ -116,9 +115,9 @@ class _CurrentLocationPickerState extends State<CurrentLocationPicker> {
 
   _geoCodingAddress(String address) async {
     //TODO: Add better error handling
-    List<Location> locations = await locationFromAddress(
+    Location locations = await locationFromAddress(
             cityValue + ', ' + stateValue + ', ' + countryValue)
-        .then((value) => value)
+        .then((value) => value[0])
         .catchError((error) {
       Future.error(error);
     });
