@@ -62,7 +62,7 @@ class SettingsRepository {
       case 'ar':
         return const Locale('ar');
       default:
-        return  Locale(Platform.localeName.split('_')[0]);
+        return Locale(Platform.localeName.split('_')[0]);
     }
   }
 
