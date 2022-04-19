@@ -22,8 +22,6 @@ class _CurrentLocationPickerState extends State<CurrentLocationPicker> {
   String stateValue = "";
   String cityValue = "";
 
-  // LocationPermission permission = LocationPermission.unableToDetermine;
-
   _checkPermission(BuildContext context) async {
     LocationPermission permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.always ||
@@ -114,7 +112,6 @@ class _CurrentLocationPickerState extends State<CurrentLocationPicker> {
   }
 
   _geoCodingAddress() async {
-    //TODO: Add better error handling
     Location location = await locationFromAddress(
             cityValue + ', ' + stateValue + ', ' + countryValue)
         .then((value) => value[0])

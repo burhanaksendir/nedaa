@@ -7,6 +7,7 @@ import 'package:nedaa/modules/prayer_times/models/prayer_times.dart';
 import 'package:nedaa/modules/settings/models/prayer_type.dart';
 import 'package:nedaa/utils/helper.dart';
 import 'package:slide_countdown/slide_countdown.dart';
+import 'dart:ui' as ui;
 
 class PrayerTimer extends StatefulWidget {
   const PrayerTimer({Key? key}) : super(key: key);
@@ -57,7 +58,7 @@ class _PrayerTimerState extends State<PrayerTimer> {
         (nextPrayer == null)
             ? Container()
             // TODO: Replace with our own counter?
-            : SlideCountdownSeparated(
+            : SlideCountdown(
                 duration: nextPrayer.timezonedTime.difference(
                     getCurrentTimeWithTimeZone(nextPrayer.timeZoneName)),
                 textStyle: Theme.of(context).textTheme.headline5 ??
@@ -66,6 +67,13 @@ class _PrayerTimerState extends State<PrayerTimer> {
                   color: Colors.transparent,
                   borderRadius: BorderRadius.circular(8),
                 ),
+                onDone: () {
+                  setState(() {});
+                },
+                textDirection:
+                    Directionality.of(context) == ui.TextDirection.ltr
+                        ? ui.TextDirection.ltr
+                        : ui.TextDirection.rtl,
               ),
         const SizedBox(height: 8),
         Text(
