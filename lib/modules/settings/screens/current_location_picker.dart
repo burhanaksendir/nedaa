@@ -99,7 +99,7 @@ class _CurrentLocationPickerState extends State<CurrentLocationPicker> {
         countryValue.isNotEmpty) {
       var address = "$cityValue, $stateValue, $countryValue";
       try {
-        Location location = await _geoCodingAddress(address);
+        Location location = await _geoCodingAddress();
         _updateUserLocation(context, location.latitude, location.longitude);
         return;
       } catch (e) {
@@ -113,15 +113,15 @@ class _CurrentLocationPickerState extends State<CurrentLocationPicker> {
     }
   }
 
-  _geoCodingAddress(String address) async {
+  _geoCodingAddress() async {
     //TODO: Add better error handling
-    Location locations = await locationFromAddress(
+    Location location = await locationFromAddress(
             cityValue + ', ' + stateValue + ', ' + countryValue)
         .then((value) => value[0])
         .catchError((error) {
       Future.error(error);
     });
-    return locations;
+    return location;
   }
 
   @override
