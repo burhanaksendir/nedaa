@@ -146,8 +146,8 @@ class _SettingsState extends State<Settings> {
                 SettingsTile(
                   title: Text(t.calculationMethods),
                   trailing: Text(_currentCalculationMethodName!.length > 25
-                      ? _currentCalculationMethodName.substring(0, 25)+'...'
-                      : _currentCalculationMethodName ),
+                      ? _currentCalculationMethodName.substring(0, 25) + '...'
+                      : _currentCalculationMethodName),
                   leading: const Icon(Icons.access_time_filled),
                   onPressed: (context) async {
                     final calculationMethod = await showCupertinoDialog(
