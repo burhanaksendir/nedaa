@@ -16,7 +16,7 @@ String generateCityParams(
 }
 
 DayPrayerTimes getTodaysTimings(List<DayPrayerTimes> allDays) {
-  var today = DateTime.now();
+  var today = getCurrentTimeWithTimeZone(allDays.first.timeZoneName);
   return allDays.firstWhere(
       (day) =>
           day.date.day == today.day &&
@@ -27,7 +27,7 @@ DayPrayerTimes getTodaysTimings(List<DayPrayerTimes> allDays) {
 }
 
 DayPrayerTimes getNextDayTimings(List<DayPrayerTimes> allDays) {
-  var today = DateTime.now();
+  var today = getCurrentTimeWithTimeZone(allDays.first.timeZoneName);
   var nextDay = today.add(const Duration(days: 1));
   return allDays.firstWhere((day) =>
       day.date.day == nextDay.day &&
@@ -37,12 +37,7 @@ DayPrayerTimes getNextDayTimings(List<DayPrayerTimes> allDays) {
 
 PrayerTime getNextPrayer(
     DayPrayerTimes todayPrayerTimes, DayPrayerTimes tomorrowPrayerTimes) {
-  var location = tz.getLocation(todayPrayerTimes.timeZoneName);
-
-  var now = tz.TZDateTime.from(
-    DateTime.now(),
-    location,
-  );
+  var now = getCurrentTimeWithTimeZone(todayPrayerTimes.timeZoneName);
 
   var nextPrayer = PrayerType.values
       .map((prayerType) => PrayerTime(
@@ -54,7 +49,8 @@ PrayerTime getNextPrayer(
     (prayerTime) {
       // if (prayerType == PrayerType.sunrise) return false;
 
-      var tzPrayerTime = tz.TZDateTime.from(prayerTime.time, location);
+      var tzPrayerTime =
+          getDateWithTimeZone(todayPrayerTimes.timeZoneName, prayerTime.time);
 
       return tzPrayerTime.isAfter(now);
     },
@@ -69,3 +65,9 @@ PrayerTime getNextPrayer(
 
   return nextPrayer;
 }
+
+tz.TZDateTime getDateWithTimeZone(String timeZoneName, DateTime date) =>
+    tz.TZDateTime.from(date, tz.getLocation(timeZoneName));
+
+tz.TZDateTime getCurrentTimeWithTimeZone(String timeZoneName) =>
+    tz.TZDateTime.now(tz.getLocation(timeZoneName));

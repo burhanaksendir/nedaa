@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:csc_picker/csc_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,6 +8,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:nedaa/modules/prayer_times/bloc/prayer_times_bloc.dart';
 import 'package:nedaa/modules/settings/bloc/user_settings_bloc.dart';
 import 'package:nedaa/modules/settings/models/user_location.dart';
+import 'package:nedaa/utils/services/rest_api_service.dart';
 
 class CurrentLocationPicker extends StatefulWidget {
   const CurrentLocationPicker({Key? key}) : super(key: key);
@@ -19,8 +21,6 @@ class _CurrentLocationPickerState extends State<CurrentLocationPicker> {
   String countryValue = "";
   String stateValue = "";
   String cityValue = "";
-
-  // LocationPermission permission = LocationPermission.unableToDetermine;
 
   _checkPermission(BuildContext context) async {
     LocationPermission permission = await Geolocator.checkPermission();
@@ -42,32 +42,7 @@ class _CurrentLocationPickerState extends State<CurrentLocationPicker> {
   _getCurrentLocation(BuildContext context) async {
     Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.low);
-    List<Placemark> placemarks =
-        await placemarkFromCoordinates(position.latitude, position.longitude);
-    Placemark placemark = placemarks[0];
-    setState(() {
-      cityValue = placemark.locality!;
-      stateValue = placemark.administrativeArea!;
-      countryValue = placemark.country!;
-    });
-    var userLocation = UserLocation(
-      city: cityValue,
-      country: countryValue,
-      state: stateValue,
-      location: Location(
-        latitude: position.latitude,
-        longitude: position.longitude,
-        timestamp: DateTime.now(),
-      ),
-    );
-    var userSettingsBloc = context.read<UserSettingsBloc>();
-    var userSettingsState = userSettingsBloc.state;
-    userSettingsBloc.add(
-      UserLocationEvent(userLocation),
-    );
-
-    context.read<PrayerTimesBloc>().add(FetchPrayerTimesEvent(
-        userLocation, userSettingsState.calculationMethod));
+    _updateUserLocation(context, position.latitude, position.longitude);
   }
 
   Widget _getUserLocationString(UserLocation? location) {
@@ -83,26 +58,67 @@ class _CurrentLocationPickerState extends State<CurrentLocationPicker> {
     }
   }
 
-  _updateUserLocation() async {
+  _updateUserLocation(
+      BuildContext context, double latitude, double longitude) async {
+    var t = AppLocalizations.of(context);
+
+    List<Placemark> placemarks = await placemarkFromCoordinates(
+        latitude, longitude,
+        localeIdentifier: t!.localeName);
+    Placemark placemark = placemarks[0];
+    setState(() {
+      cityValue = placemark.locality!;
+      stateValue = placemark.administrativeArea!;
+      countryValue = placemark.country!;
+    });
+
+    var userLocation = UserLocation(
+      city: cityValue,
+      country: countryValue,
+      state: stateValue,
+      location: Location(
+        latitude: latitude,
+        longitude: longitude,
+        timestamp: DateTime.now(),
+      ),
+    );
+    var userSettingsBloc = context.read<UserSettingsBloc>();
+    var userSettingsState = userSettingsBloc.state;
+    userSettingsBloc.add(
+      UserLocationEvent(userLocation),
+    );
+
+    context.read<PrayerTimesBloc>().add(FetchPrayerTimesEvent(
+        userLocation, userSettingsState.calculationMethod));
+  }
+
+  _getCoordinatesFromAddress(BuildContext context) async {
     if ((cityValue.isNotEmpty || stateValue.isNotEmpty) &&
         countryValue.isNotEmpty) {
-      Future<List<Location>> locations = locationFromAddress(
-          cityValue + ', ' + stateValue + ', ' + countryValue);
-      Location location = await locations.then((value) => value[0]);
-      context.read<UserSettingsBloc>().add(
-            UserLocationEvent(
-              UserLocation(
-                city: cityValue.isNotEmpty ? cityValue : null,
-                state: stateValue.isNotEmpty ? stateValue : null,
-                country: countryValue,
-                location: Location(
-                    latitude: location.latitude,
-                    longitude: location.longitude,
-                    timestamp: location.timestamp),
-              ),
-            ),
-          );
+      var address = "$cityValue, $stateValue, $countryValue";
+      try {
+        Location location = await _geoCodingAddress();
+        _updateUserLocation(context, location.latitude, location.longitude);
+        return;
+      } catch (e) {
+        debugPrint(e.toString());
+      }
+
+      var response = await getCoordinatesFromAddress(address);
+      var location = json.decode(response.body);
+      _updateUserLocation(context, location['latitude'] as double,
+          location['longitude'] as double);
     }
+  }
+
+  _geoCodingAddress() async {
+    Location location = await locationFromAddress(
+            cityValue + ', ' + stateValue + ', ' + countryValue)
+        .then((value) => value[0])
+        .catchError((error) {
+      Future.error(error);
+    });
+    return location;
   }
 
   @override
@@ -171,7 +187,7 @@ class _CurrentLocationPickerState extends State<CurrentLocationPicker> {
                 setState(() {
                   stateValue = value;
                   cityValue = "";
-                  _updateUserLocation();
+                  _getCoordinatesFromAddress(context);
                 });
               }
             },
@@ -181,7 +197,7 @@ class _CurrentLocationPickerState extends State<CurrentLocationPicker> {
               if (value != null) {
                 setState(() {
                   cityValue = value;
-                  _updateUserLocation();
+                  _getCoordinatesFromAddress(context);
                 });
               }
             },
