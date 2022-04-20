@@ -131,4 +131,17 @@ class SettingsRepository {
     }
     return settingsMap;
   }
+
+  bool isFirstRun() {
+    return _getBool('isFirstRun') ?? true;
+  }
+
+  setIsFirstRun(bool isFirstRun) async {
+    await _setBool('isFirstRun', isFirstRun);
+  }
+
+  //TODO: remove this method
+  Future<void> clear() async {
+    await _sharedPref.clear();
+  }
 }

@@ -3,6 +3,7 @@
   "appTitle": "نِداء",
   "asr": "العصر",
   "calculationMethods": "طرق الحساب",
+  "cancel": "إلغاء",
   "city": "المدينة",
   "contactUs": "اتصل بنا",
   "couldNotLaunchUrl": "لا يمكن فتح ",
@@ -44,5 +45,8 @@
   "unableToLunchLink": "لا يمكن فتح الرابط",
   "until": "حتى",
   "vibrate": "إهتزاز",
-  "wednesday": "الأربعاء"
+  "wednesday": "الأربعاء",
+  "requestLocationPermissionTitle": "إذن تحديد الموقع",
+  "requestLocationPermissionContent": "يستخدم هذا التطبيق موقعك لتحديد مواقيت الصلاة الصحيحة تلقائيًا. هل ترغب في فتح إعدادات الموقع؟",
+  "instructionsToSetLocationManually": "إذا كنت لا تريد استخدام موقعك الحالي ، فيمكنك تعيينه يدويًا بالانتقال إلى 'الإعدادات' > 'الموقع' > 'الموقع' وتحديد موقعك."
 }
