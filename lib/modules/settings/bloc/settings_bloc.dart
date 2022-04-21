@@ -8,20 +8,37 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
           SettingsState(
             appLanguage: settingsRepository.getLanguage(),
             appTheme: settingsRepository.getTheme(),
+            isFirstRun: settingsRepository.isFirstRun(),
           ),
         ) {
     on<LanguageEvent>(
       (event, emit) => {
         emit(SettingsState(
-            appLanguage: event.appLanguage, appTheme: state.appTheme)),
+          appLanguage: event.appLanguage,
+          appTheme: state.appTheme,
+          isFirstRun: state.isFirstRun,
+        )),
         settingsRepository.setLanguage(event.appLanguage)
       },
     );
     on<ThemeEvent>(
       (event, emit) => {
         emit(SettingsState(
-            appLanguage: state.appLanguage, appTheme: event.theme)),
+          appLanguage: state.appLanguage,
+          appTheme: event.theme,
+          isFirstRun: state.isFirstRun,
+        )),
         settingsRepository.setTheme(event.theme)
+      },
+    );
+    on<FirstRunEvent>(
+      (event, emit) => {
+        emit(SettingsState(
+          appLanguage: state.appLanguage,
+          appTheme: state.appTheme,
+          isFirstRun: false,
+        )),
+        settingsRepository.setIsFirstRun(false)
       },
     );
   }
@@ -30,10 +47,14 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
 }
 
 class SettingsState {
-  final Locale? appLanguage;
-  final ThemeMode? appTheme;
+  final Locale appLanguage;
+  final ThemeMode appTheme;
+  final bool isFirstRun;
 
-  SettingsState({this.appLanguage, this.appTheme});
+  SettingsState(
+      {required this.appLanguage,
+      required this.appTheme,
+      required this.isFirstRun});
 }
 
 class SettingsEvent {}
@@ -48,4 +69,8 @@ class ThemeEvent extends SettingsEvent {
   final ThemeMode theme;
 
   ThemeEvent(this.theme);
+}
+
+class FirstRunEvent extends SettingsEvent {
+  FirstRunEvent();
 }

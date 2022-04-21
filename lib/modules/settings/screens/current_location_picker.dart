@@ -3,12 +3,14 @@ import 'package:csc_picker/csc_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geocoding/geocoding.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:nedaa/modules/prayer_times/bloc/prayer_times_bloc.dart';
+import 'package:motion_toast/motion_toast.dart';
+import 'package:motion_toast/resources/arrays.dart';
 import 'package:nedaa/modules/settings/bloc/user_settings_bloc.dart';
 import 'package:nedaa/modules/settings/models/user_location.dart';
+import 'package:nedaa/utils/location_permission_utils.dart';
 import 'package:nedaa/utils/services/rest_api_service.dart';
+import 'package:nedaa/widgets/general_dialog.dart';
 
 class CurrentLocationPicker extends StatefulWidget {
   const CurrentLocationPicker({Key? key}) : super(key: key);
@@ -23,26 +25,23 @@ class _CurrentLocationPickerState extends State<CurrentLocationPicker> {
   String cityValue = "";
 
   _checkPermission(BuildContext context) async {
-    LocationPermission permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.always ||
-        permission == LocationPermission.whileInUse) {
-      _getCurrentLocation(context);
-    } else if (permission == LocationPermission.denied) {
-      LocationPermission reqPermission = await Geolocator.requestPermission();
-      if (reqPermission == LocationPermission.deniedForever) {
-        await Geolocator.openAppSettings();
+    var t = AppLocalizations.of(context);
+    if (await checkPermission(context)) {
+      updateCurrentLocation(context);
+    } else {
+      var result = await customAlert(context, t!.requestLocationPermissionTitle,
+          t.requestLocationPermissionContent);
+      if (result) {
+        openLocationSettings(context);
       } else {
-        _getCurrentLocation(context);
+        MotionToast(
+                primaryColor: Theme.of(context).primaryColor,
+                icon: Icons.info,
+                position: MOTION_TOAST_POSITION.center,
+                description: Text(t.instructionsToSetLocationManually))
+            .show(context);
       }
-    } else if (permission == LocationPermission.deniedForever) {
-      await Geolocator.openAppSettings();
     }
-  }
-
-  _getCurrentLocation(BuildContext context) async {
-    Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.low);
-    _updateUserLocation(context, position.latitude, position.longitude);
   }
 
   Widget _getUserLocationString(UserLocation? location) {
@@ -60,36 +59,12 @@ class _CurrentLocationPickerState extends State<CurrentLocationPicker> {
 
   _updateUserLocation(
       BuildContext context, double latitude, double longitude) async {
-    var t = AppLocalizations.of(context);
-
-    List<Placemark> placemarks = await placemarkFromCoordinates(
-        latitude, longitude,
-        localeIdentifier: t!.localeName);
-    Placemark placemark = placemarks[0];
+    var userLocation = await updateUserLocation(context, latitude, longitude);
     setState(() {
-      cityValue = placemark.locality!;
-      stateValue = placemark.administrativeArea!;
-      countryValue = placemark.country!;
+      countryValue = userLocation.country!;
+      stateValue = userLocation.state!;
+      cityValue = userLocation.cityAddress!;
     });
-
-    var userLocation = UserLocation(
-      city: cityValue,
-      country: countryValue,
-      state: stateValue,
-      location: Location(
-        latitude: latitude,
-        longitude: longitude,
-        timestamp: DateTime.now(),
-      ),
-    );
-    var userSettingsBloc = context.read<UserSettingsBloc>();
-    var userSettingsState = userSettingsBloc.state;
-    userSettingsBloc.add(
-      UserLocationEvent(userLocation),
-    );
-
-    context.read<PrayerTimesBloc>().add(FetchPrayerTimesEvent(
-        userLocation, userSettingsState.calculationMethod));
   }
 
   _getCoordinatesFromAddress(BuildContext context) async {
