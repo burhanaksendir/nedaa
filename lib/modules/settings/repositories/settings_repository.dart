@@ -142,6 +142,7 @@ class SettingsRepository {
 
   //TODO: remove this method
   Future<void> clear() async {
-    await _sharedPref.clear();
+    var s = await _sharedPref.clear();
+    s == true ? exit(0) : null;
   }
 }

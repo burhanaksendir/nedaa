@@ -256,8 +256,8 @@ class _SettingsState extends State<Settings> {
                       builder: (_) {
                         return AlertDialog(
                           title: const Text('Clear shared preferences'),
-                          content: const Text(
-                              'Long press on the icon to clear all data \n Note: this will  close the app'),
+                          content: Text(
+                              'Long press on ${t.ok} to clear all data \n Note: this will  close the app'),
                           actions: [
                             TextButton(
                               onPressed: () {},
@@ -265,10 +265,9 @@ class _SettingsState extends State<Settings> {
                               onLongPress: () {
                                 var userSettingsBloc =
                                     context.read<UserSettingsBloc>();
-                                userSettingsBloc.add(
+                                var ress = userSettingsBloc.add(
                                   ClearDataEvent(),
                                 );
-                                exit(0);
                               },
                             ),
                           ],
