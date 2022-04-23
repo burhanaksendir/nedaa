@@ -31,16 +31,14 @@ Future<List<DayPrayerTimes>> getPrayerTimes(
 
 Future<List<DayPrayerTimes>> getPrayerTimesByCity(
     String country, String city, CalculationMethod calculationMethod) async {
+  var response = await http.get(Uri.parse(getCalendarByCity +
+      '/?' +
+      generateCityParams(country, city, calculationMethod)));
 
-    var response = await http.get(Uri.parse(getCalendarByCity +
-        '/?' +
-        generateCityParams(country, city, calculationMethod)));
-
-    if (response.statusCode == 200) {
-      Map<String, dynamic> map = json.decode(response.body);
-      return _parseApiResponse(map);
-    } else {
-      return Future.error('An error occurd while get prayer times');
-    }
+  if (response.statusCode == 200) {
+    Map<String, dynamic> map = json.decode(response.body);
+    return _parseApiResponse(map);
+  } else {
+    return Future.error('An error occurd while get prayer times');
   }
-
+}
