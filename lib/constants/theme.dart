@@ -6,31 +6,6 @@ const pageTransition = PageTransitionsTheme(builders: {
   TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
 });
 
-//Option 1:
-// var _light = FlexThemeData.light(
-//   colors: const FlexSchemeColor(
-//     primary: Color(0xff0b3c5f),
-//     primaryContainer: Color(0xff006585),
-//     secondary: Color(0xffaf8937),
-//     secondaryContainer: Color(0xffa99874),
-//     tertiary: Color(0xff629aa2),
-//     tertiaryContainer: Color(0xff7ba4aa),
-//     appBarColor: Color(0xffa99874),
-//     error: Color(0xffb00020),
-//   ),
-//   surfaceMode: FlexSurfaceMode.highScaffoldLowSurface,
-//   blendLevel: 20,
-//   appBarOpacity: 0.95,
-//   subThemesData: const FlexSubThemesData(
-//     blendOnLevel: 20,
-//     blendOnColors: false,
-//   ),
-//   visualDensity: FlexColorScheme.comfortablePlatformDensity,
-//   useMaterial3: true,
-//   // To use the playground font, add GoogleFonts package and uncomment
-//   // fontFamily: GoogleFonts.notoSans().fontFamily,
-// ).copyWith(pageTransitionsTheme: pageTransition);
-
 var _light = FlexThemeData.light(
   colors: const FlexSchemeColor(
     primary: Color(0xff125579),
