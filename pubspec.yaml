@@ -58,6 +58,7 @@ dependencies:
   slide_countdown: ^0.2.3
   motion_toast: ^2.1.6
 
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

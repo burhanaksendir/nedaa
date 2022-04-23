@@ -3,6 +3,8 @@ import 'package:nedaa/modules/prayer_times/models/prayer_times.dart';
 import 'package:nedaa/modules/settings/models/calcualtion_method.dart';
 import 'package:nedaa/modules/settings/models/prayer_type.dart';
 import 'package:timezone/standalone.dart' as tz;
+import 'dart:async';
+import 'dart:io';
 
 String generateParams(Location location, CalculationMethod method) {
   var _calculationMethod = method.index != -1 ? '&method=${method.index}' : '';
@@ -71,3 +73,15 @@ tz.TZDateTime getDateWithTimeZone(String timeZoneName, DateTime date) =>
 
 tz.TZDateTime getCurrentTimeWithTimeZone(String timeZoneName) =>
     tz.TZDateTime.now(tz.getLocation(timeZoneName));
+
+Future<bool> hasInternetConnection() async {
+  bool? _isConnectionSuccessful;
+  try {
+    final response = await InternetAddress.lookup('www.google.com');
+
+    _isConnectionSuccessful = response.isNotEmpty;
+  } on SocketException catch (_) {
+    _isConnectionSuccessful = false;
+  }
+  return _isConnectionSuccessful;
+}
