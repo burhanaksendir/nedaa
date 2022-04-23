@@ -118,7 +118,9 @@ class MyApp extends StatelessWidget {
               theme: CustomTheme.light.copyWith(
                 textTheme: ThemeData().textTheme.apply(fontFamily: fontFamily),
               ),
-              darkTheme: CustomTheme.dark,
+              darkTheme: CustomTheme.dark.copyWith(
+                textTheme: ThemeData().textTheme.apply(fontFamily: fontFamily),
+              ),
               themeMode: settingsState.appTheme,
               initialRoute: '/',
               routes: {
