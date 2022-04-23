@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:nedaa/modules/settings/models/calcualtion_method.dart';
 import 'package:nedaa/modules/settings/models/notification_settings.dart';
 import 'package:nedaa/modules/settings/models/prayer_type.dart';
@@ -67,6 +68,7 @@ class SettingsRepository {
   }
 
   setLanguage(Locale language) async {
+    await setFont(language.languageCode);
     await _setString('language', language.languageCode);
   }
 
@@ -138,6 +140,20 @@ class SettingsRepository {
 
   setIsFirstRun(bool isFirstRun) async {
     await _setBool('isFirstRun', isFirstRun);
+  }
+
+  setFont(language) async {
+    switch (language) {
+      case 'ar':
+        await _setString('font', GoogleFonts.tajawal().fontFamily!);
+        break;
+      default:
+        await _setString('font', GoogleFonts.notoSans().fontFamily!);
+    }
+  }
+
+  String getFont() {
+    return _getString('font') ?? '';
   }
 
   //TODO: remove this method

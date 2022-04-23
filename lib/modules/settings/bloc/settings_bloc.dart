@@ -9,12 +9,14 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
             appLanguage: settingsRepository.getLanguage(),
             appTheme: settingsRepository.getTheme(),
             isFirstRun: settingsRepository.isFirstRun(),
+            font: settingsRepository.getFont(),
           ),
         ) {
     on<LanguageEvent>(
       (event, emit) => {
         emit(SettingsState(
           appLanguage: event.appLanguage,
+          font: state.font,
           appTheme: state.appTheme,
           isFirstRun: state.isFirstRun,
         )),
@@ -26,6 +28,7 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
         emit(SettingsState(
           appLanguage: state.appLanguage,
           appTheme: event.theme,
+          font: state.font,
           isFirstRun: state.isFirstRun,
         )),
         settingsRepository.setTheme(event.theme)
@@ -36,6 +39,7 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
         emit(SettingsState(
           appLanguage: state.appLanguage,
           appTheme: state.appTheme,
+          font: state.font,
           isFirstRun: false,
         )),
         settingsRepository.setIsFirstRun(false)
@@ -50,11 +54,13 @@ class SettingsState {
   final Locale appLanguage;
   final ThemeMode appTheme;
   final bool isFirstRun;
+  final String font;
 
   SettingsState(
       {required this.appLanguage,
       required this.appTheme,
-      required this.isFirstRun});
+      required this.isFirstRun,
+      required this.font});
 }
 
 class SettingsEvent {}

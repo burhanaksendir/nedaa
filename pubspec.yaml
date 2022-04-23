@@ -57,6 +57,7 @@ dependencies:
   timezone: ^0.8.0
   slide_countdown: ^0.2.3
   motion_toast: ^2.1.6
+  google_fonts: ^2.3.1
 
 dev_dependencies:
   flutter_test:

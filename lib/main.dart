@@ -96,6 +96,7 @@ class MyApp extends StatelessWidget {
         ],
         child: BlocBuilder<SettingsBloc, SettingsState>(
           builder: (BuildContext context, SettingsState settingsState) {
+            var fontFamily = context.read<SettingsBloc>().state.font;
             return MaterialApp(
               onGenerateTitle: (context) {
                 Locale activeLocale = Localizations.localeOf(context);
@@ -114,7 +115,9 @@ class MyApp extends StatelessWidget {
                 GlobalCupertinoLocalizations.delegate,
               ],
               supportedLocales: supportedLocales.keys.map((e) => Locale(e, '')),
-              theme: CustomTheme.light,
+              theme: CustomTheme.light.copyWith(
+                textTheme: ThemeData().textTheme.apply(fontFamily: fontFamily),
+              ),
               darkTheme: CustomTheme.dark,
               themeMode: settingsState.appTheme,
               initialRoute: '/',
