@@ -72,18 +72,14 @@ PrayerTime getNextPrayer(
   return nextPrayer;
 }
 
-Future<bool> tryConnection() async {
+Future<bool> hasInternetConnection() async {
   bool? _isConnectionSuccessful;
   try {
     final response = await InternetAddress.lookup('www.google.com');
 
-
-      _isConnectionSuccessful = response.isNotEmpty;
-
-  } on SocketException catch (e) {
-
-      _isConnectionSuccessful = false;
-    ;
+    _isConnectionSuccessful = response.isNotEmpty;
+  } on SocketException catch (_) {
+    _isConnectionSuccessful = false;
   }
   return _isConnectionSuccessful;
 }
