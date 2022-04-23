@@ -56,7 +56,7 @@ dependencies:
   sentry_flutter: ^6.4.0
   timezone: ^0.8.0
   slide_countdown: ^0.2.3
-  connectivity_plus: ^2.3.0
+
 
 dev_dependencies:
   flutter_test:
