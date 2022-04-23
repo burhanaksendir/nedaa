@@ -49,6 +49,7 @@ void main() async {
 class MyApp extends StatelessWidget {
   const MyApp({Key? key, required this.settingsRepository}) : super(key: key);
   final SettingsRepository settingsRepository;
+
   @override
   Widget build(BuildContext context) {
     return MultiRepositoryProvider(

@@ -42,3 +42,15 @@ Future<List<DayPrayerTimes>> getPrayerTimesByCity(
     return Future.error('An error occurd while get prayer times');
   }
 }
+
+Future<http.Response> getCoordinatesFromAddress(String address) async {
+  final response = await http.get(Uri.parse(
+    getCoordinates + '?address=' + address,
+  ));
+
+  if (response.statusCode == 200) {
+    return response;
+  } else {
+    return Future.error('An error occurd while get coordinates');
+  }
+}

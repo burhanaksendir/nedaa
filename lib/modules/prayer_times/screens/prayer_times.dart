@@ -71,7 +71,7 @@ class _PrayerTimesState extends State<PrayerTimes> {
   @override
   Widget build(BuildContext context) {
     var _userSettings = context.watch<UserSettingsBloc>().state;
-    var _prayerTimesBloc = context.read<PrayerTimesBloc>();
+    var _prayerTimesBloc = context.watch<PrayerTimesBloc>();
     return SmartRefresher(
       onRefresh: () => _onRefresh(_userSettings, _prayerTimesBloc),
       controller: _refreshController,

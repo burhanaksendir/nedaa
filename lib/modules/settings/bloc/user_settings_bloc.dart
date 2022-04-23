@@ -60,6 +60,18 @@ class UserSettingsBloc extends Bloc<UserSettingsEvent, UserSettingsState> {
       );
       settingsRepository.setNotificationSettings(state.notificationSettings);
     });
+    //TODO: remove this
+    on<ClearDataEvent>((event, emit) {
+      emit(
+        UserSettingsState(
+          location: state.location,
+          calculationMethod: state.calculationMethod,
+          keepUpdatingLocation: state.keepUpdatingLocation,
+          notificationSettings: state.notificationSettings,
+        ),
+      );
+      settingsRepository.clear();
+    });
   }
 
   final SettingsRepository settingsRepository;
@@ -103,4 +115,9 @@ class PrayerNotificationEvent extends UserSettingsEvent {
   final PrayerType prayerType;
 
   PrayerNotificationEvent(this.prayerType, this.notificationSettings);
+}
+
+//TODO: remove this snippet after testing
+class ClearDataEvent extends UserSettingsEvent {
+  ClearDataEvent();
 }

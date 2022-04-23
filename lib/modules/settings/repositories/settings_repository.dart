@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:nedaa/modules/settings/models/calcualtion_method.dart';
 import 'package:nedaa/modules/settings/models/notification_settings.dart';
@@ -61,7 +62,7 @@ class SettingsRepository {
       case 'ar':
         return const Locale('ar');
       default:
-        return const Locale('en');
+        return Locale(Platform.localeName.split('_')[0]);
     }
   }
 
@@ -129,5 +130,19 @@ class SettingsRepository {
       }
     }
     return settingsMap;
+  }
+
+  bool isFirstRun() {
+    return _getBool('isFirstRun') ?? true;
+  }
+
+  setIsFirstRun(bool isFirstRun) async {
+    await _setBool('isFirstRun', isFirstRun);
+  }
+
+  //TODO: remove this method
+  Future<void> clear() async {
+    var s = await _sharedPref.clear();
+    s == true ? exit(0) : null;
   }
 }

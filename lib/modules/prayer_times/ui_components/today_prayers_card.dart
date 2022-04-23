@@ -44,10 +44,10 @@ class _TodayPrayersCardState extends State<TodayPrayersCard> {
     var t = AppLocalizations.of(context);
 
     var columnChildren = <Widget>[const CommonCardHeader()];
-    var formatted = DateFormat("hh:mm a");
+    var formatted = DateFormat("hh:mm a", t!.localeName);
 
     var prayersTranslation = {
-      PrayerType.fajr: t!.fajr,
+      PrayerType.fajr: t.fajr,
       PrayerType.sunrise: t.sunrise,
       PrayerType.duhur: t.duhur,
       PrayerType.asr: t.asr,

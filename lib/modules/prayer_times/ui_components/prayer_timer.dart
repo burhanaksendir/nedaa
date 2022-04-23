@@ -7,6 +7,7 @@ import 'package:nedaa/modules/prayer_times/models/prayer_times.dart';
 import 'package:nedaa/modules/settings/models/prayer_type.dart';
 import 'package:nedaa/utils/helper.dart';
 import 'package:slide_countdown/slide_countdown.dart';
+import 'dart:ui' as ui;
 
 class PrayerTimer extends StatefulWidget {
   const PrayerTimer({Key? key}) : super(key: key);
@@ -40,7 +41,7 @@ class _PrayerTimerState extends State<PrayerTimer> {
       PrayerType.isha: t.isha,
     };
 
-    var formatted = DateFormat("hh:mm a");
+    var formatted = DateFormat("hh:mm a", t.localeName);
 
     return Column(
       children: <Widget>[
@@ -57,20 +58,26 @@ class _PrayerTimerState extends State<PrayerTimer> {
         (nextPrayer == null)
             ? Container()
             // TODO: Replace with our own counter?
-            : SlideCountdownSeparated(
+            : SlideCountdown(
                 duration: nextPrayer.timezonedTime.difference(
-                  DateTime.now(),
-                ),
+                    getCurrentTimeWithTimeZone(nextPrayer.timeZoneName)),
                 textStyle: Theme.of(context).textTheme.headline5 ??
                     const TextStyle(color: Colors.black),
                 decoration: BoxDecoration(
                   color: Colors.transparent,
                   borderRadius: BorderRadius.circular(8),
                 ),
+                onDone: () {
+                  setState(() {});
+                },
+                textDirection:
+                    Directionality.of(context) == ui.TextDirection.ltr
+                        ? ui.TextDirection.ltr
+                        : ui.TextDirection.rtl,
               ),
-        const SizedBox(height: 16),
+        const SizedBox(height: 8),
         Text(
-          formatted.format(nextPrayer?.timezonedTime ?? DateTime(0, 0, 0, 6)),
+          formatted.format(nextPrayer?.timezonedTime ?? DateTime.now()),
           style: Theme.of(context).textTheme.headline5,
         ),
       ],

@@ -1,12 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:nedaa/constants/app_constans.dart';
 import 'package:nedaa/constants/calculation_methods.dart';
+import 'package:nedaa/constants/theme_mode.dart';
 import 'package:nedaa/modules/prayer_times/bloc/prayer_times_bloc.dart';
 import 'package:nedaa/modules/settings/bloc/settings_bloc.dart';
 import 'package:nedaa/modules/settings/bloc/user_settings_bloc.dart';
 import 'package:nedaa/modules/settings/models/calcualtion_method.dart';
+import 'package:nedaa/modules/settings/models/user_location.dart';
 import 'package:nedaa/modules/settings/screens/calculation_methods_dialog.dart';
 import 'package:nedaa/modules/settings/screens/languages_dialog.dart';
 import 'package:nedaa/modules/settings/screens/location.dart';
@@ -30,11 +33,30 @@ class _SettingsState extends State<Settings> {
   static const email = 'support@nedaa.io';
   static const website = 'https://nedaa.io';
 
+  _updateAddressTranslation(BuildContext context, Location _currentUserLocation,
+      String language) async {
+    Placemark placemark = await placemarkFromCoordinates(
+            _currentUserLocation.latitude, _currentUserLocation.longitude,
+            localeIdentifier: language)
+        .then((value) => value[0]);
+
+    context.read<UserSettingsBloc>().add(
+          UserLocationEvent(
+            UserLocation(
+              location: _currentUserLocation,
+              city: placemark.locality,
+              country: placemark.country,
+              state: placemark.administrativeArea,
+            ),
+          ),
+        );
+  }
+
   @override
   Widget build(BuildContext context) {
     var t = AppLocalizations.of(context);
     var _currentAppState = context.watch<SettingsBloc>().state;
-    var _stateLocale = _currentAppState.appLanguage!.languageCode;
+    var _stateLocale = _currentAppState.appLanguage.languageCode;
 
     var _currentLocale = supportedLocales[_stateLocale];
     var _currentTheme = _currentAppState.appTheme;
@@ -48,6 +70,11 @@ class _SettingsState extends State<Settings> {
     var _currentCalculationMethodName =
         methods[_currentCalculationMethod.index];
     var _currentUserCity = _currentUserState.location.cityAddress;
+
+    var _currentUserLocation = _currentUserState.location.location;
+
+    var _themeModes = themeModes[locale.languageCode] ?? themeModes['en']!;
+    var _currentThemeMode = _themeModes[_currentTheme]!;
 
     return SafeArea(
       child: Scaffold(
@@ -75,12 +102,16 @@ class _SettingsState extends State<Settings> {
                       context
                           .read<SettingsBloc>()
                           .add(LanguageEvent(Locale(language)));
+
+                      // update address language
+                      _updateAddressTranslation(
+                          context, _currentUserLocation!, language);
                     }
                   },
                 ),
                 SettingsTile(
                   title: Text(t.theme),
-                  trailing: Text(_currentTheme!.name),
+                  trailing: Text(_currentThemeMode),
                   leading: const Icon(Icons.color_lens),
                   onPressed: (context) async {
                     final themeMode = await showCupertinoDialog(
@@ -118,8 +149,9 @@ class _SettingsState extends State<Settings> {
                 ),
                 SettingsTile(
                   title: Text(t.calculationMethods),
-                  trailing:
-                      Text(_currentCalculationMethodName ?? t.defaultString),
+                  trailing: Text(_currentCalculationMethodName!.length > 25
+                      ? _currentCalculationMethodName.substring(0, 25) + '...'
+                      : _currentCalculationMethodName),
                   leading: const Icon(Icons.access_time_filled),
                   onPressed: (context) async {
                     final calculationMethod = await showCupertinoDialog(
@@ -206,6 +238,41 @@ class _SettingsState extends State<Settings> {
                     ),
                   ),
                   leading: const Icon(Icons.public),
+                ),
+              ],
+            ),
+            SettingsSection(
+              title: const Text('Clear Data'),
+              tiles: [
+                SettingsTile(
+                  title: const Text('Clear Data'),
+                  leading: const Icon(Icons.delete),
+                  onPressed: (context) {
+                    //dialog to clear all data
+                    showDialog(
+                      context: context,
+                      builder: (_) {
+                        return AlertDialog(
+                          title: const Text('Clear shared preferences'),
+                          content: Text(
+                              'Long press on ${t.ok} to clear all data \n Note: this will  close the app'),
+                          actions: [
+                            TextButton(
+                              onPressed: () {},
+                              child: Text(t.ok),
+                              onLongPress: () {
+                                var userSettingsBloc =
+                                    context.read<UserSettingsBloc>();
+                                userSettingsBloc.add(
+                                  ClearDataEvent(),
+                                );
+                              },
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  },
                 ),
               ],
             ),
