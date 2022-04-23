@@ -85,4 +85,3 @@ Future<bool> hasInternetConnection() async {
   }
   return _isConnectionSuccessful;
 }
-
