@@ -28,15 +28,31 @@ class _CommonCardHeaderState extends State<CommonCardHeader> {
           style: Theme.of(context).textTheme.headline5,
         ),
         const SizedBox(height: 20),
-        Text(
-          _currentUserCity ?? '',
-          style: Theme.of(context).textTheme.headline5,
-        ),
-        const Divider(
-          thickness: 1,
-          height: 108,
-          color: Colors.black,
-        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Expanded(
+              child: Divider(
+                color: Theme.of(context).dividerColor,
+                thickness: 1,
+              ),
+            ),
+            const Padding(padding: EdgeInsets.symmetric(horizontal: 8)),
+            Text(
+              _currentUserCity ?? '',
+              style: Theme.of(context).textTheme.headline5,
+            ),
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 8),
+            ),
+            Expanded(
+              child: Divider(
+                color: Theme.of(context).dividerColor,
+                thickness: 1,
+              ),
+            )
+          ],
+        )
       ],
     );
   }
