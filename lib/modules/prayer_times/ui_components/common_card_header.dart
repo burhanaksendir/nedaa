@@ -34,7 +34,7 @@ class _CommonCardHeaderState extends State<CommonCardHeader> {
             Expanded(
               child: Divider(
                 color: Theme.of(context).dividerColor,
-                thickness: 1,
+                thickness: 2,
               ),
             ),
             const Padding(padding: EdgeInsets.symmetric(horizontal: 8)),
@@ -48,7 +48,7 @@ class _CommonCardHeaderState extends State<CommonCardHeader> {
             Expanded(
               child: Divider(
                 color: Theme.of(context).dividerColor,
-                thickness: 1,
+                thickness: 2,
               ),
             )
           ],

@@ -18,6 +18,7 @@ class _MainPrayerCardState extends State<MainPrayerCard> {
       child: Column(
         children: const [
           CommonCardHeader(),
+          SizedBox(height: 20),
           PrayerTimer(),
         ],
       ),
