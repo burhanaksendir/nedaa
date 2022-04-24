@@ -16,10 +16,10 @@ class _MainPrayerCardState extends State<MainPrayerCard> {
   Widget build(BuildContext context) {
     return PrayerTimesCard(
       child: Column(
-        children: const [
-          CommonCardHeader(),
-          SizedBox(height: 20),
-          PrayerTimer(),
+        children: [
+          const CommonCardHeader(),
+          SizedBox(height: MediaQuery.of(context).size.height * 0.06),
+          const PrayerTimer(),
         ],
       ),
     );

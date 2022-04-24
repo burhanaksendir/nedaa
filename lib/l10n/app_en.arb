@@ -31,7 +31,7 @@
   "notification": "Notification",
   "ok": "OK",
   "prayersAlerts": "Prayers Alerts",
-  "requestLocationPermissionContent": "This app uses your location to automatically determine the correct prayer times. Would you like to open loaction settings?",
+  "requestLocationPermissionContent": "This app uses your location to automatically determine the correct prayer times. Would you like to open location settings?",
   "requestLocationPermissionTitle": "Location Permission",
   "saturday": "Saturday",
   "selectMailApp": "Select Mail App",

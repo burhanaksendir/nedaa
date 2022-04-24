@@ -21,7 +21,7 @@ import 'package:timezone/data/latest_all.dart' as tz;
 void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
-  
+
   // Wait two seconds before removing the splash screen
   await Future.delayed(const Duration(seconds: 5));
   FlutterNativeSplash.remove();
