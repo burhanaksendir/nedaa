@@ -14,7 +14,7 @@ class PrayerTimesCard extends StatelessWidget {
         child: Stack(children: [
           Center(
             child: Opacity(
-              opacity: 0.1,
+              opacity: 0.2,
               child: Image.asset(
                 'assets/images/logo.png',
               ),
