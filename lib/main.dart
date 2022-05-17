@@ -24,8 +24,8 @@ void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
-  // Wait 5 seconds before removing the splash screen
-  await Future.delayed(const Duration(seconds: 10));
+  // Wait 1 seconds before removing the splash screen
+  await Future.delayed(const Duration(seconds: 1));
 
   tz.initializeTimeZones();
 
