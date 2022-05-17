@@ -29,24 +29,19 @@ void main() async {
 
   tz.initializeTimeZones();
 
-
   SettingsRepository settingsRepository = SettingsRepository(
     await SharedPreferences.getInstance(),
   );
 
   UserLocation location = settingsRepository.getUserLocation();
-  CalculationMethod method =
-      settingsRepository.getCalculationMethod();
-
+  CalculationMethod method = settingsRepository.getCalculationMethod();
 
   PrayerTimesRepository prayerTimesRepository =
       await PrayerTimesRepository.newRepo(location, method);
 
-
   FlutterNativeSplash.remove();
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
-
 
   await SentryFlutter.init(
     (options) {

@@ -56,7 +56,7 @@ class PrayerTimesRepository {
       if (todayDate.year == cache.cacheDate.year &&
           todayDate.month == cache.cacheDate.month &&
           todayDate.day == cache.cacheDate.day &&
-          method.index== cache.method.index &&
+          method.index == cache.method.index &&
           location == cache.location) {
         return cache.state;
       }

@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:geocoding/geocoding.dart';
 
 class UserLocation {
@@ -20,6 +22,9 @@ class UserLocation {
         other.state == state &&
         other.city == city;
   }
+
+  @override
+  int get hashCode => hashValues(location, country, state, city);
 
   Map<String, dynamic> toJson() => {
         'location': location?.toJson(),
