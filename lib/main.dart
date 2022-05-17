@@ -11,6 +11,8 @@ import 'package:nedaa/modules/prayer_times/bloc/prayer_times_bloc.dart';
 import 'package:nedaa/modules/prayer_times/repositories/prayer_times_repository.dart';
 import 'package:nedaa/modules/settings/bloc/settings_bloc.dart';
 import 'package:nedaa/modules/settings/bloc/user_settings_bloc.dart';
+import 'package:nedaa/modules/settings/models/calcualtion_method.dart';
+import 'package:nedaa/modules/settings/models/user_location.dart';
 import 'package:nedaa/modules/settings/repositories/settings_repository.dart';
 import 'package:nedaa/screens/main_screen.dart';
 import 'package:device_preview/device_preview.dart';
@@ -22,17 +24,29 @@ void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
-  // Wait two seconds before removing the splash screen
-  await Future.delayed(const Duration(seconds: 5));
-  FlutterNativeSplash.remove();
-  SystemChrome.setPreferredOrientations(
-      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+  // Wait 5 seconds before removing the splash screen
+  await Future.delayed(const Duration(seconds: 10));
+
+  tz.initializeTimeZones();
+
 
   SettingsRepository settingsRepository = SettingsRepository(
     await SharedPreferences.getInstance(),
   );
 
-  tz.initializeTimeZones();
+  UserLocation location = settingsRepository.getUserLocation();
+  CalculationMethod method =
+      settingsRepository.getCalculationMethod();
+
+
+  PrayerTimesRepository prayerTimesRepository =
+      await PrayerTimesRepository.newRepo(location, method);
+
+
+  FlutterNativeSplash.remove();
+  SystemChrome.setPreferredOrientations(
+      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+
 
   await SentryFlutter.init(
     (options) {
@@ -45,23 +59,28 @@ void main() async {
       DevicePreview(
         enabled: !kReleaseMode,
         builder: (context) => MyApp(
-          settingsRepository: settingsRepository,
-        ),
+            settingsRepository: settingsRepository,
+            prayerTimesRepository: prayerTimesRepository),
       ),
     ),
   );
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key, required this.settingsRepository}) : super(key: key);
+  const MyApp(
+      {Key? key,
+      required this.settingsRepository,
+      required this.prayerTimesRepository})
+      : super(key: key);
   final SettingsRepository settingsRepository;
+  final PrayerTimesRepository prayerTimesRepository;
 
   @override
   Widget build(BuildContext context) {
     return MultiRepositoryProvider(
       providers: [
         RepositoryProvider.value(value: settingsRepository),
-        RepositoryProvider(create: (context) => PrayerTimesRepository())
+        RepositoryProvider.value(value: prayerTimesRepository)
       ],
       child: MultiBlocProvider(
         providers: [

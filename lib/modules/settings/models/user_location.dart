@@ -10,6 +10,17 @@ class UserLocation {
 
   String? get cityAddress => city ?? state;
 
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other.runtimeType != runtimeType) return false;
+    return other is UserLocation &&
+        other.location == location &&
+        other.country == country &&
+        other.state == state &&
+        other.city == city;
+  }
+
   Map<String, dynamic> toJson() => {
         'location': location?.toJson(),
         'country': country,
