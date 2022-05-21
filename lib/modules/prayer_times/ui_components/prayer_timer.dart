@@ -43,44 +43,59 @@ class _PrayerTimerState extends State<PrayerTimer> {
 
     var formatted = DateFormat("hh:mm a", t.localeName);
 
-    return Column(
-      children: <Widget>[
-        const SizedBox(height: 16),
-        Text(
-          prayersTranslation[nextPrayer?.prayerType ?? PrayerType.fajr]!,
-          style: Theme.of(context).textTheme.headline5,
+    return Container(
+      height: MediaQuery.of(context).size.height * 0.30,
+      width: MediaQuery.of(context).size.width * 0.9,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        // color: Theme.of(context).timePickerTheme.dialBackgroundColor,
+        border: Border.all(
+          color: Theme.of(context).colorScheme.secondary,
+          width: 2,
         ),
-        Text(
-          t.inTime,
-          style: Theme.of(context).textTheme.headline5,
-        ),
-        const SizedBox(height: 16),
-        (nextPrayer == null)
-            ? Container()
-            // TODO: Replace with our own counter?
-            : SlideCountdown(
-                duration: nextPrayer.timezonedTime.difference(
-                    getCurrentTimeWithTimeZone(nextPrayer.timeZoneName)),
-                textStyle: Theme.of(context).textTheme.headline5 ??
-                    const TextStyle(color: Colors.black),
-                decoration: BoxDecoration(
-                  color: Colors.transparent,
-                  borderRadius: BorderRadius.circular(8),
+      ),
+      // padding: const EdgeInsets.all(8),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          const Padding(
+            padding: EdgeInsets.only(top: 20),
+          ),
+          Text(
+            prayersTranslation[nextPrayer?.prayerType ?? PrayerType.fajr]!,
+            style: Theme.of(context).textTheme.headline5,
+          ),
+          Text(
+            t.inTime,
+            style: Theme.of(context).textTheme.headline5,
+          ),
+          (nextPrayer == null)
+              ? Container()
+              // TODO: Replace with our own counter?
+              : SlideCountdown(
+                  duration: nextPrayer.timezonedTime.difference(
+                      getCurrentTimeWithTimeZone(nextPrayer.timeZoneName)),
+                  textStyle: Theme.of(context).textTheme.headline5 ??
+                      const TextStyle(color: Colors.black),
+                  decoration: BoxDecoration(
+                    color: Colors.transparent,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  onDone: () {
+                    setState(() {});
+                  },
+                  textDirection:
+                      Directionality.of(context) == ui.TextDirection.ltr
+                          ? ui.TextDirection.ltr
+                          : ui.TextDirection.rtl,
                 ),
-                onDone: () {
-                  setState(() {});
-                },
-                textDirection:
-                    Directionality.of(context) == ui.TextDirection.ltr
-                        ? ui.TextDirection.ltr
-                        : ui.TextDirection.rtl,
-              ),
-        const SizedBox(height: 8),
-        Text(
-          formatted.format(nextPrayer?.timezonedTime ?? DateTime.now()),
-          style: Theme.of(context).textTheme.headline5,
-        ),
-      ],
+          const SizedBox(height: 8),
+          Text(
+            formatted.format(nextPrayer?.timezonedTime ?? DateTime.now()),
+            style: Theme.of(context).textTheme.headline5,
+          ),
+        ],
+      ),
     );
   }
 }

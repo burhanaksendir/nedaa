@@ -50,7 +50,7 @@ class _PrayerTimesState extends State<PrayerTimes> {
           activeRadius: 6,
           borderColor: const Color(0xFF327D77),
           fillColor: Colors.white,
-          activeColor: const Color(0xFF87C7BE),
+          activeColor: Theme.of(context).primaryColor,
         ),
       ),
     ]);

@@ -58,7 +58,8 @@ class _SettingsState extends State<Settings> {
     var _currentAppState = context.watch<SettingsBloc>().state;
     var _stateLocale = _currentAppState.appLanguage.languageCode;
 
-    var _currentLocale = supportedLocales[_stateLocale];
+    var _currentLocale =
+        supportedLocales[_stateLocale] ?? supportedLocales['en'];
     var _currentTheme = _currentAppState.appTheme;
 
     var _currentUserState = context.watch<UserSettingsBloc>().state;

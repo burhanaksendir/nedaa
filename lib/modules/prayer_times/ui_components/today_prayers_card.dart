@@ -24,14 +24,14 @@ class _TodayPrayersCardState extends State<TodayPrayersCard> {
           prayerName,
           style: const TextStyle(
             fontSize: 16,
-            fontWeight: FontWeight.w600,
+            fontWeight: FontWeight.w700,
           ),
         ),
         Text(
           prayerTime,
           style: const TextStyle(
             fontSize: 16,
-            fontWeight: FontWeight.w600,
+            fontWeight: FontWeight.w700,
           ),
         ),
       ],
