@@ -19,6 +19,7 @@ class PrayerTimesBloc extends Bloc<PrayerTimesEvent, PrayerTimesState> {
         emit(PrayerTimesState(
           todayPrayerTimes: currentPrayerTimesState.today,
           tomorrowPrayerTimes: currentPrayerTimesState.tomorrow,
+          yesterdayPrayerTimes: currentPrayerTimesState.yesterday,
         ));
       } catch (e) {
         // TODO: use failed state to display error
@@ -34,8 +35,12 @@ class PrayerTimesBloc extends Bloc<PrayerTimesEvent, PrayerTimesState> {
 class PrayerTimesState {
   DayPrayerTimes? todayPrayerTimes;
   DayPrayerTimes? tomorrowPrayerTimes;
+  DayPrayerTimes? yesterdayPrayerTimes;
 
-  PrayerTimesState({this.todayPrayerTimes, this.tomorrowPrayerTimes});
+  PrayerTimesState(
+      {this.todayPrayerTimes,
+      this.tomorrowPrayerTimes,
+      this.yesterdayPrayerTimes});
 }
 
 class FailedPrayerTimesState extends PrayerTimesState {

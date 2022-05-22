@@ -2,9 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
+import 'package:motion_toast/motion_toast.dart';
+import 'package:motion_toast/resources/arrays.dart';
 import 'package:nedaa/modules/prayer_times/bloc/prayer_times_bloc.dart';
+import 'package:nedaa/modules/prayer_times/models/prayer_times.dart';
 import 'package:nedaa/modules/settings/models/prayer_type.dart';
-import '../../../widgets/prayer_times_card.dart';
+import 'package:nedaa/utils/helper.dart';
+import 'package:nedaa/widgets/prayer_times_card.dart';
 import 'common_card_header.dart';
 import 'package:timezone/standalone.dart' as tz;
 
@@ -16,38 +20,63 @@ class TodayPrayersCard extends StatefulWidget {
 }
 
 class _TodayPrayersCardState extends State<TodayPrayersCard> {
-  Widget _buildPrayerRow(String prayerName, String prayerTime) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: <Widget>[
-        Text(
-          prayerName,
-          style: const TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w700,
+  Widget _buildPrayerRow(BuildContext context, String prayerName,
+      tz.TZDateTime prayerTime, bool showPrevious,
+      [PrayerTime? previousPrayerTime]) {
+    var t = AppLocalizations.of(context);
+    var formatted = DateFormat("hh:mm a", t!.localeName);
+    var formattedTime = formatted.format(prayerTime);
+    return GestureDetector(
+      onTap: () {
+        var now = getCurrentTimeWithTimeZone(prayerTime.location.toString());
+        var duration = showPrevious
+            ? now.difference(previousPrayerTime!.time)
+            : prayerTime.difference(now);
+        var keyword = showPrevious ? t.since : t.until;
+        MotionToast(
+          backgroundType: BACKGROUND_TYPE.lighter,
+          primaryColor: Theme.of(context).primaryColorLight,
+          icon: Icons.info,
+          position: MOTION_TOAST_POSITION.center,
+          description: Text(
+            '$prayerName : $keyword ${duration.inHours}:${duration.inMinutes.remainder(60)}:${duration.inSeconds.remainder(60)}',
+            style: const TextStyle(color: Colors.black),
           ),
-        ),
-        Text(
-          prayerTime,
-          style: const TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w700,
+          toastDuration: const Duration(seconds: 5),
+          dismissable: true,
+        ).show(context);
+      },
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          Text(
+            prayerName,
+            style: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w700,
+            ),
           ),
-        ),
-      ],
+          Text(
+            formattedTime,
+            style: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+        ],
+      ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    var prayerTimes = context.watch<PrayerTimesBloc>().state.todayPrayerTimes;
+    var prayerState = context.watch<PrayerTimesBloc>().state;
     var t = AppLocalizations.of(context);
 
     var columnChildren = <Widget>[const CommonCardHeader()];
-    var formatted = DateFormat("hh:mm a", t!.localeName);
 
     var prayersTranslation = {
-      PrayerType.fajr: t.fajr,
+      PrayerType.fajr: t!.fajr,
       PrayerType.sunrise: t.sunrise,
       PrayerType.duhur: t.duhur,
       PrayerType.asr: t.asr,
@@ -55,31 +84,54 @@ class _TodayPrayersCardState extends State<TodayPrayersCard> {
       PrayerType.isha: t.isha,
     };
 
-    if (prayerTimes != null) {
+    if (prayerState.todayPrayerTimes != null &&
+        prayerState.tomorrowPrayerTimes != null &&
+        prayerState.yesterdayPrayerTimes != null) {
+      var todayPrayerTimes = prayerState.todayPrayerTimes!;
+      var tomorrowPrayerTimes = prayerState.tomorrowPrayerTimes!;
+
+      var previousPrayer = getPreviousPrayer(
+          todayPrayerTimes, prayerState.yesterdayPrayerTimes!);
+
       tz.Location? location;
       prayersTranslation.forEach((key, value) {
-        location ??= tz.getLocation(prayerTimes.timeZoneName);
+        location ??= tz.getLocation(todayPrayerTimes.timeZoneName);
 
-        var datetime = tz.TZDateTime.from(
-          prayerTimes.prayerTimes[key] ?? DateTime.now(),
+        var now = getCurrentTimeWithTimeZone(todayPrayerTimes.timeZoneName);
+
+        var prayerTime = tz.TZDateTime.from(
+          todayPrayerTimes.prayerTimes[key] ?? DateTime.now(),
           location!,
         );
+
+        var showPrevious = key == previousPrayer.prayerType;
+
+        if (showPrevious) {
+          prayerTime = tz.TZDateTime.from(
+            tomorrowPrayerTimes.prayerTimes[key] ?? DateTime.now(),
+            location!,
+          );
+        } else {
+          if (prayerTime.isBefore(now)) {
+            prayerTime = tz.TZDateTime.from(
+              tomorrowPrayerTimes.prayerTimes[key] ?? DateTime.now(),
+              location!,
+            );
+          }
+        }
+
         columnChildren.add(
           _buildPrayerRow(
+            context,
             value,
-            formatted.format(datetime),
+            prayerTime,
+            showPrevious,
+            showPrevious ? previousPrayer : null,
           ),
         );
       });
     } else {
-      columnChildren.addAll([
-        _buildPrayerRow(t.fajr, '5:00 AM'),
-        _buildPrayerRow(t.sunrise, "7:00 AM"),
-        _buildPrayerRow(t.duhur, '12:00 PM'),
-        _buildPrayerRow(t.asr, '3:00 PM'),
-        _buildPrayerRow(t.maghrib, '6:00 PM'),
-        _buildPrayerRow(t.isha, '9:00 PM'),
-      ]);
+      columnChildren.add(Text(t.noPrayersTimesFound));
     }
 
     return PrayerTimesCard(

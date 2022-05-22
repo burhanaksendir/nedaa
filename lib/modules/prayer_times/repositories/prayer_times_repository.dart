@@ -8,8 +8,9 @@ import 'package:timezone/timezone.dart';
 class CurrentPrayerTimesState {
   DayPrayerTimes today;
   DayPrayerTimes tomorrow;
+  DayPrayerTimes yesterday;
 
-  CurrentPrayerTimesState(this.today, this.tomorrow);
+  CurrentPrayerTimesState(this.today, this.tomorrow, this.yesterday);
 }
 
 class CachedPrayerTimesState {
@@ -75,7 +76,10 @@ class PrayerTimesRepository {
     // TODO: fix tomorrow prayer times overflow
     var tomorrowPrayerTimes = getNextDayTimings(monthData);
 
-    var state = CurrentPrayerTimesState(todayPrayerTimes, tomorrowPrayerTimes);
+    var yesterdayPrayerTimes = getPreviousDayTimings(monthData);
+
+    var state = CurrentPrayerTimesState(
+        todayPrayerTimes, tomorrowPrayerTimes, yesterdayPrayerTimes);
 
     cache = CachedPrayerTimesState(state,
         getCurrentTimeWithTimeZone(state.today.timeZoneName), location, method);
