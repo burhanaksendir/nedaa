@@ -2,6 +2,7 @@ import 'package:intl/intl.dart';
 import 'package:nedaa/modules/settings/models/calcualtion_method.dart';
 import 'package:nedaa/modules/settings/models/prayer_type.dart';
 import 'package:nedaa/utils/helper.dart';
+import 'package:timezone/standalone.dart' as tz;
 
 class DayPrayerTimes {
   final Map<PrayerType, DateTime> prayerTimes;
@@ -48,5 +49,5 @@ class PrayerTime {
 
   PrayerTime(this.time, this.timeZoneName, this.prayerType);
 
-  DateTime get timezonedTime => getDateWithTimeZone(timeZoneName, time);
+  tz.TZDateTime get timezonedTime => getDateWithTimeZone(timeZoneName, time);
 }

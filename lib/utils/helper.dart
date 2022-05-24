@@ -37,6 +37,15 @@ DayPrayerTimes getNextDayTimings(List<DayPrayerTimes> allDays) {
       day.date.year == nextDay.year);
 }
 
+DayPrayerTimes getPreviousDayTimings(List<DayPrayerTimes> allDays) {
+  var today = getCurrentTimeWithTimeZone(allDays.first.timeZoneName);
+  var previousDay = today.subtract(const Duration(days: 1));
+  return allDays.firstWhere((day) =>
+      day.date.day == previousDay.day &&
+      day.date.month == previousDay.month &&
+      day.date.year == previousDay.year);
+}
+
 PrayerTime getNextPrayer(
     DayPrayerTimes todayPrayerTimes, DayPrayerTimes tomorrowPrayerTimes) {
   var now = getCurrentTimeWithTimeZone(todayPrayerTimes.timeZoneName);
@@ -61,6 +70,37 @@ PrayerTime getNextPrayer(
         tomorrowPrayerTimes.prayerTimes[PrayerType.fajr] ?? now,
         tomorrowPrayerTimes.timeZoneName,
         PrayerType.fajr,
+      );
+    },
+  );
+
+  return nextPrayer;
+}
+
+PrayerTime getPreviousPrayer(
+    DayPrayerTimes todayPrayerTimes, DayPrayerTimes yesterdayPrayerTimes) {
+  var now = getCurrentTimeWithTimeZone(todayPrayerTimes.timeZoneName);
+
+  var nextPrayer = PrayerType.values.reversed
+      .map((prayerType) => PrayerTime(
+            todayPrayerTimes.prayerTimes[prayerType] ?? now,
+            todayPrayerTimes.timeZoneName,
+            prayerType,
+          ))
+      .firstWhere(
+    (prayerTime) {
+      // if (prayerType == PrayerType.sunrise) return false;
+
+      var tzPrayerTime =
+          getDateWithTimeZone(todayPrayerTimes.timeZoneName, prayerTime.time);
+
+      return tzPrayerTime.isBefore(now);
+    },
+    orElse: () {
+      return PrayerTime(
+        yesterdayPrayerTimes.prayerTimes[PrayerType.isha] ?? now,
+        yesterdayPrayerTimes.timeZoneName,
+        PrayerType.isha,
       );
     },
   );
