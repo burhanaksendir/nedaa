@@ -1,16 +1,26 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
-import 'package:motion_toast/motion_toast.dart';
-import 'package:motion_toast/resources/arrays.dart';
 import 'package:nedaa/modules/prayer_times/bloc/prayer_times_bloc.dart';
 import 'package:nedaa/modules/prayer_times/models/prayer_times.dart';
 import 'package:nedaa/modules/settings/models/prayer_type.dart';
+import 'package:nedaa/utils/arabic_digits.dart';
 import 'package:nedaa/utils/helper.dart';
 import 'package:nedaa/widgets/prayer_times_card.dart';
 import 'common_card_header.dart';
 import 'package:timezone/standalone.dart' as tz;
+
+const timerDelay = Duration(seconds: 5);
+
+class DurationMessage {
+  String message;
+  PrayerType prayerType;
+
+  DurationMessage(this.message, this.prayerType);
+}
 
 class TodayPrayersCard extends StatefulWidget {
   const TodayPrayersCard({Key? key}) : super(key: key);
@@ -20,44 +30,77 @@ class TodayPrayersCard extends StatefulWidget {
 }
 
 class _TodayPrayersCardState extends State<TodayPrayersCard> {
-  Widget _buildPrayerRow(BuildContext context, String prayerName,
+  DurationMessage? durationMessage;
+  Timer? toggleReturnTimer;
+
+  @override
+  void dispose() {
+    toggleReturnTimer?.cancel();
+    super.dispose();
+  }
+
+  String getPrayerTranslation(BuildContext context, PrayerType prayerType) {
+    var t = AppLocalizations.of(context);
+
+    var prayersTranslation = {
+      PrayerType.fajr: t!.fajr,
+      PrayerType.sunrise: t.sunrise,
+      PrayerType.duhur: t.duhur,
+      PrayerType.asr: t.asr,
+      PrayerType.maghrib: t.maghrib,
+      PrayerType.isha: t.isha,
+    };
+
+    return prayersTranslation[prayerType]!;
+  }
+
+  Widget _buildPrayerRow(BuildContext context, PrayerType prayerType,
       tz.TZDateTime prayerTime, bool showPrevious,
       [PrayerTime? previousPrayerTime]) {
     var t = AppLocalizations.of(context);
     var formatted = DateFormat("hh:mm a", t!.localeName);
-    var formattedTime = formatted.format(prayerTime);
+
+    String displayMessage;
+    if (durationMessage != null && durationMessage!.prayerType == prayerType) {
+      displayMessage = durationMessage!.message;
+    } else {
+      displayMessage = formatted.format(prayerTime);
+    }
+
     return GestureDetector(
       onTap: () {
+        toggleReturnTimer?.cancel();
+
+        toggleReturnTimer = Timer(timerDelay, () {
+          setState(() {
+            durationMessage = null;
+          });
+        });
+
         var now = getCurrentTimeWithTimeZone(prayerTime.location.toString());
         var duration = showPrevious
             ? now.difference(previousPrayerTime!.time)
             : prayerTime.difference(now);
-        var keyword = showPrevious ? t.since : t.until;
-        MotionToast(
-          backgroundType: BACKGROUND_TYPE.lighter,
-          primaryColor: Theme.of(context).primaryColorLight,
-          icon: Icons.info,
-          position: MOTION_TOAST_POSITION.center,
-          description: Text(
-            '$prayerName : $keyword ${duration.inHours}:${duration.inMinutes.remainder(60)}:${duration.inSeconds.remainder(60)}',
-            style: const TextStyle(color: Colors.black),
-          ),
-          toastDuration: const Duration(seconds: 5),
-          dismissable: true,
-        ).show(context);
+        var keyword = showPrevious ? t.since : t.inTime;
+        setState(() {
+          durationMessage = DurationMessage(
+            "$keyword ${_formatDuration(duration, t.localeName)}",
+            prayerType,
+          );
+        });
       },
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           Text(
-            prayerName,
+            getPrayerTranslation(context, prayerType),
             style: const TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.w700,
             ),
           ),
           Text(
-            formattedTime,
+            displayMessage,
             style: const TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.w700,
@@ -75,15 +118,6 @@ class _TodayPrayersCardState extends State<TodayPrayersCard> {
 
     var columnChildren = <Widget>[const CommonCardHeader()];
 
-    var prayersTranslation = {
-      PrayerType.fajr: t!.fajr,
-      PrayerType.sunrise: t.sunrise,
-      PrayerType.duhur: t.duhur,
-      PrayerType.asr: t.asr,
-      PrayerType.maghrib: t.maghrib,
-      PrayerType.isha: t.isha,
-    };
-
     if (prayerState.todayPrayerTimes != null &&
         prayerState.tomorrowPrayerTimes != null &&
         prayerState.yesterdayPrayerTimes != null) {
@@ -94,28 +128,25 @@ class _TodayPrayersCardState extends State<TodayPrayersCard> {
           todayPrayerTimes, prayerState.yesterdayPrayerTimes!);
 
       tz.Location? location;
-      prayersTranslation.forEach((key, value) {
+      for (var prayerType in PrayerType.values) {
         location ??= tz.getLocation(todayPrayerTimes.timeZoneName);
 
         var now = getCurrentTimeWithTimeZone(todayPrayerTimes.timeZoneName);
 
         var prayerTime = tz.TZDateTime.from(
-          todayPrayerTimes.prayerTimes[key] ?? DateTime.now(),
-          location!,
+          todayPrayerTimes.prayerTimes[prayerType] ?? DateTime.now(),
+          location,
         );
 
-        var showPrevious = key == previousPrayer.prayerType;
+        var showPrevious = prayerType == previousPrayer.prayerType;
 
         if (showPrevious) {
-          prayerTime = tz.TZDateTime.from(
-            tomorrowPrayerTimes.prayerTimes[key] ?? DateTime.now(),
-            location!,
-          );
+          prayerTime = previousPrayer.timezonedTime;
         } else {
           if (prayerTime.isBefore(now)) {
             prayerTime = tz.TZDateTime.from(
-              tomorrowPrayerTimes.prayerTimes[key] ?? DateTime.now(),
-              location!,
+              tomorrowPrayerTimes.prayerTimes[prayerType] ?? DateTime.now(),
+              location,
             );
           }
         }
@@ -123,15 +154,15 @@ class _TodayPrayersCardState extends State<TodayPrayersCard> {
         columnChildren.add(
           _buildPrayerRow(
             context,
-            value,
+            prayerType,
             prayerTime,
             showPrevious,
             showPrevious ? previousPrayer : null,
           ),
         );
-      });
+      }
     } else {
-      columnChildren.add(Text(t.noPrayersTimesFound));
+      columnChildren.add(Text(t!.noPrayersTimesFound));
     }
 
     return PrayerTimesCard(
@@ -140,5 +171,18 @@ class _TodayPrayersCardState extends State<TodayPrayersCard> {
         children: columnChildren,
       ),
     );
+  }
+}
+
+String _formatDuration(Duration duration, String localeName) {
+  String twoDigits(int n) => n.toString().padLeft(2, "0");
+  String twoDigitMinutes = twoDigits(duration.inMinutes.remainder(60));
+  String twoDigitSeconds = twoDigits(duration.inSeconds.remainder(60));
+  var baseDuration =
+      "${twoDigits(duration.inHours)}:$twoDigitMinutes:$twoDigitSeconds";
+  if (localeName.startsWith("ar")) {
+    return translateToArabicDigits(baseDuration);
+  } else {
+    return baseDuration;
   }
 }
