@@ -26,13 +26,17 @@ jobs:
       uses: actions/cache@v1
       with:
         path: /opt/hostedtoolcache/flutter
-        key: ${{ runner.OS }}-flutter-install-cache-2.10.3
+        key: ${{ runner.OS }}-flutter-install-cache-3.0.1
         
     # Setup the flutter environment.
-    - uses: subosito/flutter-action@v1
+    - uses: subosito/flutter-action@v2
       with:
-        #channel: 'stable' # 'dev', 'alpha', default to: 'stable'
-         flutter-version: '2.10.3' # you can also specify exact version of flutter
+         flutter-version: '3.0.1' # you can also specify exact version of flutter
+         channel: 'stable'
+         cache: true
+         cache-key: flutter # optional, change this to force refresh cache
+         cache-path: ${{ runner.tool_cache }}/flutter # optional, change this to specify the cache path
+         architecture: x64 # optional, x64 or arm64
     
     # Get flutter dependencies.
     - run: flutter pub get
