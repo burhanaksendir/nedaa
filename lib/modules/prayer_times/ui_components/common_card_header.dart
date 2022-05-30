@@ -17,8 +17,8 @@ class _CommonCardHeaderState extends State<CommonCardHeader> {
     var t = AppLocalizations.of(context);
     final todaysDate =
         DateFormat('EEEE\n d MMMM y', t!.localeName).format(DateTime.now());
-    var _currentUserState = context.watch<UserSettingsBloc>().state;
-    var _currentUserCity = _currentUserState.location.cityAddress;
+    var currentUserState = context.watch<UserSettingsBloc>().state;
+    var currentUserCity = currentUserState.location.cityAddress;
 
     return Column(
       children: <Widget>[
@@ -39,7 +39,7 @@ class _CommonCardHeaderState extends State<CommonCardHeader> {
             ),
             const Padding(padding: EdgeInsets.symmetric(horizontal: 8)),
             Text(
-              _currentUserCity ?? '',
+              currentUserCity ?? '',
               style: Theme.of(context).textTheme.headline5,
             ),
             const Padding(

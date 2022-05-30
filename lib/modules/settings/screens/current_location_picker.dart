@@ -31,13 +31,14 @@ class _CurrentLocationPickerState extends State<CurrentLocationPicker> {
     } else {
       var result = await customAlert(context, t!.requestLocationPermissionTitle,
           t.requestLocationPermissionContent);
+      if (!mounted) return;
       if (result) {
         openLocationSettings(context);
       } else {
         MotionToast(
                 primaryColor: Theme.of(context).primaryColor,
                 icon: Icons.info,
-                position: MOTION_TOAST_POSITION.center,
+                position: MotionToastPosition.center,
                 description: Text(t.instructionsToSetLocationManually))
             .show(context);
       }
@@ -73,6 +74,7 @@ class _CurrentLocationPickerState extends State<CurrentLocationPicker> {
       var address = "$cityValue, $stateValue, $countryValue";
       try {
         Location location = await _geoCodingAddress();
+        if (!mounted) return;
         _updateUserLocation(context, location.latitude, location.longitude);
         return;
       } catch (e) {
@@ -80,6 +82,8 @@ class _CurrentLocationPickerState extends State<CurrentLocationPicker> {
       }
 
       var response = await getCoordinatesFromAddress(address);
+      if (!mounted) return;
+
       var location = json.decode(response.body);
       _updateUserLocation(context, location['latitude'] as double,
           location['longitude'] as double);
@@ -87,10 +91,10 @@ class _CurrentLocationPickerState extends State<CurrentLocationPicker> {
   }
 
   _geoCodingAddress() async {
-    Location location = await locationFromAddress(
-            cityValue + ', ' + stateValue + ', ' + countryValue)
-        .then((value) => value[0])
-        .catchError((error) {
+    Location location =
+        await locationFromAddress('$cityValue, $stateValue, $countryValue')
+            .then((value) => value[0])
+            .catchError((error) {
       Future.error(error);
     });
     return location;
@@ -100,8 +104,8 @@ class _CurrentLocationPickerState extends State<CurrentLocationPicker> {
   Widget build(BuildContext context) {
     var t = AppLocalizations.of(context);
 
-    var _userSettings = context.watch<UserSettingsBloc>().state;
-    var _userLocation = _userSettings.location;
+    var userSettings = context.watch<UserSettingsBloc>().state;
+    var userLocation = userSettings.location;
 
     return Scaffold(
       appBar: AppBar(
@@ -111,9 +115,9 @@ class _CurrentLocationPickerState extends State<CurrentLocationPicker> {
         padding: const EdgeInsets.all(8.0),
         child: Column(children: [
           CSCPicker(
-            currentCity: _userLocation.city,
-            currentState: _userLocation.state,
-            currentCountry: _userLocation.country,
+            currentCity: userLocation.city,
+            currentState: userLocation.state,
+            currentCountry: userLocation.country,
 
             ///Enable disable state dropdown [OPTIONAL PARAMETER]
             showStates: true,
@@ -189,7 +193,7 @@ class _CurrentLocationPickerState extends State<CurrentLocationPicker> {
               ),
             ],
           ),
-          _getUserLocationString(_userLocation)
+          _getUserLocationString(userLocation)
         ]),
       ),
     );

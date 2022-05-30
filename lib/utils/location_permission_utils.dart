@@ -34,7 +34,7 @@ Future<void> openLocationSettings(BuildContext context) async {
 updateCurrentLocation(BuildContext context) async {
   Position position = await Geolocator.getCurrentPosition(
       desiredAccuracy: LocationAccuracy.low);
-  updateUserLocation(context, position.latitude, position.longitude);
+  await updateUserLocation(context, position.latitude, position.longitude);
 }
 
 Future<UserLocation> updateUserLocation(

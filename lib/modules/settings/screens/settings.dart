@@ -33,17 +33,18 @@ class _SettingsState extends State<Settings> {
   static const email = 'support@nedaa.io';
   static const website = 'https://nedaa.io';
 
-  _updateAddressTranslation(BuildContext context, Location _currentUserLocation,
+  _updateAddressTranslation(BuildContext context, Location currentUserLocation,
       String language) async {
     Placemark placemark = await placemarkFromCoordinates(
-            _currentUserLocation.latitude, _currentUserLocation.longitude,
+            currentUserLocation.latitude, currentUserLocation.longitude,
             localeIdentifier: language)
         .then((value) => value[0]);
+    if (!mounted) return;
 
     context.read<UserSettingsBloc>().add(
           UserLocationEvent(
             UserLocation(
-              location: _currentUserLocation,
+              location: currentUserLocation,
               city: placemark.locality,
               country: placemark.country,
               state: placemark.administrativeArea,
@@ -55,27 +56,25 @@ class _SettingsState extends State<Settings> {
   @override
   Widget build(BuildContext context) {
     var t = AppLocalizations.of(context);
-    var _currentAppState = context.watch<SettingsBloc>().state;
-    var _stateLocale = _currentAppState.appLanguage.languageCode;
+    var currentAppState = context.watch<SettingsBloc>().state;
+    var stateLocale = currentAppState.appLanguage.languageCode;
 
-    var _currentLocale =
-        supportedLocales[_stateLocale] ?? supportedLocales['en'];
-    var _currentTheme = _currentAppState.appTheme;
+    var currentLocale = supportedLocales[stateLocale] ?? supportedLocales['en'];
+    var currentTheme = currentAppState.appTheme;
 
-    var _currentUserState = context.watch<UserSettingsBloc>().state;
-    var _currentCalculationMethod = _currentUserState.calculationMethod;
+    var currentUserState = context.watch<UserSettingsBloc>().state;
+    var currentCalculationMethod = currentUserState.calculationMethod;
     var locale = Localizations.localeOf(context);
     var methods =
         calculationMethods[locale.languageCode] ?? calculationMethods['en']!;
 
-    var _currentCalculationMethodName =
-        methods[_currentCalculationMethod.index];
-    var _currentUserCity = _currentUserState.location.cityAddress;
+    var currentCalculationMethodName = methods[currentCalculationMethod.index];
+    var currentUserCity = currentUserState.location.cityAddress;
 
-    var _currentUserLocation = _currentUserState.location.location;
+    var currentUserLocation = currentUserState.location.location;
 
-    var _themeModes = themeModes[locale.languageCode] ?? themeModes['en']!;
-    var _currentThemeMode = _themeModes[_currentTheme]!;
+    var themeModesNames = themeModes[locale.languageCode] ?? themeModes['en']!;
+    var currentThemeMode = themeModesNames[currentTheme]!;
 
     return SafeArea(
       child: Scaffold(
@@ -91,7 +90,7 @@ class _SettingsState extends State<Settings> {
               tiles: [
                 SettingsTile(
                   title: Text(t.language),
-                  trailing: Text(_currentLocale!),
+                  trailing: Text(currentLocale!),
                   leading: const Icon(Icons.language),
                   onPressed: (context) async {
                     final language = await showCupertinoDialog(
@@ -99,6 +98,7 @@ class _SettingsState extends State<Settings> {
                       context: context,
                       builder: (context) => const LanguageDialog(),
                     );
+                    if (!mounted) return;
                     if (language is String) {
                       context
                           .read<SettingsBloc>()
@@ -106,13 +106,13 @@ class _SettingsState extends State<Settings> {
 
                       // update address language
                       _updateAddressTranslation(
-                          context, _currentUserLocation!, language);
+                          context, currentUserLocation!, language);
                     }
                   },
                 ),
                 SettingsTile(
                   title: Text(t.theme),
-                  trailing: Text(_currentThemeMode),
+                  trailing: Text(currentThemeMode),
                   leading: const Icon(Icons.color_lens),
                   onPressed: (context) async {
                     final themeMode = await showCupertinoDialog(
@@ -120,6 +120,7 @@ class _SettingsState extends State<Settings> {
                       context: context,
                       builder: (context) => const ThemeDialog(),
                     );
+                    if (!mounted) return;
                     if (themeMode is ThemeMode) {
                       context.read<SettingsBloc>().add(ThemeEvent(themeMode));
                     }
@@ -127,7 +128,7 @@ class _SettingsState extends State<Settings> {
                 ),
                 SettingsTile(
                   title: Text(t.location),
-                  trailing: Text(_currentUserCity ?? ""),
+                  trailing: Text(currentUserCity ?? ""),
                   leading: const Icon(Icons.room),
                   onPressed: (context) {
                     Navigator.of(context).push(
@@ -150,9 +151,9 @@ class _SettingsState extends State<Settings> {
                 ),
                 SettingsTile(
                   title: Text(t.calculationMethods),
-                  trailing: Text(_currentCalculationMethodName!.length > 25
-                      ? _currentCalculationMethodName.substring(0, 25) + '...'
-                      : _currentCalculationMethodName),
+                  trailing: Text(currentCalculationMethodName!.length > 25
+                      ? '${currentCalculationMethodName.substring(0, 25)}...'
+                      : currentCalculationMethodName),
                   leading: const Icon(Icons.access_time_filled),
                   onPressed: (context) async {
                     final calculationMethod = await showCupertinoDialog(
@@ -160,6 +161,7 @@ class _SettingsState extends State<Settings> {
                       context: context,
                       builder: (context) => const CalculationMethodsDialog(),
                     );
+                    if (!mounted) return;
                     if (calculationMethod is CalculationMethod) {
                       var userSettingsBloc = context.read<UserSettingsBloc>();
 
@@ -188,6 +190,8 @@ class _SettingsState extends State<Settings> {
                     var result = await OpenMailApp.composeNewEmailInMailApp(
                       emailContent: emailContent,
                     );
+                    if (!mounted) return;
+
                     // If no mail apps found, show error
                     if (!result.didOpen && !result.canOpen) {
                       showNoMailAppsDialog(context);
@@ -211,7 +215,7 @@ class _SettingsState extends State<Settings> {
                 ),
                 SettingsTile(
                   onPressed: (context) async {
-                    if (!await launch(website)) {
+                    if (!await launchUrl(Uri.parse(website))) {
                       showDialog(
                         context: context,
                         builder: (_) {

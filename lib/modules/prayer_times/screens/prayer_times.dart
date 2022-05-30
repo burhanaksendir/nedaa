@@ -57,10 +57,10 @@ class _PrayerTimesState extends State<PrayerTimes> {
   }
 
   void _onRefresh(
-      UserSettingsState _userSettings, PrayerTimesBloc _prayerTimesBloc) async {
-    _prayerTimesBloc.add(FetchPrayerTimesEvent(
-      _userSettings.location,
-      _userSettings.calculationMethod,
+      UserSettingsState userSettings, PrayerTimesBloc prayerTimesBloc) async {
+    prayerTimesBloc.add(FetchPrayerTimesEvent(
+      userSettings.location,
+      userSettings.calculationMethod,
     ));
 
     // TODO: this will complete quickly, but we can use Bloc state changes
@@ -70,10 +70,10 @@ class _PrayerTimesState extends State<PrayerTimes> {
 
   @override
   Widget build(BuildContext context) {
-    var _userSettings = context.watch<UserSettingsBloc>().state;
-    var _prayerTimesBloc = context.watch<PrayerTimesBloc>();
+    var userSettings = context.watch<UserSettingsBloc>().state;
+    var prayerTimesBloc = context.watch<PrayerTimesBloc>();
     return SmartRefresher(
-      onRefresh: () => _onRefresh(_userSettings, _prayerTimesBloc),
+      onRefresh: () => _onRefresh(userSettings, prayerTimesBloc),
       controller: _refreshController,
       child: CustomScrollView(
         physics: const AlwaysScrollableScrollPhysics(),

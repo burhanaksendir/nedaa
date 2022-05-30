@@ -7,14 +7,14 @@ import 'dart:async';
 import 'dart:io';
 
 String generateParams(Location location, CalculationMethod method) {
-  var _calculationMethod = method.index != -1 ? '&method=${method.index}' : '';
-  return 'iso8601=true&latitude=${location.latitude}&longitude=${location.longitude}$_calculationMethod';
+  var calculationMethod = method.index != -1 ? '&method=${method.index}' : '';
+  return 'iso8601=true&latitude=${location.latitude}&longitude=${location.longitude}$calculationMethod';
 }
 
 String generateCityParams(
     String conutry, String city, CalculationMethod method) {
-  var _calculationMethod = method.index != -1 ? '&methoud=${method.index}' : '';
-  return 'iso8601=true&city=$city&country=$conutry$_calculationMethod';
+  var calculationMethod = method.index != -1 ? '&methoud=${method.index}' : '';
+  return 'iso8601=true&city=$city&country=$conutry$calculationMethod';
 }
 
 DayPrayerTimes getTodaysTimings(List<DayPrayerTimes> allDays) {
@@ -115,13 +115,13 @@ tz.TZDateTime getCurrentTimeWithTimeZone(String timeZoneName) =>
     tz.TZDateTime.now(tz.getLocation(timeZoneName));
 
 Future<bool> hasInternetConnection() async {
-  bool? _isConnectionSuccessful;
+  bool? isConnectionSuccessful;
   try {
     final response = await InternetAddress.lookup('www.google.com');
 
-    _isConnectionSuccessful = response.isNotEmpty;
+    isConnectionSuccessful = response.isNotEmpty;
   } on SocketException catch (_) {
-    _isConnectionSuccessful = false;
+    isConnectionSuccessful = false;
   }
-  return _isConnectionSuccessful;
+  return isConnectionSuccessful;
 }

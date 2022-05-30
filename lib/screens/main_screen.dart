@@ -25,6 +25,8 @@ class _MainScreenState extends State<MainScreen> {
     } else {
       var result = await customAlert(context, t!.requestLocationPermissionTitle,
           t.requestLocationPermissionContent);
+
+      if (!mounted) return;
       if (result) {
         openLocationSettings(context);
       } else {
@@ -32,7 +34,7 @@ class _MainScreenState extends State<MainScreen> {
         MotionToast(
           primaryColor: Theme.of(context).primaryColor,
           icon: Icons.info,
-          position: MOTION_TOAST_POSITION.center,
+          position: MotionToastPosition.center,
           description: Text(
             t.instructionsToSetLocationManually,
             style: const TextStyle(color: Colors.black),
