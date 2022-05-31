@@ -9,7 +9,7 @@ class ThemeDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     var t = AppLocalizations.of(context);
     var locale = Localizations.localeOf(context);
-    var _themeModes = themeModes[locale.languageCode] ?? themeModes['en']!;
+    var themeModesNames = themeModes[locale.languageCode] ?? themeModes['en']!;
 
     return SimpleDialog(
       title: Text(t!.theme),
@@ -18,7 +18,7 @@ class ThemeDialog extends StatelessWidget {
           onPressed: () {
             Navigator.pop(context, themeMode);
           },
-          child: Text(_themeModes[themeMode]!),
+          child: Text(themeModesNames[themeMode]!),
         );
       }).toList(),
     );

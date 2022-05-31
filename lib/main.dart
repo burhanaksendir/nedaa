@@ -121,7 +121,7 @@ class MyApp extends StatelessWidget {
               onGenerateTitle: (context) {
                 Locale activeLocale = Localizations.localeOf(context);
                 debugPrint(
-                    'Current locale => ' + activeLocale.languageCode); // en/ar
+                    'Current locale => ${activeLocale.languageCode}'); // en/ar
                 debugPrint(activeLocale
                     .countryCode); // => UK or empty for non-country-specific locales
                 return AppLocalizations.of(context)!.appTitle;

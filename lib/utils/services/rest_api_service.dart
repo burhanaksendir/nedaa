@@ -20,7 +20,7 @@ List<DayPrayerTimes> _parseApiResponse(Map<String, dynamic> response) {
 Future<List<DayPrayerTimes>> getPrayerTimes(
     Location location, CalculationMethod calculationMethod) async {
   var response = await http.get(Uri.parse(
-      getCalendar + '/?' + generateParams(location, calculationMethod)));
+      '$getCalendar/?${generateParams(location, calculationMethod)}'));
   if (response.statusCode == 200) {
     Map<String, dynamic> map = json.decode(response.body);
     return _parseApiResponse(map);
@@ -31,9 +31,8 @@ Future<List<DayPrayerTimes>> getPrayerTimes(
 
 Future<List<DayPrayerTimes>> getPrayerTimesByCity(
     String country, String city, CalculationMethod calculationMethod) async {
-  var response = await http.get(Uri.parse(getCalendarByCity +
-      '/?' +
-      generateCityParams(country, city, calculationMethod)));
+  var response = await http.get(Uri.parse(
+      '$getCalendarByCity/?${generateCityParams(country, city, calculationMethod)}'));
 
   if (response.statusCode == 200) {
     Map<String, dynamic> map = json.decode(response.body);
@@ -45,7 +44,7 @@ Future<List<DayPrayerTimes>> getPrayerTimesByCity(
 
 Future<http.Response> getCoordinatesFromAddress(String address) async {
   final response = await http.get(Uri.parse(
-    getCoordinates + '?address=' + address,
+    '$getCoordinates?address=$address',
   ));
 
   if (response.statusCode == 200) {

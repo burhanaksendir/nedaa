@@ -11,6 +11,10 @@ class PrayerTimesCard extends StatelessWidget {
       padding: const EdgeInsets.all(8),
       child: Card(
         color: Colors.transparent,
+        elevation: 0,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(32),
+        ),
         child: Stack(children: [
           Center(
             child: Opacity(
@@ -25,10 +29,6 @@ class PrayerTimesCard extends StatelessWidget {
             child: child,
           ),
         ]),
-        elevation: 0,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(32),
-        ),
       ),
     );
   }

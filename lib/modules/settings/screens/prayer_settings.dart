@@ -70,9 +70,9 @@ class _PrayerSettingsScreenState extends State<PrayerSettingsScreen> {
   Widget build(BuildContext context) {
     var t = AppLocalizations.of(context);
 
-    var _currentUserState = context.watch<UserSettingsBloc>().state;
-    var _prayerNotificationSettings =
-        _currentUserState.notificationSettings[widget.prayerType]!;
+    var currentUserState = context.watch<UserSettingsBloc>().state;
+    var prayerNotificationSettings =
+        currentUserState.notificationSettings[widget.prayerType]!;
 
     return Scaffold(
       appBar: AppBar(
@@ -85,12 +85,12 @@ class _PrayerSettingsScreenState extends State<PrayerSettingsScreen> {
             SettingsSection(
               tiles: [
                 SettingsTile.switchTile(
-                  initialValue: _prayerNotificationSettings.vibration,
+                  initialValue: prayerNotificationSettings.vibration,
                   onToggle: (value) {
-                    _prayerNotificationSettings.vibration = value;
+                    prayerNotificationSettings.vibration = value;
                     context.read<UserSettingsBloc>().add(
                           PrayerNotificationEvent(
-                              widget.prayerType, _prayerNotificationSettings),
+                              widget.prayerType, prayerNotificationSettings),
                         );
                   },
                   title: Text(t!.vibrate),
@@ -101,13 +101,13 @@ class _PrayerSettingsScreenState extends State<PrayerSettingsScreen> {
             SettingsSection(
               tiles: [
                 SettingsTile.switchTile(
-                  initialValue: _prayerNotificationSettings.sound,
+                  initialValue: prayerNotificationSettings.sound,
                   onToggle: (value) {
-                    _prayerNotificationSettings.sound = value;
+                    prayerNotificationSettings.sound = value;
 
                     context.read<UserSettingsBloc>().add(
                           PrayerNotificationEvent(
-                              widget.prayerType, _prayerNotificationSettings),
+                              widget.prayerType, prayerNotificationSettings),
                         );
                   },
                   title: Text(t.alertOn),
@@ -115,27 +115,27 @@ class _PrayerSettingsScreenState extends State<PrayerSettingsScreen> {
                 ),
               ],
             ),
-            if (_prayerNotificationSettings.sound)
+            if (prayerNotificationSettings.sound)
               SettingsSection(
                 tiles: [
                   _ringtoneTile(
                     context,
                     t,
-                    _prayerNotificationSettings,
+                    prayerNotificationSettings,
                     "knock, knock",
                     "knock.mp3",
                   ),
                   _ringtoneTile(
                     context,
                     t,
-                    _prayerNotificationSettings,
+                    prayerNotificationSettings,
                     "Athan 1",
                     "athan8.mp3",
                   ),
                   _ringtoneTile(
                     context,
                     t,
-                    _prayerNotificationSettings,
+                    prayerNotificationSettings,
                     "Athan 2",
                     "athan6.mp3",
                   ),

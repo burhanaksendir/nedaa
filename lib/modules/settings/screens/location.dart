@@ -17,8 +17,8 @@ class _LocationSettingsState extends State<LocationSettings> {
   Widget build(BuildContext context) {
     var t = AppLocalizations.of(context);
 
-    var _currentUserState = context.watch<UserSettingsBloc>().state;
-    var _keepUpdatingLocation = _currentUserState.keepUpdatingLocation;
+    var currentUserState = context.watch<UserSettingsBloc>().state;
+    var keepUpdatingLocation = currentUserState.keepUpdatingLocation;
 
     return Scaffold(
       appBar: AppBar(
@@ -44,7 +44,7 @@ class _LocationSettingsState extends State<LocationSettings> {
                       .read<UserSettingsBloc>()
                       .add(KeepUpdatingLocationEvent(value));
                 },
-                initialValue: _keepUpdatingLocation,
+                initialValue: keepUpdatingLocation,
                 title: Text(t.keepLocationUpdated),
                 leading: const Icon(Icons.loop_rounded),
               ),
