@@ -4,13 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:motion_toast/motion_toast.dart';
-import 'package:motion_toast/resources/arrays.dart';
 import 'package:nedaa/modules/settings/bloc/user_settings_bloc.dart';
 import 'package:nedaa/modules/settings/models/user_location.dart';
 import 'package:nedaa/utils/location_permission_utils.dart';
 import 'package:nedaa/utils/services/rest_api_service.dart';
-import 'package:nedaa/widgets/general_dialog.dart';
 
 class CurrentLocationPicker extends StatefulWidget {
   const CurrentLocationPicker({Key? key}) : super(key: key);
@@ -23,27 +20,6 @@ class _CurrentLocationPickerState extends State<CurrentLocationPicker> {
   String countryValue = "";
   String stateValue = "";
   String cityValue = "";
-
-  _checkPermission(BuildContext context) async {
-    var t = AppLocalizations.of(context);
-    if (await checkPermission(context)) {
-      updateCurrentLocation(context);
-    } else {
-      var result = await customAlert(context, t!.requestLocationPermissionTitle,
-          t.requestLocationPermissionContent);
-      if (!mounted) return;
-      if (result) {
-        openLocationSettings(context);
-      } else {
-        MotionToast(
-                primaryColor: Theme.of(context).primaryColor,
-                icon: Icons.info,
-                position: MotionToastPosition.center,
-                description: Text(t.instructionsToSetLocationManually))
-            .show(context);
-      }
-    }
-  }
 
   Widget _getUserLocationString(UserLocation? location) {
     if (location != null &&
@@ -60,7 +36,8 @@ class _CurrentLocationPickerState extends State<CurrentLocationPicker> {
 
   _updateUserLocation(
       BuildContext context, double latitude, double longitude) async {
-    var userLocation = await updateUserLocation(context, latitude, longitude);
+    var userLocation =
+        await updateUserLocation(context, latitude, longitude, () => mounted);
     setState(() {
       countryValue = userLocation.country!;
       stateValue = userLocation.state!;
@@ -188,7 +165,8 @@ class _CurrentLocationPickerState extends State<CurrentLocationPicker> {
               ElevatedButton(
                 child: Text(t.getCurrentLocation),
                 onPressed: () async {
-                  _checkPermission(context);
+                  await checkPermissionsUpdateCurrentLocation(
+                      context, () => mounted);
                 },
               ),
             ],

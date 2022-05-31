@@ -2,10 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:motion_toast/motion_toast.dart';
+import 'package:motion_toast/resources/arrays.dart';
 import 'package:nedaa/modules/prayer_times/bloc/prayer_times_bloc.dart';
 import 'package:nedaa/modules/settings/bloc/user_settings_bloc.dart';
 import 'package:nedaa/modules/settings/models/user_location.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:nedaa/widgets/general_dialog.dart';
 
 Future<bool> checkPermission(BuildContext context) async {
   LocationPermission permission = await Geolocator.checkPermission();
@@ -31,14 +34,43 @@ Future<void> openLocationSettings(BuildContext context) async {
   await Geolocator.openAppSettings();
 }
 
-updateCurrentLocation(BuildContext context) async {
-  Position position = await Geolocator.getCurrentPosition(
-      desiredAccuracy: LocationAccuracy.low);
-  await updateUserLocation(context, position.latitude, position.longitude);
+checkPermissionsUpdateCurrentLocation(
+    BuildContext context, bool Function() isMounted) async {
+  var t = AppLocalizations.of(context);
+  if (await checkPermission(context)) {
+    Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.low);
+    var mounted = isMounted();
+    if (!mounted) return;
+    await updateUserLocation(
+        context, position.latitude, position.longitude, isMounted);
+  } else {
+    var result = await customAlert(context, t!.requestLocationPermissionTitle,
+        t.requestLocationPermissionContent);
+
+    var mounted = isMounted();
+    if (!mounted) return;
+    if (result) {
+      openLocationSettings(context);
+    } else {
+      //do taost here
+      MotionToast(
+        primaryColor: Theme.of(context).primaryColor,
+        icon: Icons.info,
+        position: MotionToastPosition.center,
+        description: Text(
+          t.instructionsToSetLocationManually,
+          style: const TextStyle(color: Colors.black),
+        ),
+        toastDuration: const Duration(seconds: 10),
+        dismissable: true,
+      ).show(context);
+    }
+  }
 }
 
-Future<UserLocation> updateUserLocation(
-    BuildContext context, double latitude, double longitude) async {
+Future<UserLocation> updateUserLocation(BuildContext context, double latitude,
+    double longitude, bool Function() isMounted) async {
   var t = AppLocalizations.of(context);
 
   List<Placemark> placemarks = await placemarkFromCoordinates(
@@ -58,6 +90,8 @@ Future<UserLocation> updateUserLocation(
       timestamp: DateTime.now(),
     ),
   );
+  var mounted = isMounted();
+  if (!mounted) return userLocation;
   var userSettingsBloc = context.read<UserSettingsBloc>();
   var userSettingsState = userSettingsBloc.state;
   userSettingsBloc.add(
