@@ -6,15 +6,12 @@ import 'package:timezone/standalone.dart' as tz;
 import 'dart:async';
 import 'dart:io';
 
-String generateParams(Location location, CalculationMethod method) {
+String generateParams(Location location, CalculationMethod method, int? year,
+    {bool annual = true}) {
+  // TODO: add timezone
+  var selectedYear = year ?? DateTime.now().year;
   var calculationMethod = method.index != -1 ? '&method=${method.index}' : '';
-  return 'iso8601=true&latitude=${location.latitude}&longitude=${location.longitude}$calculationMethod';
-}
-
-String generateCityParams(
-    String conutry, String city, CalculationMethod method) {
-  var calculationMethod = method.index != -1 ? '&methoud=${method.index}' : '';
-  return 'iso8601=true&city=$city&country=$conutry$calculationMethod';
+  return 'year=$selectedYear&annual=$annual&iso8601=true&latitude=${location.latitude}&longitude=${location.longitude}$calculationMethod';
 }
 
 DayPrayerTimes getTodaysTimings(List<DayPrayerTimes> allDays) {
