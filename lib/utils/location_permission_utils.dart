@@ -8,6 +8,7 @@ import 'package:nedaa/modules/prayer_times/bloc/prayer_times_bloc.dart';
 import 'package:nedaa/modules/settings/bloc/user_settings_bloc.dart';
 import 'package:nedaa/modules/settings/models/user_location.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:nedaa/utils/services/rest_api_service.dart';
 import 'package:nedaa/widgets/general_dialog.dart';
 
 Future<bool> checkPermission(BuildContext context) async {
@@ -90,16 +91,22 @@ Future<UserLocation> updateUserLocation(BuildContext context, double latitude,
       timestamp: DateTime.now(),
     ),
   );
+
   var mounted = isMounted();
   if (!mounted) return userLocation;
   var userSettingsBloc = context.read<UserSettingsBloc>();
   var userSettingsState = userSettingsBloc.state;
+  var timezone = await getTimezone(
+      userLocation.location!, userSettingsState.calculationMethod);
+
+  mounted = isMounted();
+  if (!mounted) return userLocation;
   userSettingsBloc.add(
-    UserLocationEvent(userLocation),
+    UserLocationEvent(userLocation, timezone),
   );
 
-  context.read<PrayerTimesBloc>().add(
-      FetchPrayerTimesEvent(userLocation, userSettingsState.calculationMethod));
+  context.read<PrayerTimesBloc>().add(CleanFetchPrayerTimesEvent(
+      userLocation, userSettingsState.calculationMethod, timezone));
 
   return userLocation;
 }
