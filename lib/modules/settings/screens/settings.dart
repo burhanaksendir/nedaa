@@ -34,7 +34,7 @@ class _SettingsState extends State<Settings> {
   static const website = 'https://nedaa.io';
 
   _updateAddressTranslation(BuildContext context, Location currentUserLocation,
-      String language) async {
+      String timezone, String language) async {
     Placemark placemark = await placemarkFromCoordinates(
             currentUserLocation.latitude, currentUserLocation.longitude,
             localeIdentifier: language)
@@ -43,13 +43,13 @@ class _SettingsState extends State<Settings> {
 
     context.read<UserSettingsBloc>().add(
           UserLocationEvent(
-            UserLocation(
-              location: currentUserLocation,
-              city: placemark.locality,
-              country: placemark.country,
-              state: placemark.administrativeArea,
-            ),
-          ),
+              UserLocation(
+                location: currentUserLocation,
+                city: placemark.locality,
+                country: placemark.country,
+                state: placemark.administrativeArea,
+              ),
+              timezone),
         );
   }
 
@@ -72,6 +72,7 @@ class _SettingsState extends State<Settings> {
     var currentUserCity = currentUserState.location.cityAddress;
 
     var currentUserLocation = currentUserState.location.location;
+    var currentTimezone = currentUserState.timezone;
 
     var themeModesNames = themeModes[locale.languageCode] ?? themeModes['en']!;
     var currentThemeMode = themeModesNames[currentTheme]!;
@@ -105,8 +106,8 @@ class _SettingsState extends State<Settings> {
                           .add(LanguageEvent(Locale(language)));
 
                       // update address language
-                      _updateAddressTranslation(
-                          context, currentUserLocation!, language);
+                      _updateAddressTranslation(context, currentUserLocation!,
+                          currentTimezone, language);
                     }
                   },
                 ),
@@ -168,8 +169,11 @@ class _SettingsState extends State<Settings> {
                       userSettingsBloc
                           .add(CalculationMethodEvent(calculationMethod));
 
-                      context.read<PrayerTimesBloc>().add(FetchPrayerTimesEvent(
-                          userSettingsBloc.state.location, calculationMethod));
+                      context.read<PrayerTimesBloc>().add(
+                          CleanFetchPrayerTimesEvent(
+                              userSettingsBloc.state.location,
+                              calculationMethod,
+                              userSettingsBloc.state.timezone));
                     }
                   },
                 ),

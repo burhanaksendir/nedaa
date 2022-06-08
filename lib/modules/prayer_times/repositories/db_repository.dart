@@ -112,6 +112,11 @@ class DBRepository {
         conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
+  Future<void> resetDatabase() async {
+    await _deleteDatabase();
+    await open();
+  }
+
   Future<void> _deleteDatabase() async {
     if (db != null) {
       await deleteDatabase(db!.path);

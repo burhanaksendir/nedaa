@@ -61,6 +61,7 @@ class _PrayerTimesState extends State<PrayerTimes> {
     prayerTimesBloc.add(FetchPrayerTimesEvent(
       userSettings.location,
       userSettings.calculationMethod,
+      userSettings.timezone,
     ));
 
     // TODO: this will complete quickly, but we can use Bloc state changes

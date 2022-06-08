@@ -156,6 +156,14 @@ class SettingsRepository {
     return _getString('font') ?? '';
   }
 
+  setTimezone(String timezone) async {
+    await _setString('timezone', timezone);
+  }
+
+  String getTimezone() {
+    return _getString('timezone') ?? '';
+  }
+
   //TODO: remove this method
   Future<void> clear() async {
     var s = await _sharedPref.clear();

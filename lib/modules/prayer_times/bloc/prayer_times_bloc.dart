@@ -10,23 +10,32 @@ class PrayerTimesBloc extends Bloc<PrayerTimesEvent, PrayerTimesState> {
           PrayerTimesState(),
         ) {
     on<FetchPrayerTimesEvent>((event, emit) async {
-      try {
-        var currentPrayerTimesState =
-            await prayerTimesRepository.getCurrentPrayerTimesState(
-          event.location,
-          event.method,
-        );
-        emit(PrayerTimesState(
-          todayPrayerTimes: currentPrayerTimesState.today,
-          tomorrowPrayerTimes: currentPrayerTimesState.tomorrow,
-          yesterdayPrayerTimes: currentPrayerTimesState.yesterday,
-        ));
-      } catch (e) {
-        // TODO: use failed state to display error
-        emit(FailedPrayerTimesState(
-            "Failed to fetch prayer times: ${e.toString()}"));
-      }
+      await _fetchPrayerTimes(event, emit);
     });
+    on<CleanFetchPrayerTimesEvent>((event, emit) async {
+      await prayerTimesRepository.cleanCache();
+      await _fetchPrayerTimes(event, emit);
+    });
+  }
+
+  Future<void> _fetchPrayerTimes(event, emit) async {
+    try {
+      var currentPrayerTimesState =
+          await prayerTimesRepository.getCurrentPrayerTimesState(
+        event.location,
+        event.method,
+        event.timezone,
+      );
+      emit(PrayerTimesState(
+        todayPrayerTimes: currentPrayerTimesState.today,
+        tomorrowPrayerTimes: currentPrayerTimesState.tomorrow,
+        yesterdayPrayerTimes: currentPrayerTimesState.yesterday,
+      ));
+    } catch (e) {
+      // TODO: use failed state to display error
+      emit(FailedPrayerTimesState(
+          "Failed to fetch prayer times: ${e.toString()}"));
+    }
   }
 
   final PrayerTimesRepository prayerTimesRepository;
@@ -54,6 +63,13 @@ class PrayerTimesEvent {}
 class FetchPrayerTimesEvent extends PrayerTimesEvent {
   UserLocation location;
   CalculationMethod method;
+  String timezone;
 
-  FetchPrayerTimesEvent(this.location, this.method);
+  FetchPrayerTimesEvent(this.location, this.method, this.timezone);
+}
+
+class CleanFetchPrayerTimesEvent extends FetchPrayerTimesEvent {
+  CleanFetchPrayerTimesEvent(
+      UserLocation location, CalculationMethod method, String timezone)
+      : super(location, method, timezone);
 }

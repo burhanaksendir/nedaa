@@ -7,40 +7,13 @@ import 'dart:async';
 import 'dart:io';
 
 String generateParams(Location location, CalculationMethod method, int? year,
-    {bool annual = true}) {
-  // TODO: add timezone
-  var selectedYear = year ?? DateTime.now().year;
+    {bool annual = true, String? timezone}) {
+  var selectedYear = year ??
+      ((timezone != null)
+          ? getCurrentTimeWithTimeZone(timezone).year
+          : DateTime.now().year);
   var calculationMethod = method.index != -1 ? '&method=${method.index}' : '';
   return 'year=$selectedYear&annual=$annual&iso8601=true&latitude=${location.latitude}&longitude=${location.longitude}$calculationMethod';
-}
-
-DayPrayerTimes getTodaysTimings(List<DayPrayerTimes> allDays) {
-  var today = getCurrentTimeWithTimeZone(allDays.first.timeZoneName);
-  return allDays.firstWhere(
-      (day) =>
-          day.date.day == today.day &&
-          day.date.month == today.month &&
-          day.date.year == today.year,
-      // TODO: add special exception to refetch data if not found
-      orElse: () => throw Exception("No data found"));
-}
-
-DayPrayerTimes getNextDayTimings(List<DayPrayerTimes> allDays) {
-  var today = getCurrentTimeWithTimeZone(allDays.first.timeZoneName);
-  var nextDay = today.add(const Duration(days: 1));
-  return allDays.firstWhere((day) =>
-      day.date.day == nextDay.day &&
-      day.date.month == nextDay.month &&
-      day.date.year == nextDay.year);
-}
-
-DayPrayerTimes getPreviousDayTimings(List<DayPrayerTimes> allDays) {
-  var today = getCurrentTimeWithTimeZone(allDays.first.timeZoneName);
-  var previousDay = today.subtract(const Duration(days: 1));
-  return allDays.firstWhere((day) =>
-      day.date.day == previousDay.day &&
-      day.date.month == previousDay.month &&
-      day.date.year == previousDay.year);
 }
 
 PrayerTime getNextPrayer(

@@ -35,9 +35,9 @@ void main() async {
 
   UserLocation location = settingsRepository.getUserLocation();
   CalculationMethod method = settingsRepository.getCalculationMethod();
-
+  String timezone = settingsRepository.getTimezone();
   PrayerTimesRepository prayerTimesRepository =
-      await PrayerTimesRepository.newRepo(location, method);
+      await PrayerTimesRepository.newRepo(location, method, timezone);
 
   FlutterNativeSplash.remove();
   SystemChrome.setPreferredOrientations(
@@ -92,8 +92,10 @@ class MyApp extends StatelessWidget {
               var settingsRepo = context.read<SettingsRepository>();
               var userLocation = settingsRepo.getUserLocation();
               var calculationMethod = settingsRepo.getCalculationMethod();
+              var timezone = settingsRepository.getTimezone();
               return PrayerTimesBloc(context.read<PrayerTimesRepository>())
-                ..add(FetchPrayerTimesEvent(userLocation, calculationMethod))
+                ..add(FetchPrayerTimesEvent(
+                    userLocation, calculationMethod, timezone))
                 // this listens to all updates in prayer times and sets
                 // calculation method to the default value we got from the API
                 // if it is not set yet

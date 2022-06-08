@@ -13,16 +13,19 @@ class UserSettingsBloc extends Bloc<UserSettingsEvent, UserSettingsState> {
             calculationMethod: settingsRepository.getCalculationMethod(),
             keepUpdatingLocation: settingsRepository.getKeepUpdatingLocation(),
             notificationSettings: settingsRepository.getNotificationSettings(),
+            timezone: settingsRepository.getTimezone(),
           ),
         ) {
     on<UserLocationEvent>(
-      (event, emit) {
+      (event, emit) async {
         emit(UserSettingsState(
           location: event.location,
           calculationMethod: state.calculationMethod,
           keepUpdatingLocation: state.keepUpdatingLocation,
           notificationSettings: state.notificationSettings,
+          timezone: event.timezone,
         ));
+        settingsRepository.setTimezone(event.timezone);
         settingsRepository.setUserLocation(event.location);
       },
     );
@@ -33,6 +36,7 @@ class UserSettingsBloc extends Bloc<UserSettingsEvent, UserSettingsState> {
           calculationMethod: event.calculationMethod,
           keepUpdatingLocation: state.keepUpdatingLocation,
           notificationSettings: state.notificationSettings,
+          timezone: state.timezone,
         ),
       );
       settingsRepository.setCalculationMethod(event.calculationMethod);
@@ -44,6 +48,7 @@ class UserSettingsBloc extends Bloc<UserSettingsEvent, UserSettingsState> {
           calculationMethod: state.calculationMethod,
           keepUpdatingLocation: event.keepUpdating,
           notificationSettings: state.notificationSettings,
+          timezone: state.timezone,
         ),
       );
       settingsRepository.setKeepUpdatingLocation(event.keepUpdating);
@@ -56,6 +61,7 @@ class UserSettingsBloc extends Bloc<UserSettingsEvent, UserSettingsState> {
           calculationMethod: state.calculationMethod,
           keepUpdatingLocation: state.keepUpdatingLocation,
           notificationSettings: state.notificationSettings,
+          timezone: state.timezone,
         ),
       );
       settingsRepository.setNotificationSettings(state.notificationSettings);
@@ -68,6 +74,7 @@ class UserSettingsBloc extends Bloc<UserSettingsEvent, UserSettingsState> {
           calculationMethod: state.calculationMethod,
           keepUpdatingLocation: state.keepUpdatingLocation,
           notificationSettings: state.notificationSettings,
+          timezone: state.timezone,
         ),
       );
       settingsRepository.clear();
@@ -82,20 +89,24 @@ class UserSettingsState {
   final CalculationMethod calculationMethod;
   final bool keepUpdatingLocation;
   final Map<PrayerType, NotificationSettings> notificationSettings;
+  final String timezone;
 
-  UserSettingsState(
-      {required this.location,
-      required this.calculationMethod,
-      required this.keepUpdatingLocation,
-      this.notificationSettings = const {}});
+  UserSettingsState({
+    required this.timezone,
+    required this.location,
+    required this.calculationMethod,
+    required this.keepUpdatingLocation,
+    this.notificationSettings = const {},
+  });
 }
 
 class UserSettingsEvent {}
 
 class UserLocationEvent extends UserSettingsEvent {
   final UserLocation location;
+  final String timezone;
 
-  UserLocationEvent(this.location);
+  UserLocationEvent(this.location, this.timezone);
 }
 
 class CalculationMethodEvent extends UserSettingsEvent {
@@ -115,6 +126,12 @@ class PrayerNotificationEvent extends UserSettingsEvent {
   final PrayerType prayerType;
 
   PrayerNotificationEvent(this.prayerType, this.notificationSettings);
+}
+
+class TimezoneEvent extends UserSettingsEvent {
+  final String timezone;
+
+  TimezoneEvent(this.timezone);
 }
 
 //TODO: remove this snippet after testing

@@ -6,6 +6,27 @@ import 'package:nedaa/modules/prayer_times/models/prayer_times.dart';
 import 'package:nedaa/modules/settings/models/calcualtion_method.dart';
 import 'package:nedaa/utils/helper.dart';
 
+String _parseTimeZone(Map<String, dynamic> response) {
+  if (response['code'] == 200 && response['data'] is Map<String, dynamic>) {
+    var day = DayPrayerTimes.fromAPIJson(response['data']);
+    return day.timeZoneName;
+  }
+
+  throw Exception('Failed to parse post');
+}
+
+Future<String> getTimezone(
+    Location location, CalculationMethod calculationMethod) async {
+  var response = await http.get(Uri.parse(
+      'http://api.aladhan.com/v1/timings?${generateParams(location, calculationMethod, null, annual: false)}'));
+  if (response.statusCode == 200) {
+    Map<String, dynamic> map = json.decode(response.body);
+    return _parseTimeZone(map);
+  } else {
+    return Future.error('An error occurd while getting timezone');
+  }
+}
+
 List<DayPrayerTimes> _parseApiResponse(Map<String, dynamic> response) {
   if (response['code'] == 200 && response['data'] is Map<String, dynamic>) {
     var allDays =
@@ -20,10 +41,10 @@ List<DayPrayerTimes> _parseApiResponse(Map<String, dynamic> response) {
 }
 
 Future<List<DayPrayerTimes>> getPrayerTimesForYear(
-    Location location, CalculationMethod calculationMethod,
+    Location location, CalculationMethod calculationMethod, String timezone,
     {int? year}) async {
   var response = await http.get(Uri.parse(
-      '$getCalendar/?${generateParams(location, calculationMethod, year, annual: true)}'));
+      '$getCalendar/?${generateParams(location, calculationMethod, year, annual: true, timezone: timezone)}'));
   if (response.statusCode == 200) {
     Map<String, dynamic> map = json.decode(response.body);
     return _parseApiResponse(map);
