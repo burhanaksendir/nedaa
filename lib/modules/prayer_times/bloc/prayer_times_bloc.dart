@@ -1,7 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nedaa/modules/prayer_times/models/prayer_times.dart';
 import 'package:nedaa/modules/prayer_times/repositories/prayer_times_repository.dart';
-import 'package:nedaa/modules/settings/models/calcualtion_method.dart';
+import 'package:nedaa/modules/settings/models/calculation_method.dart';
 import 'package:nedaa/modules/settings/models/user_location.dart';
 
 class PrayerTimesBloc extends Bloc<PrayerTimesEvent, PrayerTimesState> {
@@ -31,7 +32,9 @@ class PrayerTimesBloc extends Bloc<PrayerTimesEvent, PrayerTimesState> {
         tomorrowPrayerTimes: currentPrayerTimesState.tomorrow,
         yesterdayPrayerTimes: currentPrayerTimesState.yesterday,
       ));
-    } catch (e) {
+    } catch (e, stackTrace) {
+      debugPrint(e.toString());
+      debugPrintStack(stackTrace: stackTrace);
       // TODO: use failed state to display error
       emit(FailedPrayerTimesState(
           "Failed to fetch prayer times: ${e.toString()}"));
