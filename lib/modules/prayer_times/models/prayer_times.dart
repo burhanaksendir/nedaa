@@ -1,5 +1,5 @@
 import 'package:intl/intl.dart';
-import 'package:nedaa/modules/settings/models/calcualtion_method.dart';
+import 'package:nedaa/modules/settings/models/calculation_method.dart';
 import 'package:nedaa/modules/settings/models/prayer_type.dart';
 import 'package:nedaa/utils/helper.dart';
 import 'package:timezone/standalone.dart' as tz;

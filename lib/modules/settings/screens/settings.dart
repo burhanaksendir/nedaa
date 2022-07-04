@@ -8,7 +8,7 @@ import 'package:nedaa/constants/theme_mode.dart';
 import 'package:nedaa/modules/prayer_times/bloc/prayer_times_bloc.dart';
 import 'package:nedaa/modules/settings/bloc/settings_bloc.dart';
 import 'package:nedaa/modules/settings/bloc/user_settings_bloc.dart';
-import 'package:nedaa/modules/settings/models/calcualtion_method.dart';
+import 'package:nedaa/modules/settings/models/calculation_method.dart';
 import 'package:nedaa/modules/settings/models/user_location.dart';
 import 'package:nedaa/modules/settings/screens/calculation_methods_dialog.dart';
 import 'package:nedaa/modules/settings/screens/languages_dialog.dart';

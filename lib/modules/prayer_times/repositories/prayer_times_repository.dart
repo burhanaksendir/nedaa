@@ -1,6 +1,6 @@
 import 'package:nedaa/modules/prayer_times/models/prayer_times.dart';
 import 'package:nedaa/modules/prayer_times/repositories/db_repository.dart';
-import 'package:nedaa/modules/settings/models/calcualtion_method.dart';
+import 'package:nedaa/modules/settings/models/calculation_method.dart';
 import 'package:nedaa/modules/settings/models/user_location.dart';
 import 'package:nedaa/utils/helper.dart';
 import 'package:nedaa/utils/services/rest_api_service.dart';
@@ -46,7 +46,6 @@ class PrayerTimesRepository {
     var today = getCurrentTimeWithTimeZone(
         await getTimezone(location.location!, method));
     var todayPrayerTimes = await db.getDayPrayerTimes(today);
-
     if (todayPrayerTimes == null) {
       if (location.location != null) {
         var year =
