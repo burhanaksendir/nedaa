@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:nedaa/constants/app_constans.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -18,16 +21,48 @@ import 'package:nedaa/screens/main_screen.dart';
 import 'package:device_preview/device_preview.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
-import 'package:timezone/data/latest_all.dart' as tz;
+import 'package:timezone/data/latest_all.dart' as tz_init;
+import 'package:timezone/standalone.dart' as tz;
+
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+    FlutterLocalNotificationsPlugin();
+
+void handleForeground(NotificationResponse details) {
+  debugPrint(
+      'got notification ${details.id} ${details.input} ${details.payload}');
+}
 
 void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
+  final NotificationAppLaunchDetails? notificationAppLaunchDetails = !kIsWeb &&
+          Platform.isLinux
+      ? null
+      : await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
+  if (notificationAppLaunchDetails?.didNotificationLaunchApp ?? false) {
+    debugPrint('notification was tapped');
+  }
+
   // Wait 1 seconds before removing the splash screen
   await Future.delayed(const Duration(seconds: 1));
 
-  tz.initializeTimeZones();
+  tz_init.initializeTimeZones();
+
+  const initializationSettingsAndroid =
+      AndroidInitializationSettings('@mipmap/ic_launcher');
+
+  const initializationSettingsIOS = DarwinInitializationSettings(
+      requestAlertPermission: false,
+      requestBadgePermission: false,
+      requestSoundPermission: false);
+
+  const initializationSettings = InitializationSettings(
+      android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
+
+  flutterLocalNotificationsPlugin.initialize(initializationSettings,
+      onDidReceiveNotificationResponse: handleForeground,
+      onDidReceiveBackgroundNotificationResponse: handleForeground);
 
   SettingsRepository settingsRepository = SettingsRepository(
     await SharedPreferences.getInstance(),
@@ -99,7 +134,7 @@ class MyApp extends StatelessWidget {
                 // this listens to all updates in prayer times and sets
                 // calculation method to the default value we got from the API
                 // if it is not set yet
-                ..stream.forEach((state) {
+                ..stream.forEach((state) async {
                   if (state.todayPrayerTimes != null) {
                     var userSettingsBloc = context.read<UserSettingsBloc>();
                     var oldCalculationMethod =
@@ -111,6 +146,67 @@ class MyApp extends StatelessWidget {
                         ),
                       );
                     }
+                  }
+
+                  if (state.todayPrayerTimes == null ||
+                      state.tomorrowPrayerTimes == null) return;
+
+                  // cancel
+                  await flutterLocalNotificationsPlugin.cancelAll();
+
+                  const AndroidNotificationDetails
+                      androidPlatformChannelSpecifics =
+                      AndroidNotificationDetails(
+                          'prayers', 'Prayers Notification',
+                          channelDescription: 'Notifying prayers',
+                          importance: Importance.max,
+                          priority: Priority.high,
+                          ticker: 'ticker');
+                  const DarwinNotificationDetails
+                      darwinPlatformChannelSpecifics =
+                      DarwinNotificationDetails();
+                  const NotificationDetails platformChannelSpecifics =
+                      NotificationDetails(
+                          android: androidPlatformChannelSpecifics,
+                          iOS: darwinPlatformChannelSpecifics);
+
+                  var id = 0;
+
+                  for (var e in state.todayPrayerTimes!.prayerTimes.entries) {
+                    var d = tz.TZDateTime.from(
+                      e.value,
+                      tz.getLocation(state.tomorrowPrayerTimes!.timeZoneName),
+                    );
+                    ++id;
+                    await flutterLocalNotificationsPlugin.zonedSchedule(
+                      id,
+                      '${e.key.name} Prayer',
+                      '${e.key.name} Prayer time',
+                      d,
+                      platformChannelSpecifics,
+                      androidAllowWhileIdle: true,
+                      uiLocalNotificationDateInterpretation:
+                          UILocalNotificationDateInterpretation.absoluteTime,
+                    );
+                  }
+
+                  for (var e
+                      in state.tomorrowPrayerTimes!.prayerTimes.entries) {
+                    var d = tz.TZDateTime.from(
+                      e.value,
+                      tz.getLocation(state.tomorrowPrayerTimes!.timeZoneName),
+                    );
+                    ++id;
+                    await flutterLocalNotificationsPlugin.zonedSchedule(
+                      id,
+                      '${e.key.name} Prayer',
+                      '${e.key.name} Prayer time',
+                      d,
+                      platformChannelSpecifics,
+                      androidAllowWhileIdle: true,
+                      uiLocalNotificationDateInterpretation:
+                          UILocalNotificationDateInterpretation.absoluteTime,
+                    );
                   }
                 });
             },
