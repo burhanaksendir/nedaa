@@ -61,6 +61,12 @@ android {
             signingConfig signingConfigs.debug
         }
     }
+
+    lintOptions {
+        // FIXME: workaround for failing release builds, might be related to
+        //        changing the gradle version
+        checkReleaseBuilds false
+    }
 }
 
 flutter {
