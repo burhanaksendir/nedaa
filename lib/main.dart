@@ -19,6 +19,7 @@ import 'package:nedaa/modules/settings/models/user_location.dart';
 import 'package:nedaa/modules/settings/repositories/settings_repository.dart';
 import 'package:nedaa/screens/main_screen.dart';
 import 'package:device_preview/device_preview.dart';
+import 'package:nedaa/utils/helper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:timezone/data/latest_all.dart' as tz_init;
@@ -30,6 +31,17 @@ final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
 void handleForeground(NotificationResponse details) {
   debugPrint(
       'got notification ${details.id} ${details.input} ${details.payload}');
+}
+
+void _requestPermissions() {
+  flutterLocalNotificationsPlugin
+      .resolvePlatformSpecificImplementation<
+          IOSFlutterLocalNotificationsPlugin>()
+      ?.requestPermissions(
+        alert: true,
+        badge: true,
+        sound: true,
+      );
 }
 
 void main() async {
@@ -63,6 +75,8 @@ void main() async {
   flutterLocalNotificationsPlugin.initialize(initializationSettings,
       onDidReceiveNotificationResponse: handleForeground,
       onDidReceiveBackgroundNotificationResponse: handleForeground);
+
+  _requestPermissions();
 
   SettingsRepository settingsRepository = SettingsRepository(
     await SharedPreferences.getInstance(),
@@ -171,13 +185,28 @@ class MyApp extends StatelessWidget {
                           iOS: darwinPlatformChannelSpecifics);
 
                   var id = 0;
+                  var now = getCurrentTimeWithTimeZone(
+                    state.todayPrayerTimes!.timeZoneName,
+                  );
+
+                  await flutterLocalNotificationsPlugin.zonedSchedule(
+                    id,
+                    'First Minute',
+                    'Minute Minute Debugging',
+                    now.add(const Duration(minutes: 1)),
+                    platformChannelSpecifics,
+                    androidAllowWhileIdle: true,
+                    uiLocalNotificationDateInterpretation:
+                        UILocalNotificationDateInterpretation.absoluteTime,
+                  );
 
                   for (var e in state.todayPrayerTimes!.prayerTimes.entries) {
                     var d = tz.TZDateTime.from(
                       e.value,
-                      tz.getLocation(state.tomorrowPrayerTimes!.timeZoneName),
+                      tz.getLocation(state.todayPrayerTimes!.timeZoneName),
                     );
                     ++id;
+                    if (d.isBefore(now)) continue;
                     await flutterLocalNotificationsPlugin.zonedSchedule(
                       id,
                       '${e.key.name} Prayer',
