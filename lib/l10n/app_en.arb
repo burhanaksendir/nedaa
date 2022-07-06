@@ -1,4 +1,20 @@
 {
+  "@prayerTimeNotificationContent": {
+    "placeholders": {
+      "prayerName": {
+        "example": "Fajr",
+        "type": "String"
+      }
+    }
+  },
+  "@prayerTimeNotificationTitle": {
+    "placeholders": {
+      "prayerName": {
+        "example": "Fajr",
+        "type": "String"
+      }
+    }
+  },
   "alertOn": "Sound",
   "appTitle": "Nedaa",
   "asr": "Asr",
@@ -31,7 +47,11 @@
   "noPrayersTimesFound": "No prayer times found",
   "notification": "Notification",
   "ok": "OK",
+  "openAppReminderContent": "Please Open App to keep receiving notifications",
+  "openAppReminderTitle": "Open App",
   "prayersAlerts": "Prayers Alerts",
+  "prayerTimeNotificationContent": "It's time for {prayerName}",
+  "prayerTimeNotificationTitle": "{prayerName} Prayer",
   "requestLocationPermissionContent": "This app uses your location to automatically determine the correct prayer times. Would you like to open location settings?",
   "requestLocationPermissionTitle": "Location Permission",
   "saturday": "Saturday",

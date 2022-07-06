@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:nedaa/modules/notifications/notifications.dart';
 import 'package:nedaa/modules/settings/bloc/settings_bloc.dart';
 import 'package:nedaa/modules/settings/screens/settings.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -28,6 +29,15 @@ class _MainScreenState extends State<MainScreen> {
     return SafeArea(
       child: Scaffold(
         extendBody: true,
+        floatingActionButton: FloatingActionButton(
+          onPressed: () async {
+            // show toast
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text(
+                    "Have ${(await getPendingNotifications()).length} notifications")));
+          },
+          child: const Icon(Icons.add),
+        ),
         appBar: AppBar(
           title: Text(t!.appTitle),
           actions: [

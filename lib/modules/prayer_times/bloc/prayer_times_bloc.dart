@@ -31,6 +31,7 @@ class PrayerTimesBloc extends Bloc<PrayerTimesEvent, PrayerTimesState> {
         todayPrayerTimes: currentPrayerTimesState.today,
         tomorrowPrayerTimes: currentPrayerTimesState.tomorrow,
         yesterdayPrayerTimes: currentPrayerTimesState.yesterday,
+        tenDaysPrayerTimes: currentPrayerTimesState.tenDays,
       ));
     } catch (e, stackTrace) {
       debugPrint(e.toString());
@@ -48,11 +49,14 @@ class PrayerTimesState {
   DayPrayerTimes? todayPrayerTimes;
   DayPrayerTimes? tomorrowPrayerTimes;
   DayPrayerTimes? yesterdayPrayerTimes;
+  List<DayPrayerTimes> tenDaysPrayerTimes;
 
-  PrayerTimesState(
-      {this.todayPrayerTimes,
-      this.tomorrowPrayerTimes,
-      this.yesterdayPrayerTimes});
+  PrayerTimesState({
+    this.todayPrayerTimes,
+    this.tomorrowPrayerTimes,
+    this.yesterdayPrayerTimes,
+    this.tenDaysPrayerTimes = const [],
+  });
 }
 
 class FailedPrayerTimesState extends PrayerTimesState {

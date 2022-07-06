@@ -9,8 +9,10 @@ class CurrentPrayerTimesState {
   DayPrayerTimes today;
   DayPrayerTimes tomorrow;
   DayPrayerTimes yesterday;
+  List<DayPrayerTimes> tenDays;
 
-  CurrentPrayerTimesState(this.today, this.tomorrow, this.yesterday);
+  CurrentPrayerTimesState(
+      this.today, this.tomorrow, this.yesterday, this.tenDays);
 }
 
 class PrayerTimesRepository {
@@ -84,11 +86,32 @@ class PrayerTimesRepository {
         throw Exception('No location provided');
       }
     }
+    // get ten days of data including today
+    var lastDayOfTenDays = today.add(const Duration(days: 10 - 1));
+    var tenDaysPrayerTimes =
+        await db.getRangePrayerTimes(today, lastDayOfTenDays);
+    // must at least have 1 day
+    if (tenDaysPrayerTimes.length < 10) {
+      if (location.location != null) {
+        var year = await getPrayerTimesForYear(
+            location.location!, method, timezone,
+            year: lastDayOfTenDays.year);
+        await db.insertAllPrayerTimes(year);
+        tenDaysPrayerTimes =
+            await db.getRangePrayerTimes(today, lastDayOfTenDays);
+      } else {
+        throw Exception('No location provided');
+      }
+    }
 
     await db.deleteAllBefore(yesterday);
 
     var state = CurrentPrayerTimesState(
-        todayPrayerTimes!, tomorrowPrayerTimes!, yesterdayPrayerTimes!);
+      todayPrayerTimes!,
+      tomorrowPrayerTimes!,
+      yesterdayPrayerTimes!,
+      tenDaysPrayerTimes,
+    );
 
     return state;
   }
