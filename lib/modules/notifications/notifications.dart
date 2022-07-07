@@ -15,6 +15,9 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
+final AndroidFlutterLocalNotificationsPlugin
+    _androidFlutterLocalNotificationsPlugin =
+    AndroidFlutterLocalNotificationsPlugin();
 
 void _handleForeground(NotificationResponse details) {
   debugPrint(
@@ -124,6 +127,15 @@ Future<void> scheduleNotifications(
   };
 
   await cancelNotifications();
+  // clear old android channels
+  var channels =
+      await _androidFlutterLocalNotificationsPlugin.getNotificationChannels();
+  if (channels != null && channels.isNotEmpty) {
+    for (var channel in channels) {
+      await _androidFlutterLocalNotificationsPlugin
+          .deleteNotificationChannel(channel.id);
+    }
+  }
 
   if (days.isEmpty) return;
   var platformChannelDetails =
