@@ -74,7 +74,9 @@ NotificationDetails _buildNotificationDetails(NotificationSettings settings) {
 
   AndroidNotificationDetails androidPlatformChannelSpecifics =
       AndroidNotificationDetails(
-    'prayers',
+    // use the baseFileName as the channel id
+    // since in android you cannot change the sound after the channel is created
+    'prayers $baseFileName',
     'Prayers Notification',
     channelDescription: 'Notifying prayers',
     importance: Importance.max,
@@ -86,6 +88,7 @@ NotificationDetails _buildNotificationDetails(NotificationSettings settings) {
     enableVibration: settings.vibration,
     ticker: 'ticker',
   );
+
   DarwinNotificationDetails darwinPlatformChannelSpecifics =
       DarwinNotificationDetails(
     sound: settings.sound ? "$baseFileName.m4r" : null,
