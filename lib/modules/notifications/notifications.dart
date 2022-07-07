@@ -6,6 +6,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:nedaa/modules/prayer_times/models/prayer_times.dart';
 import 'package:nedaa/modules/settings/bloc/settings_bloc.dart';
+import 'package:nedaa/modules/settings/bloc/user_settings_bloc.dart';
+import 'package:nedaa/modules/settings/models/notification_settings.dart';
 import 'package:nedaa/modules/settings/models/prayer_type.dart';
 import 'package:nedaa/utils/helper.dart';
 import 'package:timezone/standalone.dart' as tz;
@@ -64,10 +66,43 @@ Future<void> cancelNotifications() async {
   await _flutterLocalNotificationsPlugin.cancelAll();
 }
 
+NotificationDetails _buildNotificationDetails(NotificationSettings settings) {
+  var ringtone = settings.ringtone;
+  var baseFileName = ringtone.fileName.split('.').first;
+
+  debugPrint('notification baseFileName: $baseFileName');
+
+  AndroidNotificationDetails androidPlatformChannelSpecifics =
+      AndroidNotificationDetails(
+    'prayers',
+    'Prayers Notification',
+    channelDescription: 'Notifying prayers',
+    importance: Importance.max,
+    priority: Priority.high,
+    sound: settings.sound
+        ? RawResourceAndroidNotificationSound(baseFileName)
+        : null,
+    playSound: settings.sound,
+    enableVibration: settings.vibration,
+    ticker: 'ticker',
+  );
+  DarwinNotificationDetails darwinPlatformChannelSpecifics =
+      DarwinNotificationDetails(
+    sound: settings.sound ? "$baseFileName.m4r" : null,
+    presentSound: settings.sound,
+  );
+  return NotificationDetails(
+      android: androidPlatformChannelSpecifics,
+      iOS: darwinPlatformChannelSpecifics);
+}
+
 Future<void> scheduleNotifications(
   BuildContext context,
   List<DayPrayerTimes> days,
 ) async {
+  var notificationSettings =
+      context.read<UserSettingsBloc>().state.notificationSettings;
+
   var t = AppLocalizations.of(context);
   if (t == null) {
     //TODO: this is a hack to force load of app localization,
@@ -87,22 +122,9 @@ Future<void> scheduleNotifications(
 
   await cancelNotifications();
 
-  debugPrint('got 1 ${days.length}');
-
   if (days.isEmpty) return;
-  debugPrint('got 2');
-
-  const AndroidNotificationDetails androidPlatformChannelSpecifics =
-      AndroidNotificationDetails('prayers', 'Prayers Notification',
-          channelDescription: 'Notifying prayers',
-          importance: Importance.max,
-          priority: Priority.high,
-          ticker: 'ticker');
-  const DarwinNotificationDetails darwinPlatformChannelSpecifics =
-      DarwinNotificationDetails();
-  const NotificationDetails platformChannelSpecifics = NotificationDetails(
-      android: androidPlatformChannelSpecifics,
-      iOS: darwinPlatformChannelSpecifics);
+  var platformChannelDetails =
+      _buildNotificationDetails(notificationSettings[PrayerType.fajr]!);
 
   var id = 0;
   var now = getCurrentTimeWithTimeZone(
@@ -113,8 +135,8 @@ Future<void> scheduleNotifications(
     id,
     'First Minute',
     'Minute Minute Debugging',
-    now.add(const Duration(minutes: 1)),
-    platformChannelSpecifics,
+    now.add(const Duration(seconds: 20)),
+    platformChannelDetails,
     androidAllowWhileIdle: true,
     uiLocalNotificationDateInterpretation:
         UILocalNotificationDateInterpretation.absoluteTime,
@@ -122,10 +144,11 @@ Future<void> scheduleNotifications(
 
   var counter = 0;
   var lastTime = now;
-  debugPrint('got 3');
 
   for (var day in days) {
     for (var e in day.prayerTimes.entries) {
+      var platformChannelDetails =
+          _buildNotificationDetails(notificationSettings[e.key]!);
       var d = tz.TZDateTime.from(
         e.value,
         tz.getLocation(day.timeZoneName),
@@ -138,7 +161,7 @@ Future<void> scheduleNotifications(
         t.prayerTimeNotificationTitle(prayerName),
         t.prayerTimeNotificationContent(prayerName),
         d,
-        platformChannelSpecifics,
+        platformChannelDetails,
         androidAllowWhileIdle: true,
         uiLocalNotificationDateInterpretation:
             UILocalNotificationDateInterpretation.absoluteTime,
@@ -158,7 +181,7 @@ Future<void> scheduleNotifications(
     t.openAppReminderTitle,
     t.openAppReminderContent,
     lastTime.add(const Duration(minutes: 10)),
-    platformChannelSpecifics,
+    platformChannelDetails,
     androidAllowWhileIdle: true,
     uiLocalNotificationDateInterpretation:
         UILocalNotificationDateInterpretation.absoluteTime,

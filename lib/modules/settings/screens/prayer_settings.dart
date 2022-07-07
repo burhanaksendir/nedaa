@@ -23,25 +23,26 @@ class _PrayerSettingsScreenState extends State<PrayerSettingsScreen> {
   // or as a local variable
   final _audioCache = AudioCache();
 
-  _ringtoneTile(
-      BuildContext context,
-      AppLocalizations t,
-      NotificationSettings notificationSettings,
-      String title,
-      String ringtoneFile) {
+  SettingsTile _ringtoneTile(
+    BuildContext context,
+    AppLocalizations t,
+    NotificationSettings notificationSettings,
+    NotificationRingtone ringtone,
+  ) {
     return SettingsTile(
-      title: Text(title),
+      title: Text(ringtone.displayName),
       // trailing: _selectedRingtone == index ? const Icon(Icons.check) : null,
-      trailing: title == notificationSettings.ringtoneName
-          ? const Icon(Icons.check)
-          : null,
+      trailing:
+          ringtone.displayName == notificationSettings.ringtone.displayName
+              ? const Icon(Icons.check)
+              : null,
       onPressed: (context) async {
-        notificationSettings.ringtoneName = title;
+        notificationSettings.ringtone = ringtone;
         context.read<UserSettingsBloc>().add(
               PrayerNotificationEvent(widget.prayerType, notificationSettings),
             );
 
-        AudioPlayer player = await _audioCache.play(ringtoneFile);
+        AudioPlayer player = await _audioCache.play(ringtone.fileName);
 
         player.onPlayerCompletion.listen((event) {
           Navigator.pop(context);
@@ -117,30 +118,12 @@ class _PrayerSettingsScreenState extends State<PrayerSettingsScreen> {
             ),
             if (prayerNotificationSettings.sound)
               SettingsSection(
-                tiles: [
-                  _ringtoneTile(
-                    context,
-                    t,
-                    prayerNotificationSettings,
-                    "knock, knock",
-                    "knock.mp3",
-                  ),
-                  _ringtoneTile(
-                    context,
-                    t,
-                    prayerNotificationSettings,
-                    "Athan 1",
-                    "athan8.mp3",
-                  ),
-                  _ringtoneTile(
-                    context,
-                    t,
-                    prayerNotificationSettings,
-                    "Athan 2",
-                    "athan6.mp3",
-                  ),
-                ],
-              ),
+                  tiles: allRingtones
+                      .map(
+                        (e) => _ringtoneTile(
+                            context, t, prayerNotificationSettings, e),
+                      )
+                      .toList()),
           ],
         ),
       ),

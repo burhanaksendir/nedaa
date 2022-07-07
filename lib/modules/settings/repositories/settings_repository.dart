@@ -126,7 +126,11 @@ class SettingsRepository {
 
     for (var type in PrayerType.values) {
       if (jsonMap.containsKey(type.name)) {
-        settingsMap[type] = NotificationSettings.fromJson(jsonMap[type.name]);
+        try {
+          settingsMap[type] = NotificationSettings.fromJson(jsonMap[type.name]);
+        } catch (e) {
+          settingsMap[type] = NotificationSettings.defaultValue();
+        }
       } else {
         settingsMap[type] = NotificationSettings.defaultValue();
       }
