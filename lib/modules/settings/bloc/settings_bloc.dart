@@ -1,6 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:nedaa/modules/settings/repositories/settings_repository.dart';
+
+String getFont(String language) {
+  switch (language) {
+    case 'ar':
+      return GoogleFonts.tajawal().fontFamily!;
+    default:
+      return GoogleFonts.notoSans().fontFamily!;
+  }
+}
 
 class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
   SettingsBloc(this.settingsRepository)
@@ -13,14 +23,16 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
           ),
         ) {
     on<LanguageEvent>(
-      (event, emit) => {
+      (event, emit) {
+        settingsRepository.setLanguage(event.appLanguage);
+        String font = getFont(event.appLanguage.languageCode);
+        settingsRepository.setFont(font);
         emit(SettingsState(
           appLanguage: event.appLanguage,
-          font: state.font,
+          font: font,
           appTheme: state.appTheme,
           isFirstRun: state.isFirstRun,
-        )),
-        settingsRepository.setLanguage(event.appLanguage)
+        ));
       },
     );
     on<ThemeEvent>(

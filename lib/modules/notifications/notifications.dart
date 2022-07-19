@@ -73,8 +73,6 @@ NotificationDetails _buildNotificationDetails(NotificationSettings settings) {
   var ringtone = settings.ringtone;
   var baseFileName = ringtone.fileName.split('.').first;
 
-  debugPrint('notification baseFileName: $baseFileName');
-
   AndroidNotificationDetails androidPlatformChannelSpecifics =
       AndroidNotificationDetails(
     // use the baseFileName as the channel id
@@ -128,13 +126,17 @@ Future<void> scheduleNotifications(
 
   await cancelNotifications();
   // clear old android channels
-  var channels =
-      await _androidFlutterLocalNotificationsPlugin.getNotificationChannels();
-  if (channels != null && channels.isNotEmpty) {
-    for (var channel in channels) {
-      await _androidFlutterLocalNotificationsPlugin
-          .deleteNotificationChannel(channel.id);
+  try {
+    var channels =
+        await _androidFlutterLocalNotificationsPlugin.getNotificationChannels();
+    if (channels != null && channels.isNotEmpty) {
+      for (var channel in channels) {
+        await _androidFlutterLocalNotificationsPlugin
+            .deleteNotificationChannel(channel.id);
+      }
     }
+  } catch (e) {
+    debugPrint('error deleting channels: $e');
   }
 
   if (days.isEmpty) return;
@@ -148,8 +150,8 @@ Future<void> scheduleNotifications(
 
   await _flutterLocalNotificationsPlugin.zonedSchedule(
     id,
-    'First Minute',
-    'Minute Minute Debugging',
+    t.appTitle,
+    t.contactUs,
     now.add(const Duration(seconds: 20)),
     platformChannelDetails,
     androidAllowWhileIdle: true,
@@ -162,6 +164,11 @@ Future<void> scheduleNotifications(
 
   for (var day in days) {
     for (var e in day.prayerTimes.entries) {
+      // ignore sunrise
+      if (e.key == PrayerType.sunrise) {
+        continue;
+      }
+
       var platformChannelDetails =
           _buildNotificationDetails(notificationSettings[e.key]!);
       var d = tz.TZDateTime.from(

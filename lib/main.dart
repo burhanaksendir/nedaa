@@ -83,9 +83,8 @@ class MyApp extends StatelessWidget {
       child: MultiBlocProvider(
         providers: [
           BlocProvider(
-            create: (context) =>
-                SettingsBloc(context.read<SettingsRepository>()),
-          ),
+              create: (context) =>
+                  SettingsBloc(context.read<SettingsRepository>())),
           BlocProvider(
             create: (context) =>
                 UserSettingsBloc(context.read<SettingsRepository>()),
@@ -95,7 +94,7 @@ class MyApp extends StatelessWidget {
               var settingsRepo = context.read<SettingsRepository>();
               var userLocation = settingsRepo.getUserLocation();
               var calculationMethod = settingsRepo.getCalculationMethod();
-              var timezone = settingsRepository.getTimezone();
+              var timezone = settingsRepo.getTimezone();
               return PrayerTimesBloc(context.read<PrayerTimesRepository>())
                 ..add(FetchPrayerTimesEvent(
                     userLocation, calculationMethod, timezone))
@@ -116,10 +115,15 @@ class MyApp extends StatelessWidget {
                     }
                   }
 
-                  await scheduleNotifications(
-                    context,
-                    state.tenDaysPrayerTimes,
-                  );
+                  try {
+                    await scheduleNotifications(
+                      context,
+                      state.tenDaysPrayerTimes,
+                    );
+                  } catch (e, trace) {
+                    debugPrint(e.toString());
+                    debugPrintStack(stackTrace: trace);
+                  }
                 });
             },
           ),
