@@ -16,6 +16,7 @@
     }
   },
   "alertOn": "تنبيه",
+  "allowNotifications": "السماح بالإشعارات",
   "appTitle": "نِداء",
   "asr": "العصر",
   "calculationMethods": "طرق الحساب",

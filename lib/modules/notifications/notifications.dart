@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:nedaa/modules/prayer_times/models/prayer_times.dart';
@@ -24,9 +25,9 @@ void _handleForeground(NotificationResponse details) {
       'got notification ${details.id} ${details.input} ${details.payload}');
 }
 
-void _requestIOSNotificationPermissions() {
+Future<bool> requestIOSNotificationPermissionsAndGetCurrent() async {
   if (Platform.isIOS) {
-    _flutterLocalNotificationsPlugin
+    var result = await _flutterLocalNotificationsPlugin
         .resolvePlatformSpecificImplementation<
             IOSFlutterLocalNotificationsPlugin>()
         ?.requestPermissions(
@@ -34,6 +35,14 @@ void _requestIOSNotificationPermissions() {
           badge: true,
           sound: true,
         );
+
+    if (result == null) {
+      return false;
+    } else {
+      return result;
+    }
+  } else {
+    return true;
   }
 }
 
@@ -58,11 +67,11 @@ Future<void> initNotifications() async {
   const initializationSettings = InitializationSettings(
       android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
 
-  _flutterLocalNotificationsPlugin.initialize(initializationSettings,
+  await _flutterLocalNotificationsPlugin.initialize(initializationSettings,
       onDidReceiveNotificationResponse: _handleForeground,
       onDidReceiveBackgroundNotificationResponse: _handleForeground);
 
-  _requestIOSNotificationPermissions();
+  await requestIOSNotificationPermissionsAndGetCurrent();
 }
 
 Future<void> cancelNotifications() async {
@@ -104,19 +113,23 @@ Future<void> scheduleNotifications(
   BuildContext context,
   List<DayPrayerTimes> days,
 ) async {
-  var notificationSettings =
-      context.read<UserSettingsBloc>().state.notificationSettings;
+  var userSettingsState = context.read<UserSettingsBloc>().state;
+  var notificationSettings = userSettingsState.notificationSettings;
 
   var t = AppLocalizations.of(context);
+
   if (t == null) {
-    //TODO: this is a hack to force load of app localization,
-    //      since we schedule on `main` before any widget appearing
+    // since we schedule on `main` before any widget appearing
     var locale = context.read<SettingsBloc>().state.appLanguage;
     t = await AppLocalizations.delegate.load(locale);
   }
+  if (Platform.isIOS) {
+    if (!(await requestIOSNotificationPermissionsAndGetCurrent())) {
+      return;
+    }
+  }
 
   var prayersTranslation = {
-    PrayerType.fajr: t.fajr,
     PrayerType.sunrise: t.sunrise,
     PrayerType.duhur: t.duhur,
     PrayerType.asr: t.asr,
@@ -126,17 +139,19 @@ Future<void> scheduleNotifications(
 
   await cancelNotifications();
   // clear old android channels
-  try {
-    var channels =
-        await _androidFlutterLocalNotificationsPlugin.getNotificationChannels();
-    if (channels != null && channels.isNotEmpty) {
-      for (var channel in channels) {
-        await _androidFlutterLocalNotificationsPlugin
-            .deleteNotificationChannel(channel.id);
+  if (Platform.isAndroid) {
+    try {
+      var channels = await _androidFlutterLocalNotificationsPlugin
+          .getNotificationChannels();
+      if (channels != null && channels.isNotEmpty) {
+        for (var channel in channels) {
+          await _androidFlutterLocalNotificationsPlugin
+              .deleteNotificationChannel(channel.id);
+        }
       }
+    } catch (e) {
+      debugPrint('error deleting channels: $e');
     }
-  } catch (e) {
-    debugPrint('error deleting channels: $e');
   }
 
   if (days.isEmpty) return;

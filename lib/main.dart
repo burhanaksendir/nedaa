@@ -28,7 +28,7 @@ void main() async {
   initNotifications();
 
   // Wait 1 seconds before removing the splash screen
-  await Future.delayed(const Duration(seconds: 1));
+  await Future.delayed(const Duration(milliseconds: 500));
 
   tz_init.initializeTimeZones();
 

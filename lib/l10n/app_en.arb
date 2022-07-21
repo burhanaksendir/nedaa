@@ -16,6 +16,7 @@
     }
   },
   "alertOn": "Sound",
+  "allowNotifications": "Allow Notifications",
   "appTitle": "Nedaa",
   "asr": "Asr",
   "calculationMethods": "Calculation Methods",
