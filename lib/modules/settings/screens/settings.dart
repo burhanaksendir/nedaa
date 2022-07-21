@@ -10,6 +10,7 @@ import 'package:nedaa/modules/settings/bloc/settings_bloc.dart';
 import 'package:nedaa/modules/settings/bloc/user_settings_bloc.dart';
 import 'package:nedaa/modules/settings/models/calculation_method.dart';
 import 'package:nedaa/modules/settings/models/user_location.dart';
+import 'package:nedaa/modules/settings/repositories/settings_repository.dart';
 import 'package:nedaa/modules/settings/screens/calculation_methods_dialog.dart';
 import 'package:nedaa/modules/settings/screens/languages_dialog.dart';
 import 'package:nedaa/modules/settings/screens/location.dart';
@@ -104,6 +105,14 @@ class _SettingsState extends State<Settings> {
                       context
                           .read<SettingsBloc>()
                           .add(LanguageEvent(Locale(language)));
+
+                      var settingsRepo = context.read<SettingsRepository>();
+                      var userLocation = settingsRepo.getUserLocation();
+                      var calculationMethod =
+                          settingsRepo.getCalculationMethod();
+                      var timezone = settingsRepo.getTimezone();
+                      context.read<PrayerTimesBloc>().add(FetchPrayerTimesEvent(
+                          userLocation, calculationMethod, timezone));
 
                       // update address language
                       _updateAddressTranslation(context, currentUserLocation!,

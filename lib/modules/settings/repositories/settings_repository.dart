@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:nedaa/modules/settings/models/calculation_method.dart';
 import 'package:nedaa/modules/settings/models/notification_settings.dart';
 import 'package:nedaa/modules/settings/models/prayer_type.dart';
@@ -68,7 +67,6 @@ class SettingsRepository {
   }
 
   setLanguage(Locale language) async {
-    await setFont(language.languageCode);
     await _setString('language', language.languageCode);
   }
 
@@ -126,7 +124,11 @@ class SettingsRepository {
 
     for (var type in PrayerType.values) {
       if (jsonMap.containsKey(type.name)) {
-        settingsMap[type] = NotificationSettings.fromJson(jsonMap[type.name]);
+        try {
+          settingsMap[type] = NotificationSettings.fromJson(jsonMap[type.name]);
+        } catch (e) {
+          settingsMap[type] = NotificationSettings.defaultValue();
+        }
       } else {
         settingsMap[type] = NotificationSettings.defaultValue();
       }
@@ -142,14 +144,8 @@ class SettingsRepository {
     await _setBool('isFirstRun', isFirstRun);
   }
 
-  setFont(language) async {
-    switch (language) {
-      case 'ar':
-        await _setString('font', GoogleFonts.tajawal().fontFamily!);
-        break;
-      default:
-        await _setString('font', GoogleFonts.notoSans().fontFamily!);
-    }
+  setFont(String font) async {
+    await _setString('font', font);
   }
 
   String getFont() {

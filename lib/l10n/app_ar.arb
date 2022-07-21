@@ -1,5 +1,22 @@
 {
+  "@prayerTimeNotificationContent": {
+    "placeholders": {
+      "prayerName": {
+        "example": "الفجر",
+        "type": "String"
+      }
+    }
+  },
+  "@prayerTimeNotificationTitle": {
+    "placeholders": {
+      "prayerName": {
+        "example": "الفجر",
+        "type": "String"
+      }
+    }
+  },
   "alertOn": "تنبيه",
+  "allowNotifications": "السماح بالإشعارات",
   "appTitle": "نِداء",
   "asr": "العصر",
   "calculationMethods": "طرق الحساب",
@@ -17,6 +34,7 @@
   "friday": "الجمعة",
   "getCurrentLocation": "تحديد الموقع الحالي",
   "homePage": "الرئيسية",
+  "instructionsToSetLocationManually": "إذا كنت لا تريد استخدام موقعك الحالي ، فيمكنك تعيينه يدويًا بالانتقال إلى 'الإعدادات' > 'الموقع' > 'الموقع' وتحديد موقعك.",
   "inTime": "خلال",
   "isha": "العشاء",
   "keepLocationUpdated": "إستمرار تحديث الموقع",
@@ -27,9 +45,16 @@
   "maghrib": "المغرب",
   "monday": "الإثنين",
   "noMailAppFound": "لم يتم العثور على تطبيق بريد إلكتروني",
+  "noPrayersTimesFound": "لم يتم العثور على مواعيد الصلاة",
   "notification": "الإشعارات",
   "ok": "حسنا",
+  "openAppReminderContent": "يرجى فتح التطبيق للاستمرار في تلقي إشعارات",
+  "openAppReminderTitle": "يرجى فتح التطبيق",
   "prayersAlerts": "تنبيهات الصلوات",
+  "prayerTimeNotificationContent": " حان وقت دخول صلاة {prayerName}",
+  "prayerTimeNotificationTitle": "صلاة {prayerName}",
+  "requestLocationPermissionContent": "يستخدم هذا التطبيق موقعك لتحديد مواقيت الصلاة الصحيحة تلقائيًا. هل ترغب في فتح إعدادات الموقع؟",
+  "requestLocationPermissionTitle": "إذن تحديد الموقع",
   "saturday": "السبت",
   "selectMailApp": "يرجى تحديد تطبيق بريد إلكتروني",
   "settings": "الإعدادات",
@@ -45,9 +70,5 @@
   "unableToLunchLink": "لا يمكن فتح الرابط",
   "until": "حتى",
   "vibrate": "إهتزاز",
-  "wednesday": "الأربعاء",
-  "requestLocationPermissionTitle": "إذن تحديد الموقع",
-  "requestLocationPermissionContent": "يستخدم هذا التطبيق موقعك لتحديد مواقيت الصلاة الصحيحة تلقائيًا. هل ترغب في فتح إعدادات الموقع؟",
-  "instructionsToSetLocationManually": "إذا كنت لا تريد استخدام موقعك الحالي ، فيمكنك تعيينه يدويًا بالانتقال إلى 'الإعدادات' > 'الموقع' > 'الموقع' وتحديد موقعك.",
-  "noPrayersTimesFound": "لم يتم العثور على مواعيد الصلاة"
+  "wednesday": "الأربعاء"
 }

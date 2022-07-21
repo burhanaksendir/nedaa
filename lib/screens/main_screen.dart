@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:nedaa/modules/notifications/notifications.dart';
+import 'package:nedaa/modules/prayer_times/bloc/prayer_times_bloc.dart';
 import 'package:nedaa/modules/settings/bloc/settings_bloc.dart';
+import 'package:nedaa/modules/settings/repositories/settings_repository.dart';
 import 'package:nedaa/modules/settings/screens/settings.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../modules/prayer_times/screens/prayer_times.dart';
@@ -28,20 +31,39 @@ class _MainScreenState extends State<MainScreen> {
     return SafeArea(
       child: Scaffold(
         extendBody: true,
+        floatingActionButton: FloatingActionButton(
+          onPressed: () async {
+            // show toast
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text(
+                    "Have ${(await getPendingNotifications()).length} notifications")));
+          },
+          child: const Icon(Icons.add),
+        ),
         appBar: AppBar(
           title: Text(t!.appTitle),
           actions: [
             IconButton(
               icon: const Icon(Icons.settings),
-              onPressed: () {
-                setState(() {
-                  Navigator.push(
+              onPressed: () async {
+                await Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (context) => const Settings(),
-                    ),
-                  );
-                });
+                    ));
+
+                if (!mounted) {
+                  return;
+                }
+                // Fire a prayer fetch event, so that we can reschedule
+                // notifications in case the user gave notifications permission
+                // in the settings.
+                var settingsRepo = context.read<SettingsRepository>();
+                var userLocation = settingsRepo.getUserLocation();
+                var calculationMethod = settingsRepo.getCalculationMethod();
+                var timezone = settingsRepo.getTimezone();
+                context.read<PrayerTimesBloc>().add(FetchPrayerTimesEvent(
+                    userLocation, calculationMethod, timezone));
               },
             )
           ],

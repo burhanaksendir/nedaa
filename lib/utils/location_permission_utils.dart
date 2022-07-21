@@ -31,7 +31,7 @@ Future<bool> checkPermission(BuildContext context) async {
   }
 }
 
-Future<void> openLocationSettings(BuildContext context) async {
+Future<void> openAppSettings() async {
   await Geolocator.openAppSettings();
 }
 
@@ -52,7 +52,7 @@ checkPermissionsUpdateCurrentLocation(
     var mounted = isMounted();
     if (!mounted) return;
     if (result) {
-      openLocationSettings(context);
+      openAppSettings();
     } else {
       //do taost here
       MotionToast(

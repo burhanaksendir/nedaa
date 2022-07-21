@@ -89,6 +89,20 @@ class DBRepository {
     });
   }
 
+  Future<List<DayPrayerTimes>> getRangePrayerTimes(
+      DateTime startDate, DateTime endDate) async {
+    List<Map<String, Object?>> maps = await db!.query(
+      prayerTimesTable,
+      where: '$columnDate BETWEEN ? AND ?',
+      whereArgs: [_dateToInt(startDate), _dateToInt(endDate)],
+    );
+    return List.generate(maps.length, (i) {
+      return DayPrayerTimes.fromJson(
+        json.decode(maps[i][columnContent] as String),
+      );
+    });
+  }
+
   Future insertPrayerTimes(DayPrayerTimes prayerTimes) async {
     if (db != null) {
       await _savePrayerTimes(db!, DBDayPrayerTimes(prayerTimes));

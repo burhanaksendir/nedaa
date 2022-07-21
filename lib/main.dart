@@ -7,6 +7,7 @@ import 'package:nedaa/constants/app_constans.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:nedaa/constants/theme.dart';
+import 'package:nedaa/modules/notifications/notifications.dart';
 import 'package:nedaa/modules/prayer_times/bloc/prayer_times_bloc.dart';
 import 'package:nedaa/modules/prayer_times/repositories/prayer_times_repository.dart';
 import 'package:nedaa/modules/settings/bloc/settings_bloc.dart';
@@ -18,16 +19,18 @@ import 'package:nedaa/screens/main_screen.dart';
 import 'package:device_preview/device_preview.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
-import 'package:timezone/data/latest_all.dart' as tz;
+import 'package:timezone/data/latest_all.dart' as tz_init;
 
 void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
-  // Wait 1 seconds before removing the splash screen
-  await Future.delayed(const Duration(seconds: 1));
+  initNotifications();
 
-  tz.initializeTimeZones();
+  // Wait 1 seconds before removing the splash screen
+  await Future.delayed(const Duration(milliseconds: 500));
+
+  tz_init.initializeTimeZones();
 
   SettingsRepository settingsRepository = SettingsRepository(
     await SharedPreferences.getInstance(),
@@ -80,9 +83,8 @@ class MyApp extends StatelessWidget {
       child: MultiBlocProvider(
         providers: [
           BlocProvider(
-            create: (context) =>
-                SettingsBloc(context.read<SettingsRepository>()),
-          ),
+              create: (context) =>
+                  SettingsBloc(context.read<SettingsRepository>())),
           BlocProvider(
             create: (context) =>
                 UserSettingsBloc(context.read<SettingsRepository>()),
@@ -92,14 +94,14 @@ class MyApp extends StatelessWidget {
               var settingsRepo = context.read<SettingsRepository>();
               var userLocation = settingsRepo.getUserLocation();
               var calculationMethod = settingsRepo.getCalculationMethod();
-              var timezone = settingsRepository.getTimezone();
+              var timezone = settingsRepo.getTimezone();
               return PrayerTimesBloc(context.read<PrayerTimesRepository>())
                 ..add(FetchPrayerTimesEvent(
                     userLocation, calculationMethod, timezone))
                 // this listens to all updates in prayer times and sets
                 // calculation method to the default value we got from the API
                 // if it is not set yet
-                ..stream.forEach((state) {
+                ..stream.forEach((state) async {
                   if (state.todayPrayerTimes != null) {
                     var userSettingsBloc = context.read<UserSettingsBloc>();
                     var oldCalculationMethod =
@@ -111,6 +113,16 @@ class MyApp extends StatelessWidget {
                         ),
                       );
                     }
+                  }
+
+                  try {
+                    await scheduleNotifications(
+                      context,
+                      state.tenDaysPrayerTimes,
+                    );
+                  } catch (e, trace) {
+                    debugPrint(e.toString());
+                    debugPrintStack(stackTrace: trace);
                   }
                 });
             },
