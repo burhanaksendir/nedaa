@@ -45,8 +45,7 @@ class PrayerTimesRepository {
     CalculationMethod method,
     String timezone,
   ) async {
-    var today = getCurrentTimeWithTimeZone(
-        await getTimezone(location.location!, method));
+    var today = getCurrentTimeWithTimeZone(timezone);
     var todayPrayerTimes = await db.getDayPrayerTimes(today);
     if (todayPrayerTimes == null) {
       if (location.location != null) {
