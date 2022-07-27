@@ -130,7 +130,7 @@ Future<void> scheduleNotifications(
   }
 
   var prayersTranslation = {
-    PrayerType.sunrise: t.sunrise,
+    PrayerType.fajr: t.fajr,
     PrayerType.duhur: t.duhur,
     PrayerType.asr: t.asr,
     PrayerType.maghrib: t.maghrib,
@@ -163,16 +163,6 @@ Future<void> scheduleNotifications(
     days.first.timeZoneName,
   );
 
-  await _flutterLocalNotificationsPlugin.zonedSchedule(
-    id,
-    t.appTitle,
-    t.contactUs,
-    now.add(const Duration(seconds: 20)),
-    platformChannelDetails,
-    androidAllowWhileIdle: true,
-    uiLocalNotificationDateInterpretation:
-        UILocalNotificationDateInterpretation.absoluteTime,
-  );
 
   var counter = 0;
   var lastTime = now;
