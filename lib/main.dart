@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -20,12 +22,51 @@ import 'package:device_preview/device_preview.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:timezone/data/latest_all.dart' as tz_init;
+import 'package:workmanager/workmanager.dart';
+import 'package:http/http.dart' as http;
+
+@pragma('vm:entry-point')
+void callbackDispatcher() {
+  Workmanager().executeTask((task, inputData) async {
+    var platform = Platform.isIOS ? 'iOS' : 'Android';
+    var botToken = const String.fromEnvironment('BOT_TOKEN');
+    await http.post(
+      Uri.parse('https://api.telegram.org/bot$botToken/sendMessage'),
+      body: {
+        "chat_id": const String.fromEnvironment('CHAT_ID'),
+        "text": 'Background task is running on $platform',
+      },
+    );
+    return Future.value(true);
+  });
+}
+
+// void main() {
+//   Workmanager().initialize(
+//     callbackDispatcher, // The top level function, aka callbackDispatcher
+//     isInDebugMode: true // If enabled it will post a notification whenever the task is running. Handy for debugging tasks
+//   );
+//   Workmanager().registerOneOffTask("task-identifier", "simpleTask");
+//   runApp(MyApp());
+// }
 
 void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
   initNotifications();
+
+  Workmanager().initialize(
+      callbackDispatcher, // The top level function, aka callbackDispatcher
+      isInDebugMode:
+          true // If enabled it will post a notification whenever the task is running. Handy for debugging tasks
+      );
+  Workmanager().cancelAll();
+  Workmanager().registerOneOffTask(
+    "test",
+    "test",
+    inputData: {"welocme": 11},
+  );
 
   // Wait 1 seconds before removing the splash screen
   await Future.delayed(const Duration(milliseconds: 500));

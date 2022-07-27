@@ -163,7 +163,6 @@ Future<void> scheduleNotifications(
     days.first.timeZoneName,
   );
 
-
   var counter = 0;
   var lastTime = now;
 
