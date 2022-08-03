@@ -22,13 +22,12 @@ import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:timezone/data/latest_all.dart' as tz_init;
 
 void main() async {
+  final startTime = DateTime.now().millisecondsSinceEpoch;
+
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
   initNotifications();
-
-  // Wait 1 seconds before removing the splash screen
-  await Future.delayed(const Duration(milliseconds: 500));
 
   tz_init.initializeTimeZones();
 
@@ -42,7 +41,20 @@ void main() async {
   PrayerTimesRepository prayerTimesRepository =
       await PrayerTimesRepository.newRepo(location, method, timezone);
 
+  final totalTime = DateTime.now().millisecondsSinceEpoch - startTime;
+
+  // If previous commands took less than the minimum splash time,
+  // then wait the remaining time.
+  final delayTime = minimumSplashScreenTime - totalTime;
+  if (delayTime > 0) {
+    await Future.delayed(Duration(milliseconds: delayTime));
+  }
+
   FlutterNativeSplash.remove();
+
+  debugPrint(
+      "Splash time: ${DateTime.now().millisecondsSinceEpoch - startTime}ms");
+
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
 
