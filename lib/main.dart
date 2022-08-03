@@ -43,7 +43,7 @@ void main() async {
 
   final totalTime = DateTime.now().millisecondsSinceEpoch - startTime;
 
-  // If previous commands took less than the minimum splash time, 
+  // If previous commands took less than the minimum splash time,
   // then wait the remaining time.
   final delayTime = minimumSplashScreenTime - totalTime;
   if (delayTime > 0) {
