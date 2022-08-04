@@ -55,7 +55,7 @@ dependencies:
   pull_to_refresh: ^2.0.0
   sentry_flutter: ^6.4.0
   timezone: ^0.8.0
-  slide_countdown: ^0.2.3
+  slide_countdown: ^0.2.9
   motion_toast: ^2.1.6
   google_fonts: ^3.0.1
   flutter_native_splash: ^2.1.6

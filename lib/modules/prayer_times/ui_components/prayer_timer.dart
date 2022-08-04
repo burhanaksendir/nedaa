@@ -6,6 +6,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
 import 'package:nedaa/modules/prayer_times/bloc/prayer_times_bloc.dart';
 import 'package:nedaa/modules/settings/models/prayer_type.dart';
+import 'package:nedaa/utils/helper.dart';
 import 'package:nedaa/utils/timer.dart';
 import 'package:slide_countdown/slide_countdown.dart';
 import 'dart:ui' as ui;
@@ -55,7 +56,8 @@ class _PrayerTimerState extends State<PrayerTimer> {
     var prayersTranslation = {
       PrayerType.fajr: t!.fajr,
       PrayerType.sunrise: t.sunrise,
-      PrayerType.duhur: t.duhur,
+      PrayerType.duhur: duhurOrJumuah(
+          (timerState?.timezonedTime ?? DateTime.now()).weekday, t),
       PrayerType.asr: t.asr,
       PrayerType.maghrib: t.maghrib,
       PrayerType.isha: t.isha,
