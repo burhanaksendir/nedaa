@@ -39,13 +39,14 @@ class _TodayPrayersCardState extends State<TodayPrayersCard> {
     super.dispose();
   }
 
-  String getPrayerTranslation(BuildContext context, PrayerType prayerType) {
+  String getPrayerTranslation(
+      BuildContext context, PrayerType prayerType, tz.TZDateTime prayerTime) {
     var t = AppLocalizations.of(context);
 
     var prayersTranslation = {
       PrayerType.fajr: t!.fajr,
       PrayerType.sunrise: t.sunrise,
-      PrayerType.duhur: t.duhur,
+      PrayerType.duhur: duhurOrJumuah(prayerTime.weekday, t),
       PrayerType.asr: t.asr,
       PrayerType.maghrib: t.maghrib,
       PrayerType.isha: t.isha,
@@ -93,7 +94,7 @@ class _TodayPrayersCardState extends State<TodayPrayersCard> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           Text(
-            getPrayerTranslation(context, prayerType),
+            getPrayerTranslation(context, prayerType, prayerTime),
             style: const TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.w700,

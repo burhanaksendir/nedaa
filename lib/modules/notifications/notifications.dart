@@ -192,7 +192,15 @@ Future<void> scheduleNotifications(
       );
       ++id;
       if (d.isBefore(now)) continue;
-      String prayerName = prayersTranslation[e.key] ?? "";
+
+      String prayerName;
+      // if weekday=5 (Friday) and prayer is duhur then prayerName=jumuah
+      if (day.date.weekday == 5 && e.key == PrayerType.duhur) {
+        prayerName = t.jumuah;
+      } else {
+        prayerName = prayersTranslation[e.key] ?? "";
+      }
+
       await _flutterLocalNotificationsPlugin.zonedSchedule(
         id,
         t.prayerTimeNotificationTitle(prayerName),
