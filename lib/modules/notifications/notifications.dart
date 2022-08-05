@@ -130,7 +130,7 @@ Future<void> scheduleNotifications(
   }
 
   var prayersTranslation = {
-    PrayerType.sunrise: t.sunrise,
+    PrayerType.fajr: t.fajr,
     PrayerType.duhur: t.duhur,
     PrayerType.asr: t.asr,
     PrayerType.maghrib: t.maghrib,
