@@ -163,17 +163,6 @@ Future<void> scheduleNotifications(
     days.first.timeZoneName,
   );
 
-  await _flutterLocalNotificationsPlugin.zonedSchedule(
-    id,
-    t.appTitle,
-    t.contactUs,
-    now.add(const Duration(seconds: 20)),
-    platformChannelDetails,
-    androidAllowWhileIdle: true,
-    uiLocalNotificationDateInterpretation:
-        UILocalNotificationDateInterpretation.absoluteTime,
-  );
-
   var counter = 0;
   var lastTime = now;
 

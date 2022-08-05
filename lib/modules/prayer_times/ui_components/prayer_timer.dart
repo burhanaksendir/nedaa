@@ -6,6 +6,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
 import 'package:nedaa/modules/prayer_times/bloc/prayer_times_bloc.dart';
 import 'package:nedaa/modules/settings/models/prayer_type.dart';
+import 'package:nedaa/utils/arabic_digits.dart';
 import 'package:nedaa/utils/helper.dart';
 import 'package:nedaa/utils/timer.dart';
 import 'package:slide_countdown/slide_countdown.dart';
@@ -89,12 +90,16 @@ class _PrayerTimerState extends State<PrayerTimer> {
               width: 2,
             ),
           ),
-          padding: const EdgeInsets.all(8),
+          padding: MediaQuery.of(context).size == Size.zero
+              ? const EdgeInsets.all(0)
+              : const EdgeInsets.all(8),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              const Padding(
-                padding: EdgeInsets.only(top: 20),
+              Padding(
+                padding: MediaQuery.of(context).size == Size.zero
+                    ? const EdgeInsets.all(0)
+                    : const EdgeInsets.all(8),
               ),
               Text(
                 prayersTranslation[timerState?.prayerType ?? PrayerType.fajr]!,
@@ -106,7 +111,6 @@ class _PrayerTimerState extends State<PrayerTimer> {
               ),
               (timerState == null)
                   ? Container()
-                  // TODO: Replace with our own counter?
                   : SlideCountdown(
                       duration: timerState.timerDuration,
                       textStyle: Theme.of(context).textTheme.headline5 ??
@@ -115,6 +119,7 @@ class _PrayerTimerState extends State<PrayerTimer> {
                         color: Colors.transparent,
                         borderRadius: BorderRadius.circular(8),
                       ),
+                      digitsNumber: t.localeName == 'ar' ? arabicDigits : null,
                       countUp: timerState.shouldCountUp,
                       onDone: () {
                         setState(() {});
@@ -124,7 +129,7 @@ class _PrayerTimerState extends State<PrayerTimer> {
                               ? ui.TextDirection.ltr
                               : ui.TextDirection.rtl,
                     ),
-              const SizedBox(height: 8),
+              SizedBox(height: MediaQuery.of(context).size.height * 0.01),
               Text(
                 formatted.format(timerState?.timezonedTime ?? DateTime.now()),
                 style: Theme.of(context).textTheme.headline5,
