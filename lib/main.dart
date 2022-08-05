@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -25,22 +26,79 @@ import 'package:timezone/data/latest_all.dart' as tz_init;
 import 'package:workmanager/workmanager.dart';
 import 'package:http/http.dart' as http;
 
+const taskId = 'io.nedaa.schedule';
+var botToken = const String.fromEnvironment('BOT_TOKEN');
+var botChatId = const String.fromEnvironment('BOT_CHAT_ID');
+
 @pragma('vm:entry-point')
 void callbackDispatcher() {
   Workmanager().executeTask((task, inputData) async {
-    var platform = Platform.isIOS ? 'iOS' : 'Android';
-    var botToken = const String.fromEnvironment('BOT_TOKEN');
-    await http.post(
-      Uri.parse('https://api.telegram.org/bot$botToken/sendMessage'),
-      body: {
-        "chat_id": const String.fromEnvironment('CHAT_ID'),
-        "text": 'Background task is running on $platform',
-      },
-    );
+    try {
+      if (task == taskId && Platform.isAndroid) {
+        debugPrint('android task $task');
+        await _androidTask();
+      } else if (task == Workmanager.iOSBackgroundTask) {
+        print('iOSBackgroundTask $task');
+        await _iosTask();
+      }
+    } catch (e) {
+      print(e.toString());
+      return Future.value(false);
+    }
     return Future.value(true);
   });
 }
 
+Future<bool> _iosTask() async {
+  try {
+    // if the ios background task is called, we'll schedule a new task.
+    Workmanager().registerOneOffTask(taskId, taskId,
+        inputData: {
+          "key": "value",
+        },
+        constraints: Constraints(
+            networkType: NetworkType.connected, requiresCharging: false),
+        initialDelay: const Duration(days: 1));
+    initNotifications();
+    await http.post(
+      Uri.parse('https://api.telegram.org/bot$botToken/sendMessage'),
+      body: {
+        "chat_id": botChatId,
+        "text": 'Background task is running on iOS ',
+      },
+    );
+  } catch (e) {
+    print(e.toString());
+    return Future.value(false);
+  }
+  return Future.value(true);
+}
+
+Future<bool> _androidTask() async {
+  var deviceName = 'Unknown';
+  var deviceModel = 'Unknown';
+  var deviceVersion = 'Unknown';
+  DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+  AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+  deviceName = androidInfo.model!;
+  deviceModel = androidInfo.brand!;
+  deviceVersion = androidInfo.version.release!;
+  try {
+    initNotifications();
+    await http.post(
+      Uri.parse('https://api.telegram.org/bot$botToken/sendMessage'),
+      body: {
+        "chat_id": botChatId,
+        "text":
+            'Background task is running on $deviceName ($deviceModel, $deviceVersion)',
+      },
+    );
+  } catch (e) {
+    print(e.toString());
+    return Future.value(false);
+  }
+  return Future.value(true);
+}
 // void main() {
 //   Workmanager().initialize(
 //     callbackDispatcher, // The top level function, aka callbackDispatcher
@@ -61,12 +119,21 @@ void main() async {
       isInDebugMode:
           true // If enabled it will post a notification whenever the task is running. Handy for debugging tasks
       );
-  Workmanager().cancelAll();
-  Workmanager().registerOneOffTask(
-    "test",
-    "test",
-    inputData: {"welocme": 11},
-  );
+  await Workmanager().cancelAll();
+  if (Platform.isAndroid) {
+    Workmanager().registerPeriodicTask(
+      taskId,
+      taskId,
+      frequency: const Duration(days: 1),
+    );
+  } else {
+    Workmanager().registerOneOffTask(taskId, taskId,
+        inputData: {
+          "key": "value",
+        },
+        constraints: Constraints(
+            networkType: NetworkType.connected, requiresCharging: false));
+  }
 
   // Wait 1 seconds before removing the splash screen
   await Future.delayed(const Duration(milliseconds: 500));

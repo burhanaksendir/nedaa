@@ -4,7 +4,7 @@
 <dict>
 <key>BGTaskSchedulerPermittedIdentifiers</key>
 	<array>
-		<string>test</string>
+		<string>io.nedaa.schedule</string>
 	</array>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>

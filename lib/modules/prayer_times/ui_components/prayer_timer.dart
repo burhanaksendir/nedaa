@@ -6,6 +6,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
 import 'package:nedaa/modules/prayer_times/bloc/prayer_times_bloc.dart';
 import 'package:nedaa/modules/settings/models/prayer_type.dart';
+import 'package:nedaa/utils/arabic_digits.dart';
 import 'package:nedaa/utils/timer.dart';
 import 'package:slide_countdown/slide_countdown.dart';
 import 'dart:ui' as ui;
@@ -113,6 +114,7 @@ class _PrayerTimerState extends State<PrayerTimer> {
                         color: Colors.transparent,
                         borderRadius: BorderRadius.circular(8),
                       ),
+                      digitsNumber: t.localeName == 'ar' ? arabicDigits : null,
                       countUp: timerState.shouldCountUp,
                       onDone: () {
                         setState(() {});
