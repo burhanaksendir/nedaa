@@ -62,6 +62,7 @@ dependencies:
   sqflite: ^2.0.2+1
   path: ^1.8.1
   flutter_local_notifications: ^10.0.0-dev.16
+  percent_indicator: ^4.2.2
 
 
 dev_dependencies:

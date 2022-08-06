@@ -21,8 +21,8 @@ class _CommonCardHeaderState extends State<CommonCardHeader> {
     var currentUserCity = currentUserState.location.cityAddress;
     var timezone = currentUserState.timezone;
     var tzDateTime = getCurrentTimeWithTimeZone(timezone);
-    final todaysDate = DateFormat('EEEE\n d MMMM y', t!.localeName)
-        .format(tzDateTime);
+    final todaysDate =
+        DateFormat('EEEE\n d MMMM y', t!.localeName).format(tzDateTime);
 
     return Column(
       children: <Widget>[
