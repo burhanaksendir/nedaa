@@ -27,9 +27,22 @@ class _PrayerTimerState extends State<PrayerTimer> {
   Timer? toggleReturnTimer;
   double? percentage;
 
+  // timer to refresh the progress every 5 seconds
+  Timer? updatePercentage;
+
+  @override
+  void initState() {
+    super.initState();
+
+    updatePercentage = Timer.periodic(const Duration(seconds: 5), (timer) {
+      setState(() {});
+    });
+  }
+
   @override
   void dispose() {
     toggleReturnTimer?.cancel();
+    updatePercentage?.cancel();
     super.dispose();
   }
 
@@ -102,7 +115,7 @@ class _PrayerTimerState extends State<PrayerTimer> {
                 : const EdgeInsets.all(8),
             child: CircularPercentIndicator(
               addAutomaticKeepAlive: false,
-              animation: true,
+              animation: false,
               // don't animate the percentage for the previous prayer
               animationDuration: toggled ? 0 : 1100,
               progressColor: Theme.of(context).primaryColor,
