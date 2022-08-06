@@ -26,6 +26,8 @@ class _PrayerTimerState extends State<PrayerTimer> {
   bool toggled = false;
   Timer? toggleReturnTimer;
   double? percentage;
+  Duration? timerDuration;
+  bool shouldCountUp = false;
 
   // timer to refresh the progress every 5 seconds
   Timer? updatePercentage;
@@ -77,6 +79,10 @@ class _PrayerTimerState extends State<PrayerTimer> {
       } else {
         timerState = allTimerState.next;
       }
+      setState(() {
+        timerDuration = _getTimerDuration(allTimerState, shouldShowPrevious);
+        shouldCountUp = shouldShowPrevious;
+      });
     }
 
     var prayersTranslation = {
@@ -143,10 +149,10 @@ class _PrayerTimerState extends State<PrayerTimer> {
                     (timerState?.shouldCountUp ?? false) ? t.since : t.inTime,
                     style: Theme.of(context).textTheme.headline5,
                   ),
-                  (timerState == null)
+                  (timerState == null || timerDuration == null)
                       ? Container()
                       : SlideCountdown(
-                          duration: timerState.timerDuration,
+                          duration: timerDuration ?? Duration.zero,
                           textStyle: Theme.of(context).textTheme.headline5 ??
                               const TextStyle(color: Colors.black),
                           decoration: BoxDecoration(
@@ -155,9 +161,16 @@ class _PrayerTimerState extends State<PrayerTimer> {
                           ),
                           digitsNumber:
                               t.localeName == 'ar' ? arabicDigits : null,
-                          countUp: timerState.shouldCountUp,
+                          countUp: shouldCountUp,
                           onDone: () {
-                            setState(() {});
+                            if (allTimerState != null) {
+                              setState(() {
+                                timerDuration = _getTimerDuration(allTimerState,
+                                    timerState?.shouldCountUp ?? false);
+                                shouldCountUp =
+                                    timerState?.shouldCountUp ?? false;
+                              });
+                            }
                           },
                           textDirection:
                               Directionality.of(context) == ui.TextDirection.ltr
@@ -173,5 +186,13 @@ class _PrayerTimerState extends State<PrayerTimer> {
                 ],
               ),
             )));
+  }
+
+  Duration _getTimerDuration(
+      PreviousNextTimerState allTimerState, bool shouldShowPrevious) {
+    if (shouldShowPrevious) {
+      return allTimerState.previous.timerDuration;
+    }
+    return allTimerState.next.timerDuration;
   }
 }
