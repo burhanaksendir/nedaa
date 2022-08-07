@@ -121,12 +121,9 @@ class _PrayerTimerState extends State<PrayerTimer> {
                 : const EdgeInsets.all(8),
             child: CircularPercentIndicator(
               addAutomaticKeepAlive: false,
-              animation: false,
-              // don't animate the percentage for the previous prayer
-              animationDuration: toggled ? 0 : 1100,
-              progressColor: Theme.of(context).primaryColor,
-              backgroundColor: Theme.of(context).backgroundColor,
-              radius: MediaQuery.of(context).size.width * 0.93 / 3.1,
+              progressColor: Theme.of(context).colorScheme.primary,
+              backgroundColor: Theme.of(context).colorScheme.background,
+              radius: MediaQuery.of(context).size.width * 0.9 / 3.5,
               lineWidth: 3.5,
               // show the percentage only for the upcoming prayer
               percent: toggled || (timerState?.shouldCountUp ?? false)

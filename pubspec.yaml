@@ -41,7 +41,7 @@ dependencies:
   page_view_indicators: ^2.0.0
   settings_ui: ^2.0.2
   csc_picker: ^0.2.6
-  geolocator: ^8.2.0
+  geolocator: ^9.0.1
   geocoding: ^2.0.2
   audioplayers: ^0.20.1
   flex_color_scheme: ^5.1.0
