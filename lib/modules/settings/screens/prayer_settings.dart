@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -31,7 +33,6 @@ class _PrayerSettingsScreenState extends State<PrayerSettingsScreen> {
   ) {
     return SettingsTile(
       title: Text(ringtone.displayName),
-      // trailing: _selectedRingtone == index ? const Icon(Icons.check) : null,
       trailing:
           ringtone.displayName == notificationSettings.ringtone.displayName
               ? const Icon(Icons.check)
@@ -83,22 +84,24 @@ class _PrayerSettingsScreenState extends State<PrayerSettingsScreen> {
         padding: const EdgeInsets.only(top: 8.0),
         child: SettingsList(
           sections: [
-            SettingsSection(
-              tiles: [
-                SettingsTile.switchTile(
-                  initialValue: prayerNotificationSettings.vibration,
-                  onToggle: (value) {
-                    prayerNotificationSettings.vibration = value;
-                    context.read<UserSettingsBloc>().add(
-                          PrayerNotificationEvent(
-                              widget.prayerType, prayerNotificationSettings),
-                        );
-                  },
-                  title: Text(t!.vibrate),
-                  leading: const Icon(Icons.vibration),
-                ),
-              ],
-            ),
+            // hide vibration for iOS users because it's not supported
+            if (!Platform.isIOS)
+              SettingsSection(
+                tiles: [
+                  SettingsTile.switchTile(
+                    initialValue: prayerNotificationSettings.vibration,
+                    onToggle: (value) {
+                      prayerNotificationSettings.vibration = value;
+                      context.read<UserSettingsBloc>().add(
+                            PrayerNotificationEvent(
+                                widget.prayerType, prayerNotificationSettings),
+                          );
+                    },
+                    title: Text(t!.vibrate),
+                    leading: const Icon(Icons.vibration),
+                  ),
+                ],
+              ),
             SettingsSection(
               tiles: [
                 SettingsTile.switchTile(
@@ -111,7 +114,7 @@ class _PrayerSettingsScreenState extends State<PrayerSettingsScreen> {
                               widget.prayerType, prayerNotificationSettings),
                         );
                   },
-                  title: Text(t.alertOn),
+                  title: Text(t!.alertOn),
                   leading: const Icon(Icons.volume_up),
                 ),
               ],
