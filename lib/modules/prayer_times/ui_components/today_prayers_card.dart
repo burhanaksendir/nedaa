@@ -68,6 +68,8 @@ class _TodayPrayersCardState extends State<TodayPrayersCard> {
       displayMessage = formatted.format(prayerTime);
     }
 
+    var fontSize = MediaQuery.of(context).size.width > 600 ? 16.0 : 14.0;
+
     return GestureDetector(
       onTap: () {
         toggleReturnTimer?.cancel();
@@ -95,15 +97,15 @@ class _TodayPrayersCardState extends State<TodayPrayersCard> {
         children: <Widget>[
           Text(
             getPrayerTranslation(context, prayerType, prayerTime),
-            style: const TextStyle(
-              fontSize: 16,
+            style: TextStyle(
+              fontSize: fontSize,
               fontWeight: FontWeight.w700,
             ),
           ),
           Text(
             displayMessage,
-            style: const TextStyle(
-              fontSize: 16,
+            style: TextStyle(
+              fontSize: fontSize,
               fontWeight: FontWeight.w700,
             ),
           ),

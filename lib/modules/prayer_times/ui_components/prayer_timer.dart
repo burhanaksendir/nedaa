@@ -6,8 +6,10 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
 import 'package:nedaa/modules/prayer_times/bloc/prayer_times_bloc.dart';
 import 'package:nedaa/modules/settings/models/prayer_type.dart';
+import 'package:nedaa/utils/arabic_digits.dart';
 import 'package:nedaa/utils/helper.dart';
 import 'package:nedaa/utils/timer.dart';
+import 'package:percent_indicator/percent_indicator.dart';
 import 'package:slide_countdown/slide_countdown.dart';
 import 'dart:ui' as ui;
 
@@ -23,10 +25,26 @@ class PrayerTimer extends StatefulWidget {
 class _PrayerTimerState extends State<PrayerTimer> {
   bool toggled = false;
   Timer? toggleReturnTimer;
+  double? percentage;
+  Duration? timerDuration;
+  bool shouldCountUp = false;
+
+  // timer to refresh the progress every 5 seconds
+  Timer? updatePercentage;
+
+  @override
+  void initState() {
+    super.initState();
+
+    updatePercentage = Timer.periodic(const Duration(seconds: 5), (timer) {
+      setState(() {});
+    });
+  }
 
   @override
   void dispose() {
     toggleReturnTimer?.cancel();
+    updatePercentage?.cancel();
     super.dispose();
   }
 
@@ -38,6 +56,16 @@ class _PrayerTimerState extends State<PrayerTimer> {
 
     PreviousNextTimerState? allTimerState = getTimerState(prayerTimesState);
     TimerState? timerState;
+
+    var previousPrayerTime =
+        allTimerState?.previous.timezonedTime ?? DateTime.now();
+    var nextPrayerTime = allTimerState?.next.timezonedTime ?? DateTime.now();
+    // calculate the percentage between previous and next prayer time
+    var total = nextPrayerTime.difference(previousPrayerTime);
+    //TODO: use tz date time
+    var now = DateTime.now();
+    var gone = now.difference(previousPrayerTime);
+    percentage = (gone.inMilliseconds / total.inMilliseconds);
 
     if (allTimerState != null) {
       var defaultToShowPrevious =
@@ -51,6 +79,10 @@ class _PrayerTimerState extends State<PrayerTimer> {
       } else {
         timerState = allTimerState.next;
       }
+      setState(() {
+        timerDuration = _getTimerDuration(allTimerState, shouldShowPrevious);
+        shouldCountUp = shouldShowPrevious;
+      });
     }
 
     var prayersTranslation = {
@@ -80,57 +112,84 @@ class _PrayerTimerState extends State<PrayerTimer> {
           });
         },
         child: Container(
-          height: MediaQuery.of(context).size.height * 0.30,
-          width: MediaQuery.of(context).size.width * 0.9,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            border: Border.all(
-              color: Theme.of(context).colorScheme.secondary,
-              width: 2,
-            ),
-          ),
-          padding: const EdgeInsets.all(8),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              const Padding(
-                padding: EdgeInsets.only(top: 20),
+            alignment: Alignment.center,
+            color: Colors.transparent,
+            height: MediaQuery.of(context).size.height * 0.35,
+            width: MediaQuery.of(context).size.width * 0.9,
+            padding: MediaQuery.of(context).size == Size.zero
+                ? const EdgeInsets.all(0)
+                : const EdgeInsets.all(8),
+            child: CircularPercentIndicator(
+              addAutomaticKeepAlive: false,
+              progressColor: Theme.of(context).colorScheme.primary,
+              backgroundColor: Theme.of(context).colorScheme.background,
+              radius: MediaQuery.of(context).size.width * 0.9 / 3.5,
+              lineWidth: 3.5,
+              // show the percentage only for the upcoming prayer
+              percent: toggled || (timerState?.shouldCountUp ?? false)
+                  ? 1
+                  : percentage ?? 0,
+              center: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Padding(
+                    padding: MediaQuery.of(context).size == Size.zero
+                        ? const EdgeInsets.all(0)
+                        : const EdgeInsets.all(8),
+                  ),
+                  Text(
+                    prayersTranslation[
+                        timerState?.prayerType ?? PrayerType.fajr]!,
+                    style: Theme.of(context).textTheme.headline5,
+                  ),
+                  Text(
+                    (timerState?.shouldCountUp ?? false) ? t.since : t.inTime,
+                    style: Theme.of(context).textTheme.headline5,
+                  ),
+                  (timerState == null || timerDuration == null)
+                      ? Container()
+                      : SlideCountdown(
+                          duration: timerDuration ?? Duration.zero,
+                          textStyle: Theme.of(context).textTheme.headline5 ??
+                              const TextStyle(color: Colors.black),
+                          decoration: BoxDecoration(
+                            color: Colors.transparent,
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          digitsNumber:
+                              t.localeName == 'ar' ? arabicDigits : null,
+                          countUp: shouldCountUp,
+                          onDone: () {
+                            if (allTimerState != null) {
+                              setState(() {
+                                timerDuration = _getTimerDuration(allTimerState,
+                                    timerState?.shouldCountUp ?? false);
+                                shouldCountUp =
+                                    timerState?.shouldCountUp ?? false;
+                              });
+                            }
+                          },
+                          textDirection:
+                              Directionality.of(context) == ui.TextDirection.ltr
+                                  ? ui.TextDirection.ltr
+                                  : ui.TextDirection.rtl,
+                        ),
+                  SizedBox(height: MediaQuery.of(context).size.height * 0.01),
+                  Text(
+                    formatted
+                        .format(timerState?.timezonedTime ?? DateTime.now()),
+                    style: Theme.of(context).textTheme.headline5,
+                  ),
+                ],
               ),
-              Text(
-                prayersTranslation[timerState?.prayerType ?? PrayerType.fajr]!,
-                style: Theme.of(context).textTheme.headline5,
-              ),
-              Text(
-                (timerState?.shouldCountUp ?? false) ? t.since : t.inTime,
-                style: Theme.of(context).textTheme.headline5,
-              ),
-              (timerState == null)
-                  ? Container()
-                  // TODO: Replace with our own counter?
-                  : SlideCountdown(
-                      duration: timerState.timerDuration,
-                      textStyle: Theme.of(context).textTheme.headline5 ??
-                          const TextStyle(color: Colors.black),
-                      decoration: BoxDecoration(
-                        color: Colors.transparent,
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      countUp: timerState.shouldCountUp,
-                      onDone: () {
-                        setState(() {});
-                      },
-                      textDirection:
-                          Directionality.of(context) == ui.TextDirection.ltr
-                              ? ui.TextDirection.ltr
-                              : ui.TextDirection.rtl,
-                    ),
-              const SizedBox(height: 8),
-              Text(
-                formatted.format(timerState?.timezonedTime ?? DateTime.now()),
-                style: Theme.of(context).textTheme.headline5,
-              ),
-            ],
-          ),
-        ));
+            )));
+  }
+
+  Duration _getTimerDuration(
+      PreviousNextTimerState allTimerState, bool shouldShowPrevious) {
+    if (shouldShowPrevious) {
+      return allTimerState.previous.timerDuration;
+    }
+    return allTimerState.next.timerDuration;
   }
 }
