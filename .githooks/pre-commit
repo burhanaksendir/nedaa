@@ -1,0 +1,3 @@
+#!/bin/bash
+				     #Maybe change this later
+exec flutter pub run dart_pre_commit  --outdated=none  --no-check-pull-up

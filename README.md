@@ -2,6 +2,11 @@
 
 A new Flutter project.
 
+### Pre-commit hook
+After cloning the repo to activate the pre-commit hook run: 
+``` 
+git config --local core.hooksPath .githooks/
+```
 ## Getting Started
 
 This project is a starting point for a Flutter application.
