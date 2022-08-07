@@ -336,6 +336,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.0"
+  liquid_pull_to_refresh:
+    dependency: "direct main"
+    description:
+      name: liquid_pull_to_refresh
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.0.1"
   matcher:
     dependency: transitive
     description:
@@ -525,13 +532,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "6.0.3"
-  pull_to_refresh:
-    dependency: "direct main"
-    description:
-      name: pull_to_refresh
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.0.0"
   sentry:
     dependency: transitive
     description:
