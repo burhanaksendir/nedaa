@@ -73,7 +73,16 @@ class _MainScreenState extends State<MainScreen> {
             ],
             centerTitle: true,
           ),
-          body: const PrayerTimes(),
+          body: Container(
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage("assets/images/logo.png"),
+                fit: BoxFit.fitWidth,
+                opacity: 0.2,
+              ),
+            ),
+            child: const PrayerTimes(),
+          ),
         ),
       ),
     );
