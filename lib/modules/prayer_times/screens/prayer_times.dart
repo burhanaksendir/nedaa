@@ -68,6 +68,7 @@ class _PrayerTimesState extends State<PrayerTimes> {
     var userSettings = context.watch<UserSettingsBloc>().state;
     var prayerTimesBloc = context.watch<PrayerTimesBloc>();
     return LiquidPullToRefresh(
+      springAnimationDurationInMilliseconds: 500,
       onRefresh: () => _onRefresh(userSettings, prayerTimesBloc),
       child: CustomScrollView(
         physics: const AlwaysScrollableScrollPhysics(),
