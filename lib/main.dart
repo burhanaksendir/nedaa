@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -24,11 +23,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:timezone/data/latest_all.dart' as tz_init;
 import 'package:workmanager/workmanager.dart';
-import 'package:http/http.dart' as http;
 
 const taskId = 'io.nedaa.schedule';
-var botToken = const String.fromEnvironment('BOT_TOKEN');
-var botChatId = const String.fromEnvironment('BOT_CHAT_ID');
 
 @pragma('vm:entry-point')
 void callbackDispatcher() {
@@ -36,77 +32,59 @@ void callbackDispatcher() {
     try {
       if (task == taskId && Platform.isAndroid) {
         debugPrint('android task $task');
-        await _androidTask();
+        await _task();
       } else if (task == Workmanager.iOSBackgroundTask) {
-        print('iOSBackgroundTask $task');
-        await _iosTask();
+        debugPrint('iOSBackgroundTask $task');
+        await _task();
       }
     } catch (e) {
-      print(e.toString());
+      debugPrint(e.toString());
       return Future.value(false);
     }
     return Future.value(true);
   });
 }
 
-Future<bool> _iosTask() async {
-  try {
-    // if the ios background task is called, we'll schedule a new task.
-    Workmanager().registerOneOffTask(taskId, taskId,
-        inputData: {
-          "key": "value",
-        },
-        constraints: Constraints(
-            networkType: NetworkType.connected, requiresCharging: false),
-        initialDelay: const Duration(days: 1));
-    initNotifications();
-    await http.post(
-      Uri.parse('https://api.telegram.org/bot$botToken/sendMessage'),
-      body: {
-        "chat_id": botChatId,
-        "text": 'Background task is running on iOS ',
-      },
+Future<bool> _task() async {
+  await SentryFlutter.init((options) {
+    options.dsn = const String.fromEnvironment('SENTRY_DSN');
+    // Set tracesSampleRate to 1.0 to capture 100% of transactions for performance monitoring.
+    // We recommend adjusting this value in production.
+    options.tracesSampleRate = 1.0;
+  }, appRunner: () async {
+    // send the crash report to sentry.io
+    await Sentry.captureEvent(
+      SentryEvent(
+        message: const SentryMessage(
+          'Workmanager task',
+        ),
+        level: SentryLevel.error,
+      ),
     );
-  } catch (e) {
-    print(e.toString());
-    return Future.value(false);
-  }
-  return Future.value(true);
-}
+    initNotifications();
 
-Future<bool> _androidTask() async {
-  var deviceName = 'Unknown';
-  var deviceModel = 'Unknown';
-  var deviceVersion = 'Unknown';
-  DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
-  AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
-  deviceName = androidInfo.model!;
-  deviceModel = androidInfo.brand!;
-  deviceVersion = androidInfo.version.release!;
-  try {
-    initNotifications();
-    await http.post(
-      Uri.parse('https://api.telegram.org/bot$botToken/sendMessage'),
-      body: {
-        "chat_id": botChatId,
-        "text":
-            'Background task is running on $deviceName ($deviceModel, $deviceVersion)',
-      },
+    tz_init.initializeTimeZones();
+
+    SettingsRepository settingsRepository = SettingsRepository(
+      await SharedPreferences.getInstance(),
     );
-  } catch (e) {
-    print(e.toString());
-    return Future.value(false);
-  }
+
+    var location = settingsRepository.getUserLocation();
+    var method = settingsRepository.getCalculationMethod();
+    var timezone = settingsRepository.getTimezone();
+    var prayerTimesRepository =
+        await PrayerTimesRepository.newRepo(location, method, timezone);
+    var prayerTimesState = await prayerTimesRepository
+        .getCurrentPrayerTimesState(location, method, timezone);
+
+    var lang = settingsRepository.getLanguage();
+    var t = await AppLocalizations.delegate.load(lang);
+
+    await scheduleNotificationsInner(t,
+        settingsRepository.getNotificationSettings(), prayerTimesState.tenDays);
+  });
   return Future.value(true);
 }
-// void main() {
-//   Workmanager().initialize(
-//     callbackDispatcher, // The top level function, aka callbackDispatcher
-//     isInDebugMode: true // If enabled it will post a notification whenever the task is running. Handy for debugging tasks
-//   );
-//   Workmanager().registerOneOffTask("task-identifier", "simpleTask");
-//   runApp(MyApp());
-// }
 
 void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
@@ -124,18 +102,11 @@ void main() async {
     Workmanager().registerPeriodicTask(
       taskId,
       taskId,
-      frequency: const Duration(days: 1),
+      frequency: const Duration(hours: 8),
     );
-  } else {
-    Workmanager().registerOneOffTask(taskId, taskId,
-        inputData: {
-          "key": "value",
-        },
-        constraints: Constraints(
-            networkType: NetworkType.connected, requiresCharging: false));
   }
 
-  // Wait 1 seconds before removing the splash screen
+  // Wait 0.5 seconds before removing the splash screen
   await Future.delayed(const Duration(milliseconds: 500));
 
   tz_init.initializeTimeZones();
