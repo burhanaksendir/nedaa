@@ -14,11 +14,15 @@ class MainPrayerCard extends StatefulWidget {
 class _MainPrayerCardState extends State<MainPrayerCard> {
   @override
   Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
     return PrayerTimesCard(
       child: Column(
         children: [
           const CommonCardHeader(),
-          SizedBox(height: MediaQuery.of(context).size.height * 0.06),
+          SizedBox(
+              height: screenHeight < 600
+                  ? screenHeight * 0.02
+                  : screenHeight * 0.06),
           const PrayerTimer(),
         ],
       ),

@@ -18,6 +18,7 @@ class _LocationSettingsState extends State<LocationSettings> {
     var t = AppLocalizations.of(context);
 
     var currentUserState = context.watch<UserSettingsBloc>().state;
+    // TODO: listen to changes in the current user settings and update location accordingly
     var keepUpdatingLocation = currentUserState.keepUpdatingLocation;
 
     return Scaffold(

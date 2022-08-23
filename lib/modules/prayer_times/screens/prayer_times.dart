@@ -5,7 +5,7 @@ import 'package:nedaa/modules/prayer_times/ui_components/main_prayer_card.dart';
 import 'package:nedaa/modules/prayer_times/ui_components/today_prayers_card.dart';
 import 'package:nedaa/modules/settings/bloc/user_settings_bloc.dart';
 import 'package:page_view_indicators/animated_circle_page_indicator.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 
 class PrayerTimes extends StatefulWidget {
   const PrayerTimes({Key? key}) : super(key: key);
@@ -16,8 +16,6 @@ class PrayerTimes extends StatefulWidget {
 
 class _PrayerTimesState extends State<PrayerTimes> {
   final _currentPageNotifier = ValueNotifier<int>(0);
-  final RefreshController _refreshController =
-      RefreshController(initialRefresh: false);
 
   Widget _buildPrayerTimesView() {
     return Column(children: [
@@ -56,26 +54,22 @@ class _PrayerTimesState extends State<PrayerTimes> {
     ]);
   }
 
-  void _onRefresh(
+  Future<void> _onRefresh(
       UserSettingsState userSettings, PrayerTimesBloc prayerTimesBloc) async {
     prayerTimesBloc.add(FetchPrayerTimesEvent(
       userSettings.location,
       userSettings.calculationMethod,
       userSettings.timezone,
     ));
-
-    // TODO: this will complete quickly, but we can use Bloc state changes
-    //       to listen to the completion of the fetching process
-    _refreshController.refreshCompleted();
   }
 
   @override
   Widget build(BuildContext context) {
     var userSettings = context.watch<UserSettingsBloc>().state;
     var prayerTimesBloc = context.watch<PrayerTimesBloc>();
-    return SmartRefresher(
+    return LiquidPullToRefresh(
+      springAnimationDurationInMilliseconds: 500,
       onRefresh: () => _onRefresh(userSettings, prayerTimesBloc),
-      controller: _refreshController,
       child: CustomScrollView(
         physics: const AlwaysScrollableScrollPhysics(),
         slivers: <Widget>[

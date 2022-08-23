@@ -39,13 +39,14 @@ class _TodayPrayersCardState extends State<TodayPrayersCard> {
     super.dispose();
   }
 
-  String getPrayerTranslation(BuildContext context, PrayerType prayerType) {
+  String getPrayerTranslation(
+      BuildContext context, PrayerType prayerType, tz.TZDateTime prayerTime) {
     var t = AppLocalizations.of(context);
 
     var prayersTranslation = {
       PrayerType.fajr: t!.fajr,
       PrayerType.sunrise: t.sunrise,
-      PrayerType.duhur: t.duhur,
+      PrayerType.duhur: duhurOrJumuah(prayerTime.weekday, t),
       PrayerType.asr: t.asr,
       PrayerType.maghrib: t.maghrib,
       PrayerType.isha: t.isha,
@@ -66,6 +67,8 @@ class _TodayPrayersCardState extends State<TodayPrayersCard> {
     } else {
       displayMessage = formatted.format(prayerTime);
     }
+
+    var fontSize = MediaQuery.of(context).size.width > 600 ? 16.0 : 14.0;
 
     return GestureDetector(
       onTap: () {
@@ -93,16 +96,16 @@ class _TodayPrayersCardState extends State<TodayPrayersCard> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           Text(
-            getPrayerTranslation(context, prayerType),
-            style: const TextStyle(
-              fontSize: 16,
+            getPrayerTranslation(context, prayerType, prayerTime),
+            style: TextStyle(
+              fontSize: fontSize,
               fontWeight: FontWeight.w700,
             ),
           ),
           Text(
             displayMessage,
-            style: const TextStyle(
-              fontSize: 16,
+            style: TextStyle(
+              fontSize: fontSize,
               fontWeight: FontWeight.w700,
             ),
           ),

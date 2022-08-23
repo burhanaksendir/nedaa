@@ -1,4 +1,5 @@
 import 'package:geocoding/geocoding.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:nedaa/modules/prayer_times/models/prayer_times.dart';
 import 'package:nedaa/modules/settings/models/calculation_method.dart';
 import 'package:nedaa/modules/settings/models/prayer_type.dart';
@@ -94,4 +95,12 @@ Future<bool> hasInternetConnection() async {
     isConnectionSuccessful = false;
   }
   return isConnectionSuccessful;
+}
+
+String duhurOrJumuah(int weekday, AppLocalizations t) {
+  // weekday=5 means day is Friday.
+  if (weekday == 5) {
+    return t.jumuah;
+  }
+  return t.duhur;
 }

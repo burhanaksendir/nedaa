@@ -28,48 +28,62 @@ class _MainScreenState extends State<MainScreen> {
       checkPermissionsUpdateCurrentLocation(context, () => mounted);
       settingsBloc.add(FirstRunEvent());
     }
-    return SafeArea(
-      child: Scaffold(
-        extendBody: true,
-        floatingActionButton: FloatingActionButton(
-          onPressed: () async {
-            // show toast
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                content: Text(
-                    "Have ${(await getPendingNotifications()).length} notifications")));
-          },
-          child: const Icon(Icons.add),
-        ),
-        appBar: AppBar(
-          title: Text(t!.appTitle),
-          actions: [
-            IconButton(
-              icon: const Icon(Icons.settings),
-              onPressed: () async {
-                await Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const Settings(),
-                    ));
+    return Align(
+      alignment: Alignment.topLeft,
+      child: SafeArea(
+        top: false,
+        bottom: false,
+        child: Scaffold(
+          extendBody: true,
+          floatingActionButton: FloatingActionButton(
+            onPressed: () async {
+              // show toast
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  content: Text(
+                      "Have ${(await getPendingNotifications()).length} notifications")));
+            },
+            child: const Icon(Icons.add),
+          ),
+          appBar: AppBar(
+            title: Text(t!.appTitle),
+            actions: [
+              IconButton(
+                icon: const Icon(Icons.settings),
+                onPressed: () async {
+                  await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const Settings(),
+                      ));
 
-                if (!mounted) {
-                  return;
-                }
-                // Fire a prayer fetch event, so that we can reschedule
-                // notifications in case the user gave notifications permission
-                // in the settings.
-                var settingsRepo = context.read<SettingsRepository>();
-                var userLocation = settingsRepo.getUserLocation();
-                var calculationMethod = settingsRepo.getCalculationMethod();
-                var timezone = settingsRepo.getTimezone();
-                context.read<PrayerTimesBloc>().add(FetchPrayerTimesEvent(
-                    userLocation, calculationMethod, timezone));
-              },
-            )
-          ],
-          centerTitle: true,
+                  if (!mounted) {
+                    return;
+                  }
+                  // Fire a prayer fetch event, so that we can reschedule
+                  // notifications in case the user gave notifications permission
+                  // in the settings.
+                  var settingsRepo = context.read<SettingsRepository>();
+                  var userLocation = settingsRepo.getUserLocation();
+                  var calculationMethod = settingsRepo.getCalculationMethod();
+                  var timezone = settingsRepo.getTimezone();
+                  context.read<PrayerTimesBloc>().add(FetchPrayerTimesEvent(
+                      userLocation, calculationMethod, timezone));
+                },
+              )
+            ],
+            centerTitle: true,
+          ),
+          body: Container(
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage("assets/images/logo.png"),
+                fit: BoxFit.fitWidth,
+                opacity: 0.2,
+              ),
+            ),
+            child: const PrayerTimes(),
+          ),
         ),
-        body: const PrayerTimes(),
       ),
     );
   }

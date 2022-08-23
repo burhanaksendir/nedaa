@@ -87,6 +87,8 @@ Future<bool> _task() async {
 }
 
 void main() async {
+  final startTime = DateTime.now().millisecondsSinceEpoch;
+
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
@@ -121,7 +123,20 @@ void main() async {
   PrayerTimesRepository prayerTimesRepository =
       await PrayerTimesRepository.newRepo(location, method, timezone);
 
+  final totalTime = DateTime.now().millisecondsSinceEpoch - startTime;
+
+  // If previous commands took less than the minimum splash time,
+  // then wait the remaining time.
+  final delayTime = minimumSplashScreenTime - totalTime;
+  if (delayTime > 0) {
+    await Future.delayed(Duration(milliseconds: delayTime));
+  }
+
   FlutterNativeSplash.remove();
+
+  debugPrint(
+      "Splash time: ${DateTime.now().millisecondsSinceEpoch - startTime}ms");
+
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
 

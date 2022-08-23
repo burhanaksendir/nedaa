@@ -16,14 +16,6 @@ class PrayerTimesCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(32),
         ),
         child: Stack(children: [
-          Center(
-            child: Opacity(
-              opacity: 0.2,
-              child: Image.asset(
-                'assets/images/logo.png',
-              ),
-            ),
-          ),
           Padding(
             padding: const EdgeInsets.all(32.0),
             child: child,
