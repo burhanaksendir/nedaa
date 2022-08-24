@@ -28,20 +28,18 @@ class _PrayerSettingsScreenState extends State<PrayerSettingsScreen> {
   SettingsTile _ringtoneTile(
     BuildContext context,
     AppLocalizations t,
-    NotificationSettings notificationSettings,
+    NotificationSettings settings,
+    void Function() onUpdate,
     NotificationRingtone ringtone,
   ) {
     return SettingsTile(
       title: Text(ringtone.displayName),
-      trailing:
-          ringtone.displayName == notificationSettings.ringtone.displayName
-              ? const Icon(Icons.check)
-              : null,
+      trailing: ringtone.displayName == settings.ringtone.displayName
+          ? const Icon(Icons.check)
+          : null,
       onPressed: (context) async {
-        notificationSettings.ringtone = ringtone;
-        context.read<UserSettingsBloc>().add(
-              PrayerNotificationEvent(widget.prayerType, notificationSettings),
-            );
+        settings.ringtone = ringtone;
+        onUpdate();
 
         AudioPlayer player = await _audioCache.play(ringtone.fileName);
 
@@ -68,6 +66,50 @@ class _PrayerSettingsScreenState extends State<PrayerSettingsScreen> {
     );
   }
 
+  List<AbstractSettingsSection> _notificationSettingsSections(
+      AppLocalizations t,
+      NotificationSettings settings,
+      void Function() onUpdate) {
+    return [
+      // hide vibration for iOS users because it's not supported
+      if (!Platform.isIOS)
+        SettingsSection(
+          tiles: [
+            SettingsTile.switchTile(
+              initialValue: settings.vibration,
+              onToggle: (value) {
+                settings.vibration = value;
+                onUpdate();
+              },
+              title: Text(t.vibrate),
+              leading: const Icon(Icons.vibration),
+            ),
+          ],
+        ),
+      SettingsSection(
+        tiles: [
+          SettingsTile.switchTile(
+            initialValue: settings.sound,
+            onToggle: (value) {
+              settings.sound = value;
+
+              onUpdate();
+            },
+            title: Text(t.alertOn),
+            leading: const Icon(Icons.volume_up),
+          ),
+        ],
+      ),
+      if (settings.sound)
+        SettingsSection(
+            tiles: athanRingtones
+                .map(
+                  (e) => _ringtoneTile(context, t, settings, onUpdate, e),
+                )
+                .toList()),
+    ];
+  }
+
   @override
   Widget build(BuildContext context) {
     var t = AppLocalizations.of(context);
@@ -76,59 +118,51 @@ class _PrayerSettingsScreenState extends State<PrayerSettingsScreen> {
     var prayerNotificationSettings =
         currentUserState.notificationSettings[widget.prayerType]!;
 
+    onUpdate() {
+      context.read<UserSettingsBloc>().add(
+            PrayerNotificationEvent(
+                widget.prayerType, prayerNotificationSettings),
+          );
+    }
+
+    var allSections = _notificationSettingsSections(
+      t!,
+      prayerNotificationSettings.athanSettings,
+      onUpdate,
+    );
+
+    var isIqamaEnabled = prayerNotificationSettings.iqamaSettings.enabled;
+    var iqamaEnableSection = SettingsSection(
+      tiles: [
+        SettingsTile.switchTile(
+          initialValue: isIqamaEnabled,
+          onToggle: (value) {
+            prayerNotificationSettings.iqamaSettings.enabled = value;
+
+            onUpdate();
+          },
+          title: Text(t.iqama),
+          leading: const Icon(Icons.star),
+        ),
+      ],
+    );
+    allSections.add(iqamaEnableSection);
+
+    if (isIqamaEnabled) {
+      allSections.addAll(_notificationSettingsSections(
+        t,
+        prayerNotificationSettings.iqamaSettings.notificationSettings,
+        onUpdate,
+      ));
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.prayerName),
       ),
       body: Padding(
         padding: const EdgeInsets.only(top: 8.0),
-        child: SettingsList(
-          sections: [
-            // hide vibration for iOS users because it's not supported
-            if (!Platform.isIOS)
-              SettingsSection(
-                tiles: [
-                  SettingsTile.switchTile(
-                    initialValue: prayerNotificationSettings.vibration,
-                    onToggle: (value) {
-                      prayerNotificationSettings.vibration = value;
-                      context.read<UserSettingsBloc>().add(
-                            PrayerNotificationEvent(
-                                widget.prayerType, prayerNotificationSettings),
-                          );
-                    },
-                    title: Text(t!.vibrate),
-                    leading: const Icon(Icons.vibration),
-                  ),
-                ],
-              ),
-            SettingsSection(
-              tiles: [
-                SettingsTile.switchTile(
-                  initialValue: prayerNotificationSettings.sound,
-                  onToggle: (value) {
-                    prayerNotificationSettings.sound = value;
-
-                    context.read<UserSettingsBloc>().add(
-                          PrayerNotificationEvent(
-                              widget.prayerType, prayerNotificationSettings),
-                        );
-                  },
-                  title: Text(t!.alertOn),
-                  leading: const Icon(Icons.volume_up),
-                ),
-              ],
-            ),
-            if (prayerNotificationSettings.sound)
-              SettingsSection(
-                  tiles: allRingtones
-                      .map(
-                        (e) => _ringtoneTile(
-                            context, t, prayerNotificationSettings, e),
-                      )
-                      .toList()),
-          ],
-        ),
+        child: SettingsList(sections: allSections),
       ),
     );
   }

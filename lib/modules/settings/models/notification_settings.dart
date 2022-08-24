@@ -1,4 +1,16 @@
-const allRingtones = [
+const athanRingtones = [
+  NotificationRingtone(displayName: 'knock, knock', fileName: 'knock.mp3'),
+  NotificationRingtone(
+    displayName: 'Athan 1',
+    fileName: 'athan8.mp3',
+  ),
+  NotificationRingtone(
+    displayName: 'Athan 2',
+    fileName: 'athan6.mp3',
+  ),
+];
+
+const iqamaRingtones = [
   NotificationRingtone(displayName: 'knock, knock', fileName: 'knock.mp3'),
   NotificationRingtone(
     displayName: 'Athan 1',
@@ -18,19 +30,70 @@ class NotificationRingtone {
       {required this.displayName, required this.fileName});
 }
 
+class PrayerNotificationSettings {
+  PrayerNotificationSettings(
+      {required this.athanSettings, required this.iqamaSettings});
+
+  PrayerNotificationSettings.defaultValue()
+      : this(
+          athanSettings: NotificationSettings(
+            sound: true,
+            vibration: false,
+            ringtone: athanRingtones[0],
+          ),
+          iqamaSettings: IqamaSettings(
+            enabled: true,
+            delay: 10,
+            notificationSettings: NotificationSettings(
+              sound: true,
+              vibration: false,
+              ringtone: iqamaRingtones[0],
+            ),
+          ),
+        );
+
+  NotificationSettings athanSettings;
+  IqamaSettings iqamaSettings;
+
+  factory PrayerNotificationSettings.fromJson(Map<String, dynamic> json) {
+    return PrayerNotificationSettings(
+      athanSettings: NotificationSettings.fromJson(json['athanSettings']),
+      iqamaSettings: IqamaSettings.fromJson(json['iqamaSettings']),
+    );
+  }
+  Map<String, dynamic> toJson() => {
+        'athanSettings': athanSettings.toJson(),
+        'iqamaSettings': iqamaSettings.toJson(),
+      };
+}
+
+class IqamaSettings {
+  IqamaSettings({
+    required this.enabled,
+    required this.notificationSettings,
+    required this.delay,
+  });
+  bool enabled;
+  NotificationSettings notificationSettings;
+  int delay;
+
+  factory IqamaSettings.fromJson(Map<String, dynamic> json) => IqamaSettings(
+        enabled: json["enabled"],
+        notificationSettings:
+            NotificationSettings.fromJson(json["notificationSettings"]),
+        delay: json["delay"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "enabled": enabled,
+        "notificationSettings": notificationSettings.toJson(),
+        "delay": delay,
+      };
+}
+
 class NotificationSettings {
   NotificationSettings(
       {required this.sound, required this.vibration, required this.ringtone});
-
-  NotificationSettings.defaultValue()
-      : this(
-          sound: true,
-          vibration: false,
-          ringtone: const NotificationRingtone(
-            displayName: 'knock, knock',
-            fileName: 'knock.mp3',
-          ),
-        );
 
   bool sound;
   bool vibration;

@@ -106,13 +106,13 @@ class SettingsRepository {
   }
 
   setNotificationSettings(
-      Map<PrayerType, NotificationSettings> notificationSettings) async {
+      Map<PrayerType, PrayerNotificationSettings> notificationSettings) async {
     var map = json.encode(notificationSettings
         .map((key, value) => MapEntry(key.name, value.toJson())));
     await _setString('notificationSettings', map);
   }
 
-  Map<PrayerType, NotificationSettings> getNotificationSettings() {
+  Map<PrayerType, PrayerNotificationSettings> getNotificationSettings() {
     var settings = _getString('notificationSettings');
 
     var jsonMap = {};
@@ -120,17 +120,18 @@ class SettingsRepository {
       jsonMap = json.decode(settings);
     }
 
-    var settingsMap = <PrayerType, NotificationSettings>{};
+    var settingsMap = <PrayerType, PrayerNotificationSettings>{};
 
     for (var type in PrayerType.values) {
       if (jsonMap.containsKey(type.name)) {
         try {
-          settingsMap[type] = NotificationSettings.fromJson(jsonMap[type.name]);
+          settingsMap[type] =
+              PrayerNotificationSettings.fromJson(jsonMap[type.name]);
         } catch (e) {
-          settingsMap[type] = NotificationSettings.defaultValue();
+          settingsMap[type] = PrayerNotificationSettings.defaultValue();
         }
       } else {
-        settingsMap[type] = NotificationSettings.defaultValue();
+        settingsMap[type] = PrayerNotificationSettings.defaultValue();
       }
     }
     return settingsMap;

@@ -133,7 +133,7 @@ Future<void> scheduleNotifications(
 
 Future<void> scheduleNotificationsInner(
   AppLocalizations t,
-  Map<PrayerType, NotificationSettings> notificationSettings,
+  Map<PrayerType, PrayerNotificationSettings> notificationSettings,
   List<DayPrayerTimes> days,
 ) async {
   if (Platform.isIOS) {
@@ -168,8 +168,8 @@ Future<void> scheduleNotificationsInner(
   }
 
   if (days.isEmpty) return;
-  var platformChannelDetails =
-      _buildNotificationDetails(notificationSettings[PrayerType.fajr]!);
+  var platformChannelDetails = _buildNotificationDetails(
+      notificationSettings[PrayerType.fajr]!.athanSettings);
 
   var id = 0;
   var now = getCurrentTimeWithTimeZone(
@@ -186,14 +186,16 @@ Future<void> scheduleNotificationsInner(
         continue;
       }
 
-      var platformChannelDetails =
-          _buildNotificationDetails(notificationSettings[e.key]!);
-      var d = tz.TZDateTime.from(
+      var prayerNotificationSettings = notificationSettings[e.key]!;
+
+      var athanPlatformChannelDetails =
+          _buildNotificationDetails(prayerNotificationSettings.athanSettings);
+      var prayerTime = tz.TZDateTime.from(
         e.value,
         tz.getLocation(day.timeZoneName),
       );
       ++id;
-      if (d.isBefore(now)) continue;
+      if (prayerTime.isBefore(now)) continue;
 
       String prayerName;
       // if weekday=5 (Friday) and prayer is duhur then prayerName=jumuah
@@ -207,18 +209,40 @@ Future<void> scheduleNotificationsInner(
         id,
         t.prayerTimeNotificationTitle(prayerName),
         t.prayerTimeNotificationContent(prayerName),
-        d,
-        platformChannelDetails,
+        prayerTime,
+        athanPlatformChannelDetails,
         androidAllowWhileIdle: true,
         uiLocalNotificationDateInterpretation:
             UILocalNotificationDateInterpretation.absoluteTime,
       );
       counter++;
+      id++;
+
+      var iqamaSettings = prayerNotificationSettings.iqamaSettings;
+
+      if (iqamaSettings.enabled && counter < 64) {
+        var iqamaPlatformChannelDetails =
+            _buildNotificationDetails(iqamaSettings.notificationSettings);
+        var iqamaTime = prayerTime.add(Duration(minutes: iqamaSettings.delay));
+
+        await _flutterLocalNotificationsPlugin.zonedSchedule(
+          id,
+          t.iqamaTimeNotificationTitle(prayerName),
+          t.iqamaTimeNotificationContent(iqamaSettings.delay, prayerName),
+          iqamaTime,
+          iqamaPlatformChannelDetails,
+          androidAllowWhileIdle: true,
+          uiLocalNotificationDateInterpretation:
+              UILocalNotificationDateInterpretation.absoluteTime,
+        );
+        counter++;
+      }
+
       // reached the end for iOS
       if (counter == 63) {
         break;
       }
-      lastTime = d;
+      lastTime = prayerTime;
     }
   }
 

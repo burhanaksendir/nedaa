@@ -1,4 +1,24 @@
 {
+  "@iqamaTimeNotificationContent": {
+    "placeholders": {
+      "delay": {
+        "example": "٥",
+        "type": "int"
+      },
+      "prayerName": {
+        "example": "الفجر",
+        "type": "String"
+      }
+    }
+  },
+  "@iqamaTimeNotificationTitle": {
+    "placeholders": {
+      "prayerName": {
+        "example": "الفجر",
+        "type": "String"
+      }
+    }
+  },
   "@prayerTimeNotificationContent": {
     "placeholders": {
       "prayerName": {
@@ -36,6 +56,9 @@
   "homePage": "الرئيسية",
   "instructionsToSetLocationManually": "إذا كنت لا تريد استخدام موقعك الحالي ، فيمكنك تعيينه يدويًا بالانتقال إلى 'الإعدادات' > 'الموقع' > 'الموقع' وتحديد موقعك.",
   "inTime": "خلال",
+  "iqama": "اقامة الصلاة",
+  "iqamaTimeNotificationContent": "{delay} منذ صلاة {prayerName}",
+  "iqamaTimeNotificationTitle": "حان وقت اقامة صلاة {prayerName}",
   "isha": "العشاء",
   "jumuah": "الجمعة",
   "keepLocationUpdated": "إستمرار تحديث الموقع",
