@@ -123,6 +123,19 @@ Future<void> scheduleNotifications(
     var locale = context.read<SettingsBloc>().state.appLanguage;
     t = await AppLocalizations.delegate.load(locale);
   }
+
+  await scheduleNotificationsInner(
+    t,
+    notificationSettings,
+    days,
+  );
+}
+
+Future<void> scheduleNotificationsInner(
+  AppLocalizations t,
+  Map<PrayerType, NotificationSettings> notificationSettings,
+  List<DayPrayerTimes> days,
+) async {
   if (Platform.isIOS) {
     if (!(await requestIOSNotificationPermissionsAndGetCurrent())) {
       return;

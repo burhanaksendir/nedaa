@@ -52,7 +52,7 @@ dependencies:
   http: ^0.13.4
   open_mail_app: ^0.4.5
   url_launcher: ^6.0.20
-  sentry_flutter: ^6.4.0
+  sentry_flutter: ^6.9.1
   timezone: ^0.8.0
   slide_countdown: ^0.2.9
   motion_toast: ^2.1.6
@@ -60,7 +60,9 @@ dependencies:
   flutter_native_splash: ^2.2.7
   sqflite: ^2.0.2+1
   path: ^1.8.1
-  flutter_local_notifications: ^10.0.0-dev.16
+  flutter_local_notifications: ^10.0.0-dev.20
+  workmanager: ^0.5.0
+  device_info_plus: ^4.0.1
   percent_indicator: ^4.2.2
   liquid_pull_to_refresh: ^3.0.1 
 

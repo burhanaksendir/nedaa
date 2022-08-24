@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -20,6 +22,69 @@ import 'package:device_preview/device_preview.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:timezone/data/latest_all.dart' as tz_init;
+import 'package:workmanager/workmanager.dart';
+
+const taskId = 'io.nedaa.schedule';
+
+@pragma('vm:entry-point')
+void callbackDispatcher() {
+  Workmanager().executeTask((task, inputData) async {
+    try {
+      if (task == taskId && Platform.isAndroid) {
+        debugPrint('android task $task');
+        await _task();
+      } else if (task == Workmanager.iOSBackgroundTask) {
+        debugPrint('iOSBackgroundTask $task');
+        await _task();
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+      return Future.value(false);
+    }
+    return Future.value(true);
+  });
+}
+
+Future<bool> _task() async {
+  await SentryFlutter.init((options) {
+    options.dsn = const String.fromEnvironment('SENTRY_DSN');
+    // Set tracesSampleRate to 1.0 to capture 100% of transactions for performance monitoring.
+    // We recommend adjusting this value in production.
+    options.tracesSampleRate = 1.0;
+  }, appRunner: () async {
+    // send the crash report to sentry.io
+    await Sentry.captureEvent(
+      SentryEvent(
+        message: const SentryMessage(
+          'Workmanager task',
+        ),
+        level: SentryLevel.error,
+      ),
+    );
+    initNotifications();
+
+    tz_init.initializeTimeZones();
+
+    SettingsRepository settingsRepository = SettingsRepository(
+      await SharedPreferences.getInstance(),
+    );
+
+    var location = settingsRepository.getUserLocation();
+    var method = settingsRepository.getCalculationMethod();
+    var timezone = settingsRepository.getTimezone();
+    var prayerTimesRepository =
+        await PrayerTimesRepository.newRepo(location, method, timezone);
+    var prayerTimesState = await prayerTimesRepository
+        .getCurrentPrayerTimesState(location, method, timezone);
+
+    var lang = settingsRepository.getLanguage();
+    var t = await AppLocalizations.delegate.load(lang);
+
+    await scheduleNotificationsInner(t,
+        settingsRepository.getNotificationSettings(), prayerTimesState.tenDays);
+  });
+  return Future.value(true);
+}
 
 void main() async {
   final startTime = DateTime.now().millisecondsSinceEpoch;
@@ -28,6 +93,23 @@ void main() async {
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
   initNotifications();
+
+  Workmanager().initialize(
+      callbackDispatcher, // The top level function, aka callbackDispatcher
+      isInDebugMode:
+          true // If enabled it will post a notification whenever the task is running. Handy for debugging tasks
+      );
+  await Workmanager().cancelAll();
+  if (Platform.isAndroid) {
+    Workmanager().registerPeriodicTask(
+      taskId,
+      taskId,
+      frequency: const Duration(hours: 8),
+    );
+  }
+
+  // Wait 0.5 seconds before removing the splash screen
+  await Future.delayed(const Duration(milliseconds: 500));
 
   tz_init.initializeTimeZones();
 
