@@ -1,10 +1,13 @@
 import 'dart:io';
 
 import 'package:audioplayers/audioplayers.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nedaa/modules/settings/models/notification_settings.dart';
 import 'package:nedaa/modules/settings/models/prayer_type.dart';
+import 'package:nedaa/modules/settings/screens/iqama_delay_dialog.dart';
+import 'package:nedaa/utils/arabic_digits.dart';
 import 'package:settings_ui/settings_ui.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -96,7 +99,9 @@ class _PrayerSettingsScreenState extends State<PrayerSettingsScreen> {
               onUpdate();
             },
             title: Text(t.alertOn),
-            leading: const Icon(Icons.volume_up),
+            leading: settings.sound
+                ? const Icon(Icons.volume_up)
+                : const Icon(Icons.volume_off),
           ),
         ],
       ),
@@ -108,6 +113,31 @@ class _PrayerSettingsScreenState extends State<PrayerSettingsScreen> {
                 )
                 .toList()),
     ];
+  }
+
+  AbstractSettingsSection _iqamaDelaySection(
+      AppLocalizations t, IqamaSettings settings, void Function() onUpdate) {
+    return SettingsSection(
+      tiles: [
+        SettingsTile(
+          title: Text(t.iqamaDelayTime),
+          trailing:
+              Text(t.minuteShortForm(translateNumber(t, '${settings.delay}'))),
+          onPressed: (context) async {
+            final delay = await showCupertinoDialog(
+              barrierDismissible: true,
+              context: context,
+              builder: (context) =>
+                  IqamaDelayDialog(inputDelay: settings.delay),
+            );
+            if (delay != null) {
+              settings.delay = delay;
+              onUpdate();
+            }
+          },
+        ),
+      ],
+    );
   }
 
   @override
@@ -125,11 +155,12 @@ class _PrayerSettingsScreenState extends State<PrayerSettingsScreen> {
           );
     }
 
-    var allSections = _notificationSettingsSections(
+    var athanSections = _notificationSettingsSections(
       t!,
       prayerNotificationSettings.athanSettings,
       onUpdate,
     );
+    var iqamaSections = <AbstractSettingsSection>[];
 
     var isIqamaEnabled = prayerNotificationSettings.iqamaSettings.enabled;
     var iqamaEnableSection = SettingsSection(
@@ -141,28 +172,47 @@ class _PrayerSettingsScreenState extends State<PrayerSettingsScreen> {
 
             onUpdate();
           },
-          title: Text(t.iqama),
-          leading: const Icon(Icons.star),
+          title: Text(t.enableIqamaNotification),
+          leading: isIqamaEnabled
+              ? const Icon(Icons.notifications_active)
+              : const Icon(Icons.notifications_off),
         ),
       ],
     );
-    allSections.add(iqamaEnableSection);
+    iqamaSections.add(iqamaEnableSection);
 
     if (isIqamaEnabled) {
-      allSections.addAll(_notificationSettingsSections(
+      iqamaSections.add(_iqamaDelaySection(
+          t, prayerNotificationSettings.iqamaSettings, onUpdate));
+      iqamaSections.addAll(_notificationSettingsSections(
         t,
         prayerNotificationSettings.iqamaSettings.notificationSettings,
         onUpdate,
       ));
     }
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.prayerName),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.only(top: 8.0),
-        child: SettingsList(sections: allSections),
+    return DefaultTabController(
+      length: 2,
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(widget.prayerName),
+          bottom: TabBar(
+            tabs: [
+              Tab(text: t.athan),
+              Tab(text: t.iqama),
+            ],
+          ),
+        ),
+        body: TabBarView(
+          children: [
+            SettingsList(
+              sections: athanSections,
+            ),
+            SettingsList(
+              sections: iqamaSections,
+            ),
+          ],
+        ),
       ),
     );
   }

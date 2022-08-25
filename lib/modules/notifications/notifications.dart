@@ -10,6 +10,7 @@ import 'package:nedaa/modules/settings/bloc/settings_bloc.dart';
 import 'package:nedaa/modules/settings/bloc/user_settings_bloc.dart';
 import 'package:nedaa/modules/settings/models/notification_settings.dart';
 import 'package:nedaa/modules/settings/models/prayer_type.dart';
+import 'package:nedaa/utils/arabic_digits.dart';
 import 'package:nedaa/utils/helper.dart';
 import 'package:timezone/standalone.dart' as tz;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -232,7 +233,8 @@ Future<void> scheduleNotificationsInner(
         await _flutterLocalNotificationsPlugin.zonedSchedule(
           id,
           t.iqamaTimeNotificationTitle(prayerName),
-          t.iqamaTimeNotificationContent(iqamaSettings.delay, prayerName),
+          t.iqamaTimeNotificationContent(
+              translateNumber(t, iqamaSettings.delay.toString()), prayerName),
           iqamaTime,
           iqamaPlatformChannelDetails,
           androidAllowWhileIdle: true,
@@ -243,7 +245,7 @@ Future<void> scheduleNotificationsInner(
       }
 
       // reached the iOS schedule limit (64)
-      if (Platform.isIOS && counter == maxIOSNotification) {
+      if (counter == maxIOSNotification) {
         debugPrint('breaking with $counter notifications');
         breakOuterLoop = true;
         break;

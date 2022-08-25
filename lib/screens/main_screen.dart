@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nedaa/modules/notifications/notifications.dart';
 import 'package:nedaa/modules/prayer_times/bloc/prayer_times_bloc.dart';
 import 'package:nedaa/modules/settings/bloc/settings_bloc.dart';
+import 'package:nedaa/modules/settings/bloc/user_settings_bloc.dart';
 import 'package:nedaa/modules/settings/repositories/settings_repository.dart';
 import 'package:nedaa/modules/settings/screens/settings.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -81,7 +82,19 @@ class _MainScreenState extends State<MainScreen> {
                 opacity: 0.2,
               ),
             ),
-            child: const PrayerTimes(),
+            child: BlocBuilder<SettingsBloc, SettingsState>(
+              builder: (context, state) {
+                // render only if we have a location
+                var currentUserState = context.watch<UserSettingsBloc>().state;
+                if (currentUserState.location.location == null) {
+                  return const Center(
+                    // TODO: show error message to add a location
+                    child: CircularProgressIndicator(),
+                  );
+                }
+                return const PrayerTimes();
+              },
+            ),
           ),
         ),
       ),

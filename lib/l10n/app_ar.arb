@@ -3,7 +3,7 @@
     "placeholders": {
       "delay": {
         "example": "٥",
-        "type": "int"
+        "type": "String"
       },
       "prayerName": {
         "example": "الفجر",
@@ -35,10 +35,19 @@
       }
     }
   },
+  "@minuteShortForm": {
+    "placeholders": {
+      "minute": {
+        "example": "٥",
+        "type": "String"
+      }
+    }
+  },
   "alertOn": "تنبيه",
   "allowNotifications": "السماح بالإشعارات",
   "appTitle": "نِداء",
   "asr": "العصر",
+  "athan": "الأذان",
   "calculationMethods": "طرق الحساب",
   "cancel": "إلغاء",
   "city": "المدينة",
@@ -49,6 +58,7 @@
   "dark": "داكن",
   "defaultString": "الافتراضي",
   "duhur": "الظهر",
+  "enableIqamaNotification": "تفعيل تنبيه الاقامة",
   "error": "خطأ",
   "fajr": "الفجر",
   "friday": "الجمعة",
@@ -56,8 +66,9 @@
   "homePage": "الرئيسية",
   "instructionsToSetLocationManually": "إذا كنت لا تريد استخدام موقعك الحالي ، فيمكنك تعيينه يدويًا بالانتقال إلى 'الإعدادات' > 'الموقع' > 'الموقع' وتحديد موقعك.",
   "inTime": "خلال",
-  "iqama": "اقامة الصلاة",
-  "iqamaTimeNotificationContent": "{delay} منذ صلاة {prayerName}",
+  "iqama": "الاقامة",
+  "iqamaDelayTime": "وقت تنبيه الاقامة",
+  "iqamaTimeNotificationContent": "مضت {delay} دقائق منذ صلاة {prayerName}",
   "iqamaTimeNotificationTitle": "حان وقت اقامة صلاة {prayerName}",
   "isha": "العشاء",
   "jumuah": "الجمعة",
@@ -67,6 +78,7 @@
   "location": "الموقع",
   "locationSettings": "إعدادات الموقع",
   "maghrib": "المغرب",
+  "minuteShortForm": "{minute} د",
   "monday": "الإثنين",
   "noMailAppFound": "لم يتم العثور على تطبيق بريد إلكتروني",
   "noPrayersTimesFound": "لم يتم العثور على مواعيد الصلاة",
