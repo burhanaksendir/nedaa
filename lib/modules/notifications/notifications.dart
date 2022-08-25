@@ -178,10 +178,13 @@ Future<void> scheduleNotificationsInner(
 
   var counter = 0;
   var lastTime = now;
-  //TODO: update it to 63
-  // we save the last notification to remind the user to open the app.
-  var maxIOSNotification = 62;
+
+  // iOS only allows 64 scheduled notifications at a time
+  // we save the 64th notification to remind the user to open the app.
+  var maxIOSNotification = 63;
+  var breakOuterLoop = false;
   for (var day in days) {
+    if (breakOuterLoop) break;
     for (var e in day.prayerTimes.entries) {
       // ignore sunrise
       if (e.key == PrayerType.sunrise) {
@@ -221,7 +224,6 @@ Future<void> scheduleNotificationsInner(
       id++;
 
       var iqamaSettings = prayerNotificationSettings.iqamaSettings;
-
       if (iqamaSettings.enabled && counter < maxIOSNotification) {
         var iqamaPlatformChannelDetails =
             _buildNotificationDetails(iqamaSettings.notificationSettings);
@@ -242,6 +244,8 @@ Future<void> scheduleNotificationsInner(
 
       // reached the iOS schedule limit (64)
       if (Platform.isIOS && counter == maxIOSNotification) {
+        debugPrint('breaking with $counter notifications');
+        breakOuterLoop = true;
         break;
       }
       lastTime = prayerTime;
