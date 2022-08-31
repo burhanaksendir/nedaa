@@ -1,3 +1,5 @@
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 const arabicDigits = [
   "٠",
   "١",
@@ -26,4 +28,12 @@ String translateToArabicDigits(String input) {
     }
   }
   return String.fromCharCodes(outputCodeUnits);
+}
+
+String translateNumber(AppLocalizations t, String input) {
+  if (t.localeName.split('_')[0] == "ar") {
+    return translateToArabicDigits(input);
+  } else {
+    return input;
+  }
 }

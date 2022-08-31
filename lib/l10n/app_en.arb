@@ -1,4 +1,32 @@
 {
+  "@iqamaTimeNotificationContent": {
+    "placeholders": {
+      "delay": {
+        "example": "5",
+        "type": "String"
+      },
+      "prayerName": {
+        "example": "Fajr",
+        "type": "String"
+      }
+    }
+  },
+  "@iqamaTimeNotificationTitle": {
+    "placeholders": {
+      "prayerName": {
+        "example": "Fajr",
+        "type": "String"
+      }
+    }
+  },
+  "@minuteShortForm": {
+    "placeholders": {
+      "minute": {
+        "example": "5",
+        "type": "String"
+      }
+    }
+  },
   "@prayerTimeNotificationContent": {
     "placeholders": {
       "prayerName": {
@@ -19,6 +47,7 @@
   "allowNotifications": "Allow Notifications",
   "appTitle": "Nedaa",
   "asr": "Asr",
+  "athan": "Athan",
   "calculationMethods": "Calculation Methods",
   "cancel": "CANCEL",
   "city": "City",
@@ -29,6 +58,7 @@
   "dark": "Dark",
   "defaultString": "Default",
   "duhur": "Duhur",
+  "enableIqamaNotification": "Enable Iqama Notification",
   "error": "Error",
   "fajr": "Fajr",
   "friday": "Friday",
@@ -36,6 +66,10 @@
   "homePage": "Home",
   "instructionsToSetLocationManually": "If you do not want to use your current location, you can set it manually by going to 'Settings' > 'Location' > 'Location' and select your location.",
   "inTime": "in",
+  "iqama": "Iqama",
+  "iqamaDelayTime": "Iqama Time",
+  "iqamaTimeNotificationContent": "It has been {delay} mintues since {prayerName} Athan",
+  "iqamaTimeNotificationTitle": "Time for {prayerName} Iqama",
   "isha": "Isha",
   "jumuah": "Jumu’ah",
   "keepLocationUpdated": "Keep Updated",
@@ -44,6 +78,7 @@
   "location": "Location",
   "locationSettings": "Location Settings",
   "maghrib": "Maghrib",
+  "minuteShortForm": "{minute} min",
   "monday": "Monday",
   "noMailAppFound": "No mail apps installed",
   "noPrayersTimesFound": "No prayer times found",

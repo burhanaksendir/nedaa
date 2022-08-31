@@ -88,7 +88,7 @@ class UserSettingsState {
   final UserLocation location;
   final CalculationMethod calculationMethod;
   final bool keepUpdatingLocation;
-  final Map<PrayerType, NotificationSettings> notificationSettings;
+  final Map<PrayerType, PrayerNotificationSettings> notificationSettings;
   final String timezone;
 
   UserSettingsState({
@@ -122,7 +122,7 @@ class KeepUpdatingLocationEvent extends UserSettingsEvent {
 }
 
 class PrayerNotificationEvent extends UserSettingsEvent {
-  final NotificationSettings notificationSettings;
+  final PrayerNotificationSettings notificationSettings;
   final PrayerType prayerType;
 
   PrayerNotificationEvent(this.prayerType, this.notificationSettings);

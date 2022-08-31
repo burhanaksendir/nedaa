@@ -10,6 +10,7 @@ import 'package:nedaa/modules/settings/bloc/settings_bloc.dart';
 import 'package:nedaa/modules/settings/bloc/user_settings_bloc.dart';
 import 'package:nedaa/modules/settings/models/notification_settings.dart';
 import 'package:nedaa/modules/settings/models/prayer_type.dart';
+import 'package:nedaa/utils/arabic_digits.dart';
 import 'package:nedaa/utils/helper.dart';
 import 'package:timezone/standalone.dart' as tz;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -133,7 +134,7 @@ Future<void> scheduleNotifications(
 
 Future<void> scheduleNotificationsInner(
   AppLocalizations t,
-  Map<PrayerType, NotificationSettings> notificationSettings,
+  Map<PrayerType, PrayerNotificationSettings> notificationSettings,
   List<DayPrayerTimes> days,
 ) async {
   if (Platform.isIOS) {
@@ -168,8 +169,8 @@ Future<void> scheduleNotificationsInner(
   }
 
   if (days.isEmpty) return;
-  var platformChannelDetails =
-      _buildNotificationDetails(notificationSettings[PrayerType.fajr]!);
+  var platformChannelDetails = _buildNotificationDetails(
+      notificationSettings[PrayerType.fajr]!.athanSettings);
 
   var id = 0;
   var now = getCurrentTimeWithTimeZone(
@@ -179,21 +180,28 @@ Future<void> scheduleNotificationsInner(
   var counter = 0;
   var lastTime = now;
 
+  // iOS only allows 64 scheduled notifications at a time
+  // we save the 64th notification to remind the user to open the app.
+  var maxIOSNotification = 63;
+  var breakOuterLoop = false;
   for (var day in days) {
+    if (breakOuterLoop) break;
     for (var e in day.prayerTimes.entries) {
       // ignore sunrise
       if (e.key == PrayerType.sunrise) {
         continue;
       }
 
-      var platformChannelDetails =
-          _buildNotificationDetails(notificationSettings[e.key]!);
-      var d = tz.TZDateTime.from(
+      var prayerNotificationSettings = notificationSettings[e.key]!;
+
+      var athanPlatformChannelDetails =
+          _buildNotificationDetails(prayerNotificationSettings.athanSettings);
+      var prayerTime = tz.TZDateTime.from(
         e.value,
         tz.getLocation(day.timeZoneName),
       );
       ++id;
-      if (d.isBefore(now)) continue;
+      if (prayerTime.isBefore(now)) continue;
 
       String prayerName;
       // if weekday=5 (Friday) and prayer is duhur then prayerName=jumuah
@@ -207,18 +215,42 @@ Future<void> scheduleNotificationsInner(
         id,
         t.prayerTimeNotificationTitle(prayerName),
         t.prayerTimeNotificationContent(prayerName),
-        d,
-        platformChannelDetails,
+        prayerTime,
+        athanPlatformChannelDetails,
         androidAllowWhileIdle: true,
         uiLocalNotificationDateInterpretation:
             UILocalNotificationDateInterpretation.absoluteTime,
       );
       counter++;
-      // reached the end for iOS
-      if (counter == 63) {
+      id++;
+
+      var iqamaSettings = prayerNotificationSettings.iqamaSettings;
+      if (iqamaSettings.enabled && counter < maxIOSNotification) {
+        var iqamaPlatformChannelDetails =
+            _buildNotificationDetails(iqamaSettings.notificationSettings);
+        var iqamaTime = prayerTime.add(Duration(minutes: iqamaSettings.delay));
+
+        await _flutterLocalNotificationsPlugin.zonedSchedule(
+          id,
+          t.iqamaTimeNotificationTitle(prayerName),
+          t.iqamaTimeNotificationContent(
+              translateNumber(t, iqamaSettings.delay.toString()), prayerName),
+          iqamaTime,
+          iqamaPlatformChannelDetails,
+          androidAllowWhileIdle: true,
+          uiLocalNotificationDateInterpretation:
+              UILocalNotificationDateInterpretation.absoluteTime,
+        );
+        counter++;
+      }
+
+      // reached the iOS schedule limit (64)
+      if (counter == maxIOSNotification) {
+        debugPrint('breaking with $counter notifications');
+        breakOuterLoop = true;
         break;
       }
-      lastTime = d;
+      lastTime = prayerTime;
     }
   }
 

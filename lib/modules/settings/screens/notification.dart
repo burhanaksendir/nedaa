@@ -62,7 +62,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
         SettingsTile.switchTile(
           initialValue: permission,
           onToggle: (value) {
-            // open settingsS
+            // open settings
             openAppSettings().then((_) {
               Navigator.pop(context);
             });
