@@ -62,7 +62,7 @@ class SettingsRepository {
       case 'ar':
         return const Locale('ar');
       default:
-        return Locale(Platform.localeName.split('_')[0]);
+        return const Locale('en');
     }
   }
 
@@ -158,7 +158,7 @@ class SettingsRepository {
   }
 
   String getTimezone() {
-    return _getString('timezone') ?? '';
+    return _getString('timezone') ?? 'Etc/UTC';
   }
 
   //TODO: remove this method

@@ -51,20 +51,16 @@ Future<bool> _task() async {
     // Set tracesSampleRate to 1.0 to capture 100% of transactions for performance monitoring.
     // We recommend adjusting this value in production.
     options.tracesSampleRate = 1.0;
+    options.sampleRate = 1.0;
+    options.enableAutoPerformanceTracking = true;
+    options.autoAppStart = true;
+    options.enableAppLifecycleBreadcrumbs = true;
   }, appRunner: () async {
-    // send the crash report to sentry.io
-    await Sentry.captureEvent(
-      SentryEvent(
-        message: const SentryMessage(
-          'Workmanager task',
-        ),
-        level: SentryLevel.error,
-      ),
-    );
     initNotifications();
 
     tz_init.initializeTimeZones();
-
+    // get number of current schedule notifications
+    final notificationsNumBefore = (await getPendingNotifications()).length;
     SettingsRepository settingsRepository = SettingsRepository(
       await SharedPreferences.getInstance(),
     );
@@ -72,17 +68,53 @@ Future<bool> _task() async {
     var location = settingsRepository.getUserLocation();
     var method = settingsRepository.getCalculationMethod();
     var timezone = settingsRepository.getTimezone();
+
     var prayerTimesRepository =
         await PrayerTimesRepository.newRepo(location, method, timezone);
     var prayerTimesState = await prayerTimesRepository
         .getCurrentPrayerTimesState(location, method, timezone);
 
     var lang = settingsRepository.getLanguage();
-    var t = await AppLocalizations.delegate.load(lang);
 
+    // send the crash report to sentry.io
+    await Sentry.captureEvent(
+      SentryEvent(
+        message: SentryMessage(
+          'Not Actually an error Workmanager task',
+          params: [
+            'Number of notifications before: $notificationsNumBefore',
+            'location: $location',
+            'method: $method',
+            'timezone: $timezone',
+            'prayerTimesState: $prayerTimesState',
+            'lang: $lang',
+          ],
+        ),
+        level: SentryLevel.info,
+      ),
+    );
+
+    var t = await AppLocalizations.delegate.load(lang);
     await scheduleNotificationsInner(t,
         settingsRepository.getNotificationSettings(), prayerTimesState.tenDays);
+
+    final notificationsNumAfter = (await getPendingNotifications()).length;
+
+    // send the crash report to sentry.io
+    await Sentry.captureEvent(
+      SentryEvent(
+        message: SentryMessage(
+          'Not Actually an error Workmanager task number of notifications',
+          params: [
+            'notifications before: $notificationsNumBefore',
+            'notifications after: $notificationsNumAfter',
+          ],
+        ),
+        level: SentryLevel.info,
+      ),
+    );
   });
+
   return Future.value(true);
 }
 
@@ -226,6 +258,7 @@ class MyApp extends StatelessWidget {
           builder: (BuildContext context, SettingsState settingsState) {
             var fontFamily = context.read<SettingsBloc>().state.font;
             return MaterialApp(
+              navigatorObservers: [SentryNavigatorObserver()],
               onGenerateTitle: (context) {
                 Locale activeLocale = Localizations.localeOf(context);
                 debugPrint(
