@@ -6,6 +6,7 @@ import 'package:motion_toast/motion_toast.dart';
 import 'package:motion_toast/resources/arrays.dart';
 import 'package:nedaa/modules/prayer_times/bloc/prayer_times_bloc.dart';
 import 'package:nedaa/modules/settings/bloc/user_settings_bloc.dart';
+import 'package:nedaa/modules/settings/models/calculation_method.dart';
 import 'package:nedaa/modules/settings/models/user_location.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:nedaa/utils/services/rest_api_service.dart';
@@ -101,12 +102,17 @@ Future<UserLocation> updateUserLocation(BuildContext context, double latitude,
 
   mounted = isMounted();
   if (!mounted) return userLocation;
-  userSettingsBloc.add(
-    UserLocationEvent(userLocation, timezone),
-  );
 
-  context.read<PrayerTimesBloc>().add(CleanFetchPrayerTimesEvent(
-      userLocation, userSettingsState.calculationMethod, timezone));
+  var newCalculationMethod = CalculationMethod(-1);
+
+  userSettingsBloc
+    ..add(
+      UserLocationEvent(userLocation, timezone),
+    )
+    ..add(CalculationMethodEvent(newCalculationMethod));
+
+  context.read<PrayerTimesBloc>().add(
+      CleanFetchPrayerTimesEvent(userLocation, newCalculationMethod, timezone));
 
   return userLocation;
 }

@@ -1,5 +1,6 @@
 import 'package:geocoding/geocoding.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:nedaa/constants/default_timezone_calculation_method.dart';
 import 'package:nedaa/modules/prayer_times/models/prayer_times.dart';
 import 'package:nedaa/modules/settings/models/calculation_method.dart';
 import 'package:nedaa/modules/settings/models/prayer_type.dart';
@@ -13,7 +14,11 @@ String generateParams(Location location, CalculationMethod method, int? year,
       ((timezone != null)
           ? getCurrentTimeWithTimeZone(timezone).year
           : DateTime.now().year);
-  var calculationMethod = method.index != -1 ? '&method=${method.index}' : '';
+  var methodIndex = method.index;
+  if (methodIndex == -1) {
+    methodIndex = defaultMethod[timezone] ?? -1;
+  }
+  var calculationMethod = methodIndex != -1 ? '&method=$methodIndex' : '';
   return 'year=$selectedYear&annual=$annual&iso8601=true&latitude=${location.latitude}&longitude=${location.longitude}$calculationMethod';
 }
 
