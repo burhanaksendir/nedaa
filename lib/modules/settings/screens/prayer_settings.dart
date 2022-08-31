@@ -1,11 +1,14 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:nedaa/modules/prayer_times/bloc/prayer_times_bloc.dart';
 import 'package:nedaa/modules/settings/models/notification_settings.dart';
 import 'package:nedaa/modules/settings/models/prayer_type.dart';
+import 'package:nedaa/modules/settings/repositories/settings_repository.dart';
 import 'package:nedaa/modules/settings/screens/iqama_delay_dialog.dart';
 import 'package:nedaa/utils/arabic_digits.dart';
 import 'package:settings_ui/settings_ui.dart';
@@ -25,8 +28,31 @@ class PrayerSettingsScreen extends StatefulWidget {
 }
 
 class _PrayerSettingsScreenState extends State<PrayerSettingsScreen> {
+  Timer? _debounce;
   // or as a local variable
   final _audioCache = AudioCache();
+
+  @override
+  void dispose() {
+    var active = _debounce?.isActive ?? false;
+    _debounce?.cancel();
+
+    if (active) {
+      _triggerRefetch();
+    }
+
+    super.dispose();
+  }
+
+  Future<void> _triggerRefetch() async {
+    var settingsRepo = context.read<SettingsRepository>();
+    var userLocation = settingsRepo.getUserLocation();
+    var calculationMethod = settingsRepo.getCalculationMethod();
+    var timezone = settingsRepo.getTimezone();
+    context
+        .read<PrayerTimesBloc>()
+        .add(FetchPrayerTimesEvent(userLocation, calculationMethod, timezone));
+  }
 
   SettingsTile _ringtoneTile(
     BuildContext context,
@@ -153,6 +179,12 @@ class _PrayerSettingsScreenState extends State<PrayerSettingsScreen> {
             PrayerNotificationEvent(
                 widget.prayerType, prayerNotificationSettings),
           );
+      // reschedule notifications with the new settings.
+      // debounce scheduling to avoid scheduling multiple times in a short period of time.
+      if (_debounce?.isActive ?? false) _debounce!.cancel();
+      _debounce = Timer(const Duration(milliseconds: 1000), () async {
+        await _triggerRefetch();
+      });
     }
 
     var athanSections = _notificationSettingsSections(

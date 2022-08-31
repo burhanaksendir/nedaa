@@ -68,7 +68,7 @@
   "inTime": "خلال",
   "iqama": "الاقامة",
   "iqamaDelayTime": "وقت تنبيه الاقامة",
-  "iqamaTimeNotificationContent": "مضت {delay} دقائق منذ صلاة {prayerName}",
+  "iqamaTimeNotificationContent": "مضت {delay} دقائق منذ اذان {prayerName}",
   "iqamaTimeNotificationTitle": "حان وقت اقامة صلاة {prayerName}",
   "isha": "العشاء",
   "jumuah": "الجمعة",
