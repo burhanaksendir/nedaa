@@ -47,7 +47,7 @@
 		358D316428B6A2DE00472A8D /* Runner.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Runner.entitlements; sourceTree = "<group>"; };
 		35C8AEA728D21DE900E14B6F /* beep.m4r */ = {isa = PBXFileReference; lastKnownFileType = file; path = beep.m4r; sourceTree = "<group>"; };
 		35C8AEA928D21DF500E14B6F /* medina_athan.m4r */ = {isa = PBXFileReference; lastKnownFileType = file; path = medina_athan.m4r; sourceTree = "<group>"; };
-		35C8AEAD28D220D900E14B6F /* takbir.m4r */ = {isa = PBXFileReference; lastKnownFileType = file; name = takbir.m4r; path = ../../../../../Downloads/takbir.m4r; sourceTree = "<group>"; };
+		35C8AEAD28D220D900E14B6F /* takbir.m4r */ = {isa = PBXFileReference; lastKnownFileType = file; path = takbir.m4r; sourceTree = "<group>"; };
 		35D92D9E2877327500FEC8B3 /* athan8.m4r */ = {isa = PBXFileReference; lastKnownFileType = file; path = athan8.m4r; sourceTree = "<group>"; };
 		35D92D9F2877327500FEC8B3 /* knock.m4r */ = {isa = PBXFileReference; lastKnownFileType = file; path = knock.m4r; sourceTree = "<group>"; };
 		35D92DA22877328A00FEC8B3 /* athan6.m4r */ = {isa = PBXFileReference; lastKnownFileType = file; path = athan6.m4r; sourceTree = "<group>"; };
