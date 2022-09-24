@@ -8,6 +8,11 @@
 
 /* Begin PBXBuildFile section */
 		1498D2341E8E89220040F4C2 /* GeneratedPluginRegistrant.m in Sources */ = {isa = PBXBuildFile; fileRef = 1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */; };
+		3558854728D0CDCA00A4AF43 /* iqama1.m4r in Resources */ = {isa = PBXBuildFile; fileRef = 3558854628D0CDCA00A4AF43 /* iqama1.m4r */; };
+		3558854928D0D21400A4AF43 /* athan1.m4r in Resources */ = {isa = PBXBuildFile; fileRef = 3558854828D0D21400A4AF43 /* athan1.m4r */; };
+		35C8AEA828D21DE900E14B6F /* beep.m4r in Resources */ = {isa = PBXBuildFile; fileRef = 35C8AEA728D21DE900E14B6F /* beep.m4r */; };
+		35C8AEAA28D21DF500E14B6F /* medina_athan.m4r in Resources */ = {isa = PBXBuildFile; fileRef = 35C8AEA928D21DF500E14B6F /* medina_athan.m4r */; };
+		35C8AEAE28D220D900E14B6F /* takbir.m4r in Resources */ = {isa = PBXBuildFile; fileRef = 35C8AEAD28D220D900E14B6F /* takbir.m4r */; };
 		35D92DA02877327500FEC8B3 /* athan8.m4r in Resources */ = {isa = PBXBuildFile; fileRef = 35D92D9E2877327500FEC8B3 /* athan8.m4r */; };
 		35D92DA12877327500FEC8B3 /* knock.m4r in Resources */ = {isa = PBXBuildFile; fileRef = 35D92D9F2877327500FEC8B3 /* knock.m4r */; };
 		35D92DA32877328A00FEC8B3 /* athan6.m4r in Resources */ = {isa = PBXBuildFile; fileRef = 35D92DA22877328A00FEC8B3 /* athan6.m4r */; };
@@ -37,7 +42,12 @@
 		143556D7139CD8AE2035F3DE /* Pods-Runner.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.profile.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.profile.xcconfig"; sourceTree = "<group>"; };
 		1498D2321E8E86230040F4C2 /* GeneratedPluginRegistrant.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GeneratedPluginRegistrant.h; sourceTree = "<group>"; };
 		1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeneratedPluginRegistrant.m; sourceTree = "<group>"; };
+		3558854628D0CDCA00A4AF43 /* iqama1.m4r */ = {isa = PBXFileReference; lastKnownFileType = file; path = iqama1.m4r; sourceTree = "<group>"; };
+		3558854828D0D21400A4AF43 /* athan1.m4r */ = {isa = PBXFileReference; lastKnownFileType = file; path = athan1.m4r; sourceTree = "<group>"; };
 		358D316428B6A2DE00472A8D /* Runner.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Runner.entitlements; sourceTree = "<group>"; };
+		35C8AEA728D21DE900E14B6F /* beep.m4r */ = {isa = PBXFileReference; lastKnownFileType = file; path = beep.m4r; sourceTree = "<group>"; };
+		35C8AEA928D21DF500E14B6F /* medina_athan.m4r */ = {isa = PBXFileReference; lastKnownFileType = file; path = medina_athan.m4r; sourceTree = "<group>"; };
+		35C8AEAD28D220D900E14B6F /* takbir.m4r */ = {isa = PBXFileReference; lastKnownFileType = file; path = takbir.m4r; sourceTree = "<group>"; };
 		35D92D9E2877327500FEC8B3 /* athan8.m4r */ = {isa = PBXFileReference; lastKnownFileType = file; path = athan8.m4r; sourceTree = "<group>"; };
 		35D92D9F2877327500FEC8B3 /* knock.m4r */ = {isa = PBXFileReference; lastKnownFileType = file; path = knock.m4r; sourceTree = "<group>"; };
 		35D92DA22877328A00FEC8B3 /* athan6.m4r */ = {isa = PBXFileReference; lastKnownFileType = file; path = athan6.m4r; sourceTree = "<group>"; };
@@ -82,6 +92,11 @@
 			isa = PBXGroup;
 			children = (
 				35D92DA22877328A00FEC8B3 /* athan6.m4r */,
+				3558854828D0D21400A4AF43 /* athan1.m4r */,
+				35C8AEA728D21DE900E14B6F /* beep.m4r */,
+				35C8AEA928D21DF500E14B6F /* medina_athan.m4r */,
+				35C8AEAD28D220D900E14B6F /* takbir.m4r */,
+				3558854628D0CDCA00A4AF43 /* iqama1.m4r */,
 				35D92D9E2877327500FEC8B3 /* athan8.m4r */,
 				35D92D9F2877327500FEC8B3 /* knock.m4r */,
 			);
@@ -208,11 +223,16 @@
 			files = (
 				35D92DA12877327500FEC8B3 /* knock.m4r in Resources */,
 				97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */,
+				3558854928D0D21400A4AF43 /* athan1.m4r in Resources */,
 				35D92DA02877327500FEC8B3 /* athan8.m4r in Resources */,
 				35D92DA32877328A00FEC8B3 /* athan6.m4r in Resources */,
 				3B3967161E833CAA004F5970 /* AppFrameworkInfo.plist in Resources */,
+				3558854728D0CDCA00A4AF43 /* iqama1.m4r in Resources */,
+				35C8AEA828D21DE900E14B6F /* beep.m4r in Resources */,
 				97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */,
 				97C146FC1CF9000F007C117D /* Main.storyboard in Resources */,
+				35C8AEAE28D220D900E14B6F /* takbir.m4r in Resources */,
+				35C8AEAA28D21DF500E14B6F /* medina_athan.m4r in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

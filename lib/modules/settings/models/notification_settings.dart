@@ -1,33 +1,28 @@
 const athanRingtones = [
-  NotificationRingtone(displayName: 'knock, knock', fileName: 'knock.mp3'),
-  NotificationRingtone(
-    displayName: 'Athan 1',
-    fileName: 'athan8.mp3',
-  ),
-  NotificationRingtone(
-    displayName: 'Athan 2',
-    fileName: 'athan6.mp3',
-  ),
+  NotificationRingtone(displayId: 'knock', fileName: 'knock.mp3'),
+  NotificationRingtone(displayId: 'beep', fileName: 'beep.mp3'),
+  NotificationRingtone(displayId: 'athan1', fileName: 'athan1.mp3'),
+  NotificationRingtone(displayId: 'athan8', fileName: 'athan8.mp3'),
+  NotificationRingtone(displayId: 'athan2', fileName: 'athan6.mp3'),
+  NotificationRingtone(displayId: 'medina_athan', fileName: 'medina_athan.mp3'),
+  NotificationRingtone(displayId: 'takbir', fileName: 'takbir.mp3'),
 ];
 
 const iqamaRingtones = [
-  NotificationRingtone(displayName: 'knock, knock', fileName: 'knock.mp3'),
-  NotificationRingtone(
-    displayName: 'Athan 1',
-    fileName: 'athan8.mp3',
-  ),
-  NotificationRingtone(
-    displayName: 'Athan 2',
-    fileName: 'athan6.mp3',
-  ),
+  NotificationRingtone(displayId: 'knock', fileName: 'knock.mp3'),
+  NotificationRingtone(displayId: 'beep', fileName: 'beep.mp3'),
+  NotificationRingtone(displayId: 'iqama1', fileName: 'iqama1.mp3'),
+  NotificationRingtone(displayId: 'takbir', fileName: 'takbir.mp3'),
 ];
 
 class NotificationRingtone {
-  final String displayName;
+  final String displayId;
   final String fileName;
 
-  const NotificationRingtone(
-      {required this.displayName, required this.fileName});
+  const NotificationRingtone({
+    required this.displayId,
+    required this.fileName,
+  });
 }
 
 class PrayerNotificationSettings {
@@ -104,7 +99,7 @@ class NotificationSettings {
         sound: json["sound"],
         vibration: json["vibration"],
         ringtone: NotificationRingtone(
-          displayName: json["ringtoneName"],
+          displayId: json["ringtoneId"],
           fileName: json["ringtoneFileName"],
         ),
       );
@@ -112,7 +107,7 @@ class NotificationSettings {
   Map<String, dynamic> toJson() => {
         "sound": sound,
         "vibration": vibration,
-        "ringtoneName": ringtone.displayName,
+        "ringtoneId": ringtone.displayId,
         "ringtoneFileName": ringtone.fileName,
       };
 }

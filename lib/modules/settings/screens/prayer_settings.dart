@@ -5,6 +5,7 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:nedaa/constants/ringtones.dart';
 import 'package:nedaa/modules/prayer_times/bloc/prayer_times_bloc.dart';
 import 'package:nedaa/modules/settings/models/notification_settings.dart';
 import 'package:nedaa/modules/settings/models/prayer_type.dart';
@@ -61,9 +62,13 @@ class _PrayerSettingsScreenState extends State<PrayerSettingsScreen> {
     void Function() onUpdate,
     NotificationRingtone ringtone,
   ) {
+    var locale = Localizations.localeOf(context);
+    var translations = ringtoneTranslations[locale.languageCode] ??
+        ringtoneTranslations['en']!;
+
     return SettingsTile(
-      title: Text(ringtone.displayName),
-      trailing: ringtone.displayName == settings.ringtone.displayName
+      title: Text(translations[ringtone.displayId] ?? '??'),
+      trailing: ringtone.displayId == settings.ringtone.displayId
           ? const Icon(Icons.check)
           : null,
       onPressed: (context) async {
