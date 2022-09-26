@@ -103,6 +103,7 @@ class _PrayerSettingsScreenState extends State<PrayerSettingsScreen> {
   List<AbstractSettingsSection> _notificationSettingsSections(
       AppLocalizations t,
       NotificationSettings settings,
+      List<NotificationRingtone> ringtoneList,
       void Function() onUpdate) {
     return [
       // hide vibration for iOS users because it's not supported
@@ -138,7 +139,7 @@ class _PrayerSettingsScreenState extends State<PrayerSettingsScreen> {
       ),
       if (settings.sound)
         SettingsSection(
-            tiles: athanRingtones
+            tiles: ringtoneList
                 .map(
                   (e) => _ringtoneTile(context, t, settings, onUpdate, e),
                 )
@@ -195,6 +196,7 @@ class _PrayerSettingsScreenState extends State<PrayerSettingsScreen> {
     var athanSections = _notificationSettingsSections(
       t!,
       prayerNotificationSettings.athanSettings,
+      athanRingtones,
       onUpdate,
     );
     var iqamaSections = <AbstractSettingsSection>[];
@@ -224,6 +226,7 @@ class _PrayerSettingsScreenState extends State<PrayerSettingsScreen> {
       iqamaSections.addAll(_notificationSettingsSections(
         t,
         prayerNotificationSettings.iqamaSettings.notificationSettings,
+        iqamaRingtones,
         onUpdate,
       ));
     }

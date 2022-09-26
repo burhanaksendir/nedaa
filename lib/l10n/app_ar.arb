@@ -19,6 +19,14 @@
       }
     }
   },
+  "@minuteShortForm": {
+    "placeholders": {
+      "minute": {
+        "example": "٥",
+        "type": "String"
+      }
+    }
+  },
   "@prayerTimeNotificationContent": {
     "placeholders": {
       "prayerName": {
@@ -35,17 +43,10 @@
       }
     }
   },
-  "@minuteShortForm": {
-    "placeholders": {
-      "minute": {
-        "example": "٥",
-        "type": "String"
-      }
-    }
-  },
   "alertOn": "تنبيه",
   "allowNotifications": "السماح بالإشعارات",
   "appTitle": "نِداء",
+  "appVersion": "نسخة التطبيق",
   "asr": "العصر",
   "athan": "الأذان",
   "calculationMethods": "طرق الحساب",
