@@ -19,12 +19,14 @@ import 'package:nedaa/modules/settings/models/user_location.dart';
 import 'package:nedaa/modules/settings/repositories/settings_repository.dart';
 import 'package:nedaa/screens/main_screen.dart';
 import 'package:device_preview/device_preview.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:timezone/data/latest_all.dart' as tz_init;
 import 'package:workmanager/workmanager.dart';
 
 const taskId = 'io.nedaa.schedule';
+String appVersion = "";
 
 @pragma('vm:entry-point')
 void callbackDispatcher() {
@@ -59,8 +61,6 @@ Future<bool> _task() async {
     initNotifications();
 
     tz_init.initializeTimeZones();
-    // get number of current schedule notifications
-    final notificationsNumBefore = (await getPendingNotifications()).length;
     SettingsRepository settingsRepository = SettingsRepository(
       await SharedPreferences.getInstance(),
     );
@@ -76,43 +76,9 @@ Future<bool> _task() async {
 
     var lang = settingsRepository.getLanguage();
 
-    // send the crash report to sentry.io
-    await Sentry.captureEvent(
-      SentryEvent(
-        message: SentryMessage(
-          'Not Actually an error Workmanager task',
-          params: [
-            'Number of notifications before: $notificationsNumBefore',
-            'location: $location',
-            'method: $method',
-            'timezone: $timezone',
-            'prayerTimesState: $prayerTimesState',
-            'lang: $lang',
-          ],
-        ),
-        level: SentryLevel.info,
-      ),
-    );
-
     var t = await AppLocalizations.delegate.load(lang);
     await scheduleNotificationsInner(t,
         settingsRepository.getNotificationSettings(), prayerTimesState.tenDays);
-
-    final notificationsNumAfter = (await getPendingNotifications()).length;
-
-    // send the crash report to sentry.io
-    await Sentry.captureEvent(
-      SentryEvent(
-        message: SentryMessage(
-          'Not Actually an error Workmanager task number of notifications',
-          params: [
-            'notifications before: $notificationsNumBefore',
-            'notifications after: $notificationsNumAfter',
-          ],
-        ),
-        level: SentryLevel.info,
-      ),
-    );
   });
 
   return Future.value(true);
@@ -125,6 +91,9 @@ void main() async {
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
   initNotifications();
+
+  PackageInfo packageInfo = await PackageInfo.fromPlatform();
+  appVersion = packageInfo.version;
 
   Workmanager().initialize(
       callbackDispatcher, // The top level function, aka callbackDispatcher

@@ -1,6 +1,6 @@
 const _ringtoneTranslationsAr = {
   'knock': 'طرق, طرق',
-  'beep': 'Beep',
+  'beep': 'بيب, بيب',
   'athan1': 'اذان ١',
   'athan2': 'اذان ٢',
   'athan8': 'اذان ٣',

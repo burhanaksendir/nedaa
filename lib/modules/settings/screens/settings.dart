@@ -5,6 +5,7 @@ import 'package:geocoding/geocoding.dart';
 import 'package:nedaa/constants/app_constans.dart';
 import 'package:nedaa/constants/calculation_methods.dart';
 import 'package:nedaa/constants/theme_mode.dart';
+import 'package:nedaa/main.dart';
 import 'package:nedaa/modules/prayer_times/bloc/prayer_times_bloc.dart';
 import 'package:nedaa/modules/settings/bloc/settings_bloc.dart';
 import 'package:nedaa/modules/settings/bloc/user_settings_bloc.dart';
@@ -16,6 +17,7 @@ import 'package:nedaa/modules/settings/screens/languages_dialog.dart';
 import 'package:nedaa/modules/settings/screens/location.dart';
 import 'package:nedaa/modules/settings/screens/notification.dart';
 import 'package:nedaa/modules/settings/screens/theme_dialog.dart';
+import 'package:nedaa/utils/arabic_digits.dart';
 import 'package:open_mail_app/open_mail_app.dart';
 import 'package:settings_ui/settings_ui.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -293,6 +295,14 @@ class _SettingsState extends State<Settings> {
                   },
                 ),
               ],
+            ),
+            // add app version at the end
+            CustomSettingsSection(
+              child: Center(
+                  child: Text(
+                '${t.appVersion}\n ${translateNumber(t, appVersion)}',
+                textAlign: TextAlign.center,
+              )),
             ),
           ],
         ),

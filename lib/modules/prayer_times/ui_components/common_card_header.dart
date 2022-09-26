@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:hijri/hijri_calendar.dart';
 import 'package:nedaa/modules/settings/bloc/user_settings_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:nedaa/utils/helper.dart';
@@ -23,11 +24,19 @@ class _CommonCardHeaderState extends State<CommonCardHeader> {
     var tzDateTime = getCurrentTimeWithTimeZone(timezone);
     final todaysDate =
         DateFormat('EEEE\n d MMMM y', t!.localeName).format(tzDateTime);
+    HijriCalendar.setLocal(t.localeName);
+    final todaysDateHijri = HijriCalendar.fromDate(tzDateTime);
+    final todaysDateHijriAr = todaysDateHijri.toFormat('dd MMMM yyyy');
 
     return Column(
       children: <Widget>[
         Text(
           todaysDate,
+          textAlign: TextAlign.center,
+          style: Theme.of(context).textTheme.headline5,
+        ),
+        Text(
+          todaysDateHijriAr,
           textAlign: TextAlign.center,
           style: Theme.of(context).textTheme.headline5,
         ),
