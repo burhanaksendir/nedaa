@@ -31,7 +31,7 @@ class PrayerSettingsScreen extends StatefulWidget {
 class _PrayerSettingsScreenState extends State<PrayerSettingsScreen> {
   Timer? _debounce;
   // or as a local variable
-  final _audioCache = AudioCache();
+  final player = AudioPlayer();
 
   @override
   void dispose() {
@@ -75,9 +75,9 @@ class _PrayerSettingsScreenState extends State<PrayerSettingsScreen> {
         settings.ringtone = ringtone;
         onUpdate();
 
-        AudioPlayer player = await _audioCache.play(ringtone.fileName);
+        player.play(AssetSource(ringtone.fileName));
 
-        player.onPlayerCompletion.listen((event) {
+        player.onPlayerComplete.listen((event) {
           Navigator.pop(context);
         });
 
@@ -87,7 +87,7 @@ class _PrayerSettingsScreenState extends State<PrayerSettingsScreen> {
             return TextButton(
               child: Text(t.stop),
               onPressed: () {
-                if (player.state == PlayerState.PLAYING) {
+                if (player.state == PlayerState.playing) {
                   player.stop();
                   Navigator.pop(context);
                 }
