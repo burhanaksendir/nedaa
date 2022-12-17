@@ -43,7 +43,7 @@ dependencies:
   csc_picker: ^0.2.6
   geolocator: ^9.0.1
   geocoding: ^2.0.2
-  audioplayers: ^0.20.1
+  audioplayers: ^1.1.1
   flex_color_scheme: ^5.1.0
   device_preview: ^1.0.0
   auto_size_text: ^3.0.0
@@ -53,19 +53,19 @@ dependencies:
   open_mail_app: ^0.4.5
   url_launcher: ^6.0.20
   sentry_flutter: ^6.9.1
-  timezone: ^0.8.0
-  slide_countdown: ^0.2.9
+  timezone: ^0.9.0
+  slide_countdown: ^0.3.4
   motion_toast: ^2.1.6
   google_fonts: ^3.0.1
   flutter_native_splash: ^2.2.7
   sqflite: ^2.0.2+1
   path: ^1.8.1
-  flutter_local_notifications: ^10.0.0-dev.20
+  flutter_local_notifications: ^12.0.4
   workmanager: ^0.5.0
   percent_indicator: ^4.2.2
   liquid_pull_to_refresh: ^3.0.1 
   hijri: ^3.0.0
-  package_info_plus: ^1.4.3+1
+  package_info_plus: ^3.0.2
 
 
 dev_dependencies:
