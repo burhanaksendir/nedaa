@@ -154,8 +154,10 @@ class _PrayerTimerState extends State<PrayerTimer> {
                   (timerState == null || timerDuration == null)
                       ? Container()
                       : SlideCountdown(
-                          streamDuration:
-                              StreamDuration(timerDuration ?? Duration.zero),
+                          slideDirection: shouldCountUp
+                              ? SlideDirection.up
+                              : SlideDirection.down,
+                          duration: timerDuration ?? Duration.zero,
                           textStyle: Theme.of(context).textTheme.headline5 ??
                               const TextStyle(color: Colors.black),
                           decoration: BoxDecoration(

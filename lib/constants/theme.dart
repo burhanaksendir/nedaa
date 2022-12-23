@@ -30,6 +30,8 @@ var _light = FlexThemeData.light(
   ),
   visualDensity: FlexColorScheme.comfortablePlatformDensity,
   useMaterial3: true,
+  useMaterial3ErrorColors: true,
+  swapLegacyOnMaterial3: true,
 ).copyWith(pageTransitionsTheme: pageTransition);
 
 var _dark = FlexThemeData.dark(
@@ -56,6 +58,8 @@ var _dark = FlexThemeData.dark(
   ),
   visualDensity: FlexColorScheme.comfortablePlatformDensity,
   useMaterial3: true,
+  useMaterial3ErrorColors: true,
+  swapLegacyOnMaterial3: true,
 ).copyWith(pageTransitionsTheme: pageTransition);
 
 class CustomTheme {
