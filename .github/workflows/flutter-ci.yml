@@ -24,10 +24,6 @@ jobs:
       with:
          flutter-version: '3.3.10' # you can also specify exact version of flutter
          channel: 'stable'
-         cache: true
-         cache-key: flutter # optional, change this to force refresh cache
-         cache-path: ${{ runner.tool_cache }}/flutter # optional, change this to specify the cache path
-         architecture: x64 # optional, x64 or arm64
     
     - run: flutter doctor -v
     # Get flutter dependencies.
