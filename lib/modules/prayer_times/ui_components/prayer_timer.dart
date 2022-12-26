@@ -67,6 +67,11 @@ class _PrayerTimerState extends State<PrayerTimer> {
     var gone = now.difference(previousPrayerTime);
     percentage = (gone.inMilliseconds / total.inMilliseconds);
 
+    // if the percentage greater than 1 or less than 0, reset it to 0.0
+    if (percentage! > 1.0 || percentage! < 0.0) {
+      percentage = 0.0;
+    }
+
     if (allTimerState != null) {
       var defaultToShowPrevious =
           allTimerState.previous.timerDuration.inMinutes <= 30;
@@ -149,6 +154,9 @@ class _PrayerTimerState extends State<PrayerTimer> {
                   (timerState == null || timerDuration == null)
                       ? Container()
                       : SlideCountdown(
+                          slideDirection: shouldCountUp
+                              ? SlideDirection.up
+                              : SlideDirection.down,
                           duration: timerDuration ?? Duration.zero,
                           textStyle: Theme.of(context).textTheme.headline5 ??
                               const TextStyle(color: Colors.black),
