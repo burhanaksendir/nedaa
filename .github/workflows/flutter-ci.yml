@@ -16,8 +16,13 @@ jobs:
     steps:
     
     
-    # Setup Java environment in order to build the Android app.
     - uses: actions/checkout@v3
+    # Setup Java environment in order to build the Android app.
+    - uses: actions/setup-java@v2
+      with:
+        java-version: '17'
+        distribution: 'zulu'
+
    
     # Setup the flutter environment.
     - uses: subosito/flutter-action@v2
@@ -39,7 +44,7 @@ jobs:
     #- run: flutter test
     
     # Build ipa.
-    - run: flutter build ios --no-codesign
+    - run: flutter build ios --release --no-codesign
      # Build apk.
     - run: flutter build apk
     
