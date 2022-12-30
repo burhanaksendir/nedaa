@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:nedaa/modules/settings/bloc/user_settings_bloc.dart';
 import 'package:nedaa/modules/settings/screens/current_location_picker.dart';
 import 'package:settings_ui/settings_ui.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -17,9 +15,9 @@ class _LocationSettingsState extends State<LocationSettings> {
   Widget build(BuildContext context) {
     var t = AppLocalizations.of(context);
 
-    var currentUserState = context.watch<UserSettingsBloc>().state;
+    // var currentUserState = context.watch<UserSettingsBloc>().state;
     // TODO: listen to changes in the current user settings and update location accordingly
-    var keepUpdatingLocation = currentUserState.keepUpdatingLocation;
+    // var keepUpdatingLocation = currentUserState.keepUpdatingLocation;
 
     return Scaffold(
       appBar: AppBar(

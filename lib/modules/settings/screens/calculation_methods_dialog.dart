@@ -21,24 +21,23 @@ class CalculationMethodsDialog extends StatelessWidget {
           onPressed: () {
             Navigator.pop(context, CalculationMethod(entry.key));
           },
-          child:
-          methods.length - 1 == entry.key
+          child: methods.length - 1 == entry.key
               ? Text(entry.value)
               : Container(
-            decoration: BoxDecoration(
-              border: Border(
-                bottom: BorderSide(
-                  // use the theme's divider color using the Theme.of(context).dividerColor
-                  color: dividerColor,
-                  width: 0.5,
+                  decoration: BoxDecoration(
+                    border: Border(
+                      bottom: BorderSide(
+                        // use the theme's divider color using the Theme.of(context).dividerColor
+                        color: dividerColor,
+                        width: 0.5,
+                      ),
+                    ),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 4.0),
+                    child: Text(entry.value),
+                  ),
                 ),
-              ),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 4.0),
-              child: Text(entry.value),
-            ),
-          ),
         );
       }).toList(),
     );

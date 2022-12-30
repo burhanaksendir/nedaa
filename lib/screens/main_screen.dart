@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:nedaa/modules/notifications/notifications.dart';
 import 'package:nedaa/modules/prayer_times/bloc/prayer_times_bloc.dart';
 import 'package:nedaa/modules/settings/bloc/settings_bloc.dart';
 import 'package:nedaa/modules/settings/bloc/user_settings_bloc.dart';
