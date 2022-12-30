@@ -12,12 +12,10 @@ import 'package:nedaa/modules/settings/bloc/user_settings_bloc.dart';
 import 'package:nedaa/modules/settings/models/calculation_method.dart';
 import 'package:nedaa/modules/settings/models/user_location.dart';
 import 'package:nedaa/modules/settings/repositories/settings_repository.dart';
-import 'package:nedaa/modules/settings/screens/calculation_methods_dialog.dart';
-import 'package:nedaa/modules/settings/screens/languages_dialog.dart';
 import 'package:nedaa/modules/settings/screens/location.dart';
 import 'package:nedaa/modules/settings/screens/notification.dart';
-import 'package:nedaa/modules/settings/screens/theme_dialog.dart';
 import 'package:nedaa/utils/arabic_digits.dart';
+import 'package:nedaa/widgets/options_dialog.dart';
 import 'package:open_mail_app/open_mail_app.dart';
 import 'package:settings_ui/settings_ui.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -100,7 +98,10 @@ class _SettingsState extends State<Settings> {
                     final language = await showCupertinoDialog(
                       barrierDismissible: true,
                       context: context,
-                      builder: (context) => const LanguageDialog(),
+                      builder: (context) => OptionsDialog(
+                        title: t.language,
+                        entries: supportedLocales,
+                      ),
                     );
                     if (!mounted) return;
                     if (language is String) {
@@ -130,7 +131,10 @@ class _SettingsState extends State<Settings> {
                     final themeMode = await showCupertinoDialog(
                       barrierDismissible: true,
                       context: context,
-                      builder: (context) => const ThemeDialog(),
+                      builder: (context) => OptionsDialog(
+                          title: t.theme,
+                          entries: themeModes[locale.languageCode] ??
+                              themeModes['en']!),
                     );
                     if (!mounted) return;
                     if (themeMode is ThemeMode) {
@@ -168,13 +172,18 @@ class _SettingsState extends State<Settings> {
                       : currentCalculationMethodName),
                   leading: const Icon(Icons.access_time_filled),
                   onPressed: (context) async {
-                    final calculationMethod = await showCupertinoDialog(
+                    final result = await showCupertinoDialog(
                       barrierDismissible: true,
                       context: context,
-                      builder: (context) => const CalculationMethodsDialog(),
+                      builder: (context) => OptionsDialog(
+                        title: t.calculationMethod,
+                        entries: calculationMethods[locale.languageCode] ??
+                            calculationMethods['en']!,
+                      ),
                     );
                     if (!mounted) return;
-                    if (calculationMethod is CalculationMethod) {
+                    if (result is int) {
+                      var calculationMethod = CalculationMethod(result);
                       var userSettingsBloc = context.read<UserSettingsBloc>();
 
                       userSettingsBloc
