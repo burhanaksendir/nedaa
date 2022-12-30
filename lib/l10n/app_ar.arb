@@ -49,7 +49,7 @@
   "appVersion": "نسخة رقم",
   "asr": "العصر",
   "athan": "الأذان",
-  "calculationMethods": "طريقة الحساب",
+  "calculationMethod": "طريقة الحساب",
   "cancel": "إلغاء",
   "city": "المدينة",
   "contactUs": "اتصل بنا",
