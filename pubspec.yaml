@@ -57,7 +57,7 @@ dependencies:
   slide_countdown: ^0.4.0
   motion_toast: ^2.1.6
   google_fonts: ^3.0.1
-  flutter_native_splash: ^2.2.7
+  flutter_native_splash: ^2.2.16
   sqflite: ^2.0.2+1
   path: ^1.8.1
   flutter_local_notifications: ^13.0.0

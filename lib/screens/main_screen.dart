@@ -36,15 +36,6 @@ class _MainScreenState extends State<MainScreen> {
         bottom: false,
         child: Scaffold(
           extendBody: true,
-          floatingActionButton: FloatingActionButton(
-            onPressed: () async {
-              // show toast
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  content: Text(
-                      "Have ${(await getPendingNotifications()).length} notifications")));
-            },
-            child: const Icon(Icons.add),
-          ),
           appBar: AppBar(
             title: Text(t!.appTitle),
             actions: [

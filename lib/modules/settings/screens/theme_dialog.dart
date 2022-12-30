@@ -18,7 +18,22 @@ class ThemeDialog extends StatelessWidget {
           onPressed: () {
             Navigator.pop(context, themeMode);
           },
-          child: Text(themeModesNames[themeMode]!),
+          child: ThemeMode.values.last == themeMode
+              ? Text(themeModesNames[themeMode]!)
+              : Container(
+                  decoration: BoxDecoration(
+                    border: Border(
+                      bottom: BorderSide(
+                        color: Theme.of(context).dividerColor,
+                        width: 0.5,
+                      ),
+                    ),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 4.0),
+                    child: Text(themeModesNames[themeMode]!),
+                  ),
+                ),
         );
       }).toList(),
     );

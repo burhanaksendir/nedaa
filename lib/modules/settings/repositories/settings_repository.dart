@@ -160,10 +160,4 @@ class SettingsRepository {
   String getTimezone() {
     return _getString('timezone') ?? 'Etc/UTC';
   }
-
-  //TODO: remove this method
-  Future<void> clear() async {
-    var s = await _sharedPref.clear();
-    s == true ? exit(0) : null;
-  }
 }

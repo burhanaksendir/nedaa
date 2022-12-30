@@ -39,16 +39,17 @@ class _LocationSettingsState extends State<LocationSettings> {
                   ));
                 },
               ),
-              SettingsTile.switchTile(
-                onToggle: (bool value) {
-                  context
-                      .read<UserSettingsBloc>()
-                      .add(KeepUpdatingLocationEvent(value));
-                },
-                initialValue: keepUpdatingLocation,
-                title: Text(t.keepLocationUpdated),
-                leading: const Icon(Icons.loop_rounded),
-              ),
+              // TODO: hide untill we implement this
+              // SettingsTile.switchTile(
+              //   onToggle: (bool value) {
+              //     context
+              //         .read<UserSettingsBloc>()
+              //         .add(KeepUpdatingLocationEvent(value));
+              //   },
+              //   initialValue: keepUpdatingLocation,
+              //   title: Text(t.keepLocationUpdated),
+              //   leading: const Icon(Icons.loop_rounded),
+              // ),
             ]),
           ],
         ),

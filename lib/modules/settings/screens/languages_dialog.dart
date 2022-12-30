@@ -8,6 +8,7 @@ class LanguageDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var t = AppLocalizations.of(context);
+    var dividerColor = Theme.of(context).dividerColor;
     return SimpleDialog(
       title: Text(t!.language),
       children: supportedLocales.entries.map((entry) {
@@ -15,7 +16,19 @@ class LanguageDialog extends StatelessWidget {
           onPressed: () {
             Navigator.pop(context, entry.key);
           },
-          child: Text(entry.value),
+          child: supportedLocales.entries.last.key == entry.key
+              ? Text(entry.value)
+              : Container(
+                  decoration: BoxDecoration(
+                    border: Border(
+                      bottom: BorderSide(
+                        color: dividerColor,
+                        width: 0.5,
+                      ),
+                    ),
+                  ),
+                  child: Text(entry.value),
+                ),
         );
       }).toList(),
     );

@@ -12,15 +12,33 @@ class CalculationMethodsDialog extends StatelessWidget {
     var locale = Localizations.localeOf(context);
     var methods =
         calculationMethods[locale.languageCode] ?? calculationMethods['en']!;
+    var dividerColor = Theme.of(context).dividerColor;
 
     return SimpleDialog(
-      title: Text(t!.calculationMethods),
+      title: Text(t!.calculationMethod),
       children: methods.entries.map((entry) {
         return SimpleDialogOption(
           onPressed: () {
             Navigator.pop(context, CalculationMethod(entry.key));
           },
-          child: Text(entry.value),
+          child:
+          methods.length - 1 == entry.key
+              ? Text(entry.value)
+              : Container(
+            decoration: BoxDecoration(
+              border: Border(
+                bottom: BorderSide(
+                  // use the theme's divider color using the Theme.of(context).dividerColor
+                  color: dividerColor,
+                  width: 0.5,
+                ),
+              ),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 4.0),
+              child: Text(entry.value),
+            ),
+          ),
         );
       }).toList(),
     );
