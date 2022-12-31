@@ -1,9 +1,11 @@
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:nedaa/constants/default_timezone_calculation_method.dart';
 import 'package:nedaa/modules/prayer_times/models/prayer_times.dart';
 import 'package:nedaa/modules/settings/models/calculation_method.dart';
 import 'package:nedaa/modules/settings/models/prayer_type.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:timezone/standalone.dart' as tz;
 import 'dart:async';
 import 'dart:io';
@@ -108,4 +110,40 @@ String duhurOrJumuah(int weekday, AppLocalizations t) {
     return t.jumuah;
   }
   return t.duhur;
+}
+
+// Get package info string
+Future<String> getPackageInfo() async {
+  PackageInfo packageInfo = await PackageInfo.fromPlatform();
+
+  return 'Version: ${packageInfo.version}+${packageInfo.buildNumber}';
+}
+
+// Get device info string
+Future<String> getDeviceInfo() async {
+  DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+  var deviceData = 'Unknown';
+
+  if (Platform.isAndroid) {
+    AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+    var model = androidInfo.model;
+    var version = androidInfo.version;
+    deviceData = '$model $version';
+  } else if (Platform.isIOS) {
+    IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
+    var systemVersion = iosInfo.systemVersion;
+    var model = iosInfo.model;
+    var localizedModel = iosInfo.localizedModel;
+    deviceData = '$systemVersion $model $localizedModel';
+  }
+
+  return deviceData;
+}
+
+String resolveDeviceLocale() {
+  var locale = Platform.localeName;
+  if (locale.contains('_')) {
+    locale = locale.split('_')[0];
+  }
+  return locale;
 }
