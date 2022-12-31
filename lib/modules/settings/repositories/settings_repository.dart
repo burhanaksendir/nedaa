@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:nedaa/modules/settings/models/calculation_method.dart';
 import 'package:nedaa/modules/settings/models/notification_settings.dart';
@@ -159,11 +158,5 @@ class SettingsRepository {
 
   String getTimezone() {
     return _getString('timezone') ?? 'Etc/UTC';
-  }
-
-  //TODO: remove this method
-  Future<void> clear() async {
-    var s = await _sharedPref.clear();
-    s == true ? exit(0) : null;
   }
 }

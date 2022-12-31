@@ -66,19 +66,6 @@ class UserSettingsBloc extends Bloc<UserSettingsEvent, UserSettingsState> {
       );
       settingsRepository.setNotificationSettings(state.notificationSettings);
     });
-    //TODO: remove this
-    on<ClearDataEvent>((event, emit) {
-      emit(
-        UserSettingsState(
-          location: state.location,
-          calculationMethod: state.calculationMethod,
-          keepUpdatingLocation: state.keepUpdatingLocation,
-          notificationSettings: state.notificationSettings,
-          timezone: state.timezone,
-        ),
-      );
-      settingsRepository.clear();
-    });
   }
 
   final SettingsRepository settingsRepository;
@@ -132,9 +119,4 @@ class TimezoneEvent extends UserSettingsEvent {
   final String timezone;
 
   TimezoneEvent(this.timezone);
-}
-
-//TODO: remove this snippet after testing
-class ClearDataEvent extends UserSettingsEvent {
-  ClearDataEvent();
 }
