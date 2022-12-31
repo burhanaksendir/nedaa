@@ -4,6 +4,7 @@ import 'package:nedaa/modules/settings/models/calculation_method.dart';
 import 'package:nedaa/modules/settings/models/notification_settings.dart';
 import 'package:nedaa/modules/settings/models/prayer_type.dart';
 import 'package:nedaa/modules/settings/models/user_location.dart';
+import 'package:nedaa/utils/helper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SettingsRepository {
@@ -55,6 +56,12 @@ class SettingsRepository {
 
   Locale getLanguage() {
     var language = _getString('language');
+
+    // initally the language is null
+    // so we'll use the system language as the default language
+    // or default to english if the system language is not supported
+    language ??= resolveDeviceLocale();
+
     switch (language) {
       case 'en':
         return const Locale('en');

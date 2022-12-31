@@ -15,6 +15,7 @@ import 'package:nedaa/modules/settings/repositories/settings_repository.dart';
 import 'package:nedaa/modules/settings/screens/location.dart';
 import 'package:nedaa/modules/settings/screens/notification.dart';
 import 'package:nedaa/utils/arabic_digits.dart';
+import 'package:nedaa/utils/helper.dart';
 import 'package:nedaa/widgets/options_dialog.dart';
 import 'package:open_mail_app/open_mail_app.dart';
 import 'package:settings_ui/settings_ui.dart';
@@ -206,7 +207,16 @@ class _SettingsState extends State<Settings> {
                   title: const Text(email),
                   leading: const Icon(Icons.email),
                   onPressed: (context) async {
-                    EmailContent emailContent = EmailContent(to: [
+                    // Use device info plugin to get device & package info
+                    var deviceInfo = await getDeviceInfo();
+                    var packageInfo = await getPackageInfo();
+
+                    // append device & package info to email body at the end
+                    var emailBody =
+                        '\n\n Device Info: $deviceInfo\n$packageInfo';
+                    debugPrint(emailBody);
+                    EmailContent emailContent =
+                        EmailContent(body: emailBody, to: [
                       email,
                     ]);
                     // Android: Will open mail app or show native picker.
