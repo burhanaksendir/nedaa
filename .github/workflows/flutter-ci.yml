@@ -44,8 +44,10 @@ jobs:
     #- run: flutter test
     
     # Setup android keys for signing (dummpy keys to test signing and release build for android)
-    - run: printf "welcome\nwelcome\nyes\nyes\nyes\nyes\nyes\nyes\nyes" | keytool -genkey -v -keystore ./android/test.jks -keyalg RSA -keysize 2048 -validity 10000 -alias nedaa-android -storetype JKS
-    - run: printf "storePassword=welcome\nkeyPassword=welcome\nkeyAlias=nedaa-android\nstoreFile=../test.jks" > ./android/key.properties
+    - name: create keystore
+      run: printf "welcome\nwelcome\nyes\nyes\nyes\nyes\nyes\nyes\nyes" | keytool -genkey -v -keystore ./android/test.jks -keyalg RSA -keysize 2048 -validity 10000 -alias nedaa-android -storetype JKS
+    - name: create key.properties
+      run: printf "storePassword=welcome\nkeyPassword=welcome\nkeyAlias=nedaa-android\nstoreFile=../test.jks" > ./android/key.properties
     # Build apk.
     - run: flutter build apk
     # Build ipa.
