@@ -7,6 +7,7 @@ import 'package:intl/intl.dart';
 import 'package:nedaa/modules/prayer_times/bloc/prayer_times_bloc.dart';
 import 'package:nedaa/modules/settings/models/prayer_type.dart';
 import 'package:nedaa/utils/arabic_digits.dart';
+import 'package:nedaa/utils/custom_stream_duration.dart';
 import 'package:nedaa/utils/helper.dart';
 import 'package:nedaa/utils/timer.dart';
 import 'package:percent_indicator/percent_indicator.dart';
@@ -31,6 +32,8 @@ class _PrayerTimerState extends State<PrayerTimer> {
 
   // timer to refresh the progress every 5 seconds
   Timer? updatePercentage;
+
+  Key counterKey = UniqueKey();
 
   @override
   void initState() {
@@ -100,19 +103,35 @@ class _PrayerTimerState extends State<PrayerTimer> {
       PrayerType.isha: t.isha,
     };
 
-    var formatted = DateFormat("hh:mm a", t.localeName);
+    CustomStreamDuration streamDuration = CustomStreamDuration(
+      timerDuration ?? Duration.zero,
+      countUp: shouldCountUp,
+      onDone: () {
+        if (allTimerState != null) {
+          setState(() {
+            timerDuration = _getTimerDuration(
+                allTimerState, timerState?.shouldCountUp ?? false);
+            shouldCountUp = timerState?.shouldCountUp ?? false;
+            counterKey = UniqueKey();
+          });
+        }
+      },
+    );
 
+    var formatted = DateFormat("hh:mm a", t.localeName);
     return GestureDetector(
         onTap: () {
           toggleReturnTimer?.cancel();
 
           toggleReturnTimer = Timer(timerDelay, () {
             setState(() {
+              counterKey = UniqueKey();
               toggled = false;
             });
           });
 
           setState(() {
+            counterKey = UniqueKey();
             toggled = !toggled;
           });
         },
@@ -154,10 +173,11 @@ class _PrayerTimerState extends State<PrayerTimer> {
                   (timerState == null || timerDuration == null)
                       ? Container()
                       : SlideCountdown(
+                          streamDuration: streamDuration,
                           slideDirection: shouldCountUp
                               ? SlideDirection.up
                               : SlideDirection.down,
-                          duration: timerDuration ?? Duration.zero,
+                          key: counterKey,
                           textStyle: Theme.of(context).textTheme.headline5 ??
                               const TextStyle(color: Colors.black),
                           decoration: BoxDecoration(
@@ -166,17 +186,6 @@ class _PrayerTimerState extends State<PrayerTimer> {
                           ),
                           digitsNumber:
                               t.localeName == 'ar' ? arabicDigits : null,
-                          countUp: shouldCountUp,
-                          onDone: () {
-                            if (allTimerState != null) {
-                              setState(() {
-                                timerDuration = _getTimerDuration(allTimerState,
-                                    timerState?.shouldCountUp ?? false);
-                                shouldCountUp =
-                                    timerState?.shouldCountUp ?? false;
-                              });
-                            }
-                          },
                           textDirection:
                               Directionality.of(context) == ui.TextDirection.ltr
                                   ? ui.TextDirection.ltr
