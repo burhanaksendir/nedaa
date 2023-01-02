@@ -150,7 +150,7 @@ void main() async {
     },
     appRunner: () => runApp(
       DevicePreview(
-        enabled: !kReleaseMode,
+        enabled: false,
         builder: (context) => MyApp(
             settingsRepository: settingsRepository,
             prayerTimesRepository: prayerTimesRepository),
