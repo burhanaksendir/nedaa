@@ -52,12 +52,21 @@ checkPermissionsUpdateCurrentLocation(
 
     var mounted = isMounted();
     if (!mounted) return;
+    // Update user location with default location (Makkah)
+    // setting the location here since the click open app settings
+    // but not giving the permission
+    await updateUserLocation(context, 21.422510, 39.826168, isMounted);
+
+    if (!mounted) return;
+    // if user pressed ok
     if (result) {
       openAppSettings();
     } else {
       //do taost here
       MotionToast(
         primaryColor: Theme.of(context).primaryColor,
+        width: MediaQuery.of(context).size.width * 0.8,
+        height: MediaQuery.of(context).size.height * 0.2,
         icon: Icons.info,
         position: MotionToastPosition.center,
         description: Text(

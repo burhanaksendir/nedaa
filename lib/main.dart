@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -150,7 +149,7 @@ void main() async {
     },
     appRunner: () => runApp(
       DevicePreview(
-        enabled: !kReleaseMode,
+        enabled: false,
         builder: (context) => MyApp(
             settingsRepository: settingsRepository,
             prayerTimesRepository: prayerTimesRepository),
