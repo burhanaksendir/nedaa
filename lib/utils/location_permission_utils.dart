@@ -53,7 +53,7 @@ checkPermissionsUpdateCurrentLocation(
     var mounted = isMounted();
     if (!mounted) return;
     // Update user location with default location (Makkah)
-    // setting the loccation here since the click open app settings
+    // setting the location here since the click open app settings
     // but not giving the permission
     await updateUserLocation(context, 21.422510, 39.826168, isMounted);
 
