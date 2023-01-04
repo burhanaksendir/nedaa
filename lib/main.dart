@@ -122,6 +122,7 @@ void main() async {
   String timezone = settingsRepository.getTimezone();
   PrayerTimesRepository prayerTimesRepository =
       await PrayerTimesRepository.newRepo(location, method, timezone);
+  var sendCrashReports = settingsRepository.getSendCrashReports();
 
   final totalTime = DateTime.now().millisecondsSinceEpoch - startTime;
 
@@ -140,22 +141,38 @@ void main() async {
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
 
-  await SentryFlutter.init(
-    (options) {
+  if (sendCrashReports) {
+    await SentryFlutter.init((options) {
       options.dsn = const String.fromEnvironment('SENTRY_DSN');
       // Set tracesSampleRate to 1.0 to capture 100% of transactions for performance monitoring.
       // We recommend adjusting this value in production.
-      options.tracesSampleRate = 1.0;
-    },
-    appRunner: () => runApp(
+      options.tracesSampleRate = 0.5;
+      options.sampleRate = 0.5;
+      options.enableAutoPerformanceTracking = true;
+      options.autoAppStart = true;
+      options.enableAppLifecycleBreadcrumbs = true;
+    }, appRunner: () async {
+      runApp(
+        DevicePreview(
+          enabled: false,
+          builder: (context) => MyApp(
+            settingsRepository: settingsRepository,
+            prayerTimesRepository: prayerTimesRepository,
+          ),
+        ),
+      );
+    });
+  } else {
+    runApp(
       DevicePreview(
         enabled: false,
         builder: (context) => MyApp(
-            settingsRepository: settingsRepository,
-            prayerTimesRepository: prayerTimesRepository),
+          settingsRepository: settingsRepository,
+          prayerTimesRepository: prayerTimesRepository,
+        ),
       ),
-    ),
-  );
+    );
+  }
 }
 
 class MyApp extends StatelessWidget {

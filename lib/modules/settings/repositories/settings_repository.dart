@@ -166,4 +166,12 @@ class SettingsRepository {
   String getTimezone() {
     return _getString('timezone') ?? 'Etc/UTC';
   }
+
+  setSendCrashReports(bool value) async {
+    await _setBool('sendCrashReports', value);
+  }
+
+  bool getSendCrashReports() {
+    return _getBool('sendCrashReports') ?? true;
+  }
 }

@@ -94,6 +94,8 @@
   "requestLocationPermissionTitle": "Location Permission",
   "saturday": "Saturday",
   "selectMailApp": "Select Mail App",
+  "sendCrashReports": "Send Analytics",
+  "sendCrashReportsDescription": "We use crash logs to collect anonymous usage data to help us improve the app. No personal information is collected. You can disable it anytime. For more information, please visit our privacy policy.",
   "settings": "Settings",
   "since": "since",
   "state": "State",
