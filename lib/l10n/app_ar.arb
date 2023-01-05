@@ -92,6 +92,8 @@
   "prayerTimeNotificationTitle": "صلاة {prayerName}",
   "requestLocationPermissionContent": "يستخدم هذا التطبيق موقعك لتحديد مواقيت الصلاة الصحيحة تلقائيًا. هل ترغب في فتح إعدادات الموقع؟",
   "requestLocationPermissionTitle": "إذن تحديد الموقع",
+  "restart": "إعادة تشغيل",
+  "restartAppToApplyChanges": "يرجى إعادة تشغيل التطبيق لتطبيق التغييرات",
   "saturday": "السبت",
   "selectMailApp": "يرجى تحديد تطبيق بريد إلكتروني",
   "sendCrashReports": "إرسال تحليلات",

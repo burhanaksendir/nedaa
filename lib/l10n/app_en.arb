@@ -92,6 +92,8 @@
   "prayerTimeNotificationTitle": "{prayerName} Prayer",
   "requestLocationPermissionContent": "This app uses your location to automatically determine the correct prayer times. Would you like to open location settings?",
   "requestLocationPermissionTitle": "Location Permission",
+  "restart": "Restart",
+  "restartAppToApplyChanges": "Please restart the app to apply changes",
   "saturday": "Saturday",
   "selectMailApp": "Select Mail App",
   "sendCrashReports": "Send Analytics",

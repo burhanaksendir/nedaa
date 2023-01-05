@@ -16,6 +16,7 @@ import 'package:nedaa/modules/settings/screens/location.dart';
 import 'package:nedaa/modules/settings/screens/notification.dart';
 import 'package:nedaa/utils/arabic_digits.dart';
 import 'package:nedaa/utils/helper.dart';
+import 'package:nedaa/widgets/general_dialog.dart';
 import 'package:nedaa/widgets/options_dialog.dart';
 import 'package:open_mail_app/open_mail_app.dart';
 import 'package:settings_ui/settings_ui.dart';
@@ -324,6 +325,10 @@ class _SettingsState extends State<Settings> {
                       context
                           .read<SettingsBloc>()
                           .add(SendCrashReportsEvent(sendCrashReports));
+                      // show restart dialog to apply changes
+                      customAlert(
+                          context, t.restart, t.restartAppToApplyChanges,
+                          showOk: false, showCancel: false);
                     },
                   ),
                 ],
