@@ -16,6 +16,7 @@ import 'package:nedaa/modules/settings/screens/location.dart';
 import 'package:nedaa/modules/settings/screens/notification.dart';
 import 'package:nedaa/utils/arabic_digits.dart';
 import 'package:nedaa/utils/helper.dart';
+import 'package:nedaa/widgets/general_dialog.dart';
 import 'package:nedaa/widgets/options_dialog.dart';
 import 'package:open_mail_app/open_mail_app.dart';
 import 'package:settings_ui/settings_ui.dart';
@@ -32,6 +33,7 @@ class Settings extends StatefulWidget {
 class _SettingsState extends State<Settings> {
   bool lockInBackground = false;
   bool notificationsEnabled = false;
+  bool sendCrashReports = true;
   static const email = 'support@nedaa.io';
   static const website = 'https://nedaa.io';
 
@@ -78,6 +80,8 @@ class _SettingsState extends State<Settings> {
 
     var themeModesNames = themeModes[locale.languageCode] ?? themeModes['en']!;
     var currentThemeMode = themeModesNames[currentTheme]!;
+
+    sendCrashReports = currentAppState.sendCrashReports;
 
     return SafeArea(
       child: Scaffold(
@@ -287,6 +291,48 @@ class _SettingsState extends State<Settings> {
                 '${t.appVersion}\n ${translateNumber(t, appVersion)}',
                 textAlign: TextAlign.center,
               )),
+            ),
+            CustomSettingsSection(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  IconButton(
+                    icon: const Icon(Icons.analytics),
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (_) {
+                          return AlertDialog(
+                            title: Text(t.sendCrashReports),
+                            content: Text(t.sendCrashReportsDescription),
+                            actions: [
+                              TextButton(
+                                child: Text(t.ok),
+                                onPressed: () => Navigator.of(context).pop(),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    },
+                  ),
+                  Switch(
+                    value: sendCrashReports,
+                    onChanged: (value) {
+                      setState(() {
+                        sendCrashReports = value;
+                      });
+                      context
+                          .read<SettingsBloc>()
+                          .add(SendCrashReportsEvent(sendCrashReports));
+                      // show restart dialog to apply changes
+                      customAlert(
+                          context, t.restart, t.restartAppToApplyChanges,
+                          showOk: false, showCancel: false);
+                    },
+                  ),
+                ],
+              ),
             ),
           ],
         ),

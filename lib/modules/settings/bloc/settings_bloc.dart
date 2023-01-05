@@ -20,6 +20,7 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
             appTheme: settingsRepository.getTheme(),
             isFirstRun: settingsRepository.isFirstRun(),
             font: settingsRepository.getFont(),
+            sendCrashReports: settingsRepository.getSendCrashReports(),
           ),
         ) {
     on<LanguageEvent>(
@@ -32,6 +33,7 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
           font: font,
           appTheme: state.appTheme,
           isFirstRun: state.isFirstRun,
+          sendCrashReports: state.sendCrashReports,
         ));
       },
     );
@@ -42,6 +44,7 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
           appTheme: event.theme,
           font: state.font,
           isFirstRun: state.isFirstRun,
+          sendCrashReports: state.sendCrashReports,
         )),
         settingsRepository.setTheme(event.theme)
       },
@@ -53,8 +56,21 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
           appTheme: state.appTheme,
           font: state.font,
           isFirstRun: false,
+          sendCrashReports: state.sendCrashReports,
         )),
         settingsRepository.setIsFirstRun(false)
+      },
+    );
+    on<SendCrashReportsEvent>(
+      (event, emit) => {
+        emit(SettingsState(
+          appLanguage: state.appLanguage,
+          appTheme: state.appTheme,
+          font: state.font,
+          isFirstRun: state.isFirstRun,
+          sendCrashReports: event.sendCrashReports,
+        )),
+        settingsRepository.setSendCrashReports(state.sendCrashReports)
       },
     );
   }
@@ -67,12 +83,14 @@ class SettingsState {
   final ThemeMode appTheme;
   final bool isFirstRun;
   final String font;
+  final bool sendCrashReports;
 
   SettingsState(
       {required this.appLanguage,
       required this.appTheme,
       required this.isFirstRun,
-      required this.font});
+      required this.font,
+      required this.sendCrashReports});
 }
 
 class SettingsEvent {}
@@ -91,4 +109,9 @@ class ThemeEvent extends SettingsEvent {
 
 class FirstRunEvent extends SettingsEvent {
   FirstRunEvent();
+}
+
+class SendCrashReportsEvent extends SettingsEvent {
+  final bool sendCrashReports;
+  SendCrashReportsEvent(this.sendCrashReports);
 }
