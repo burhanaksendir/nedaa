@@ -138,6 +138,11 @@ class SettingsRepository {
         }
       } else {
         settingsMap[type] = PrayerNotificationSettings.defaultValue();
+
+        // override Maghrib default value to 5 minutes
+        if (type.name == PrayerType.maghrib.name) {
+          settingsMap[type]?.iqamaSettings.delay = 5;
+        }
       }
     }
     return settingsMap;
