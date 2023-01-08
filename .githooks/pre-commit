@@ -1,3 +1,16 @@
 #!/bin/bash
-				     #Maybe change this later
-exec flutter pub run dart_pre_commit  --outdated=none  --no-check-pull-up
+set -e
+
+
+# Run Flutter format
+echo "Running Flutter format..."
+flutter format .
+
+# Run Dart analyze
+echo "Running Dart analyze..."
+flutter analyze
+
+# Check outdated dependencies
+echo "Checking outdated dependencies..."
+flutter pub outdated --mode=null-safety
+
