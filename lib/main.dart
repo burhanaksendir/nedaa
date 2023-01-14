@@ -47,40 +47,53 @@ void callbackDispatcher() {
 }
 
 Future<bool> _task() async {
-  await SentryFlutter.init((options) {
-    options.dsn = const String.fromEnvironment('SENTRY_DSN');
-    // Set tracesSampleRate to 1.0 to capture 100% of transactions for performance monitoring.
-    // We recommend adjusting this value in production.
-    options.tracesSampleRate = 1.0;
-    options.sampleRate = 1.0;
-    options.enableAutoPerformanceTracking = true;
-    options.autoAppStart = true;
-    options.enableAppLifecycleBreadcrumbs = true;
-  }, appRunner: () async {
-    initNotifications();
+  // use sendCrashReports to determine if you want to send crash reports or not.
+  SettingsRepository settingsRepository = SettingsRepository(
+    await SharedPreferences.getInstance(),
+  );
+  var sendCrashReports = settingsRepository.getSendCrashReports();
 
-    tz_init.initializeTimeZones();
-    SettingsRepository settingsRepository = SettingsRepository(
-      await SharedPreferences.getInstance(),
-    );
-
-    var location = settingsRepository.getUserLocation();
-    var method = settingsRepository.getCalculationMethod();
-    var timezone = settingsRepository.getTimezone();
-
-    var prayerTimesRepository =
-        await PrayerTimesRepository.newRepo(location, method, timezone);
-    var prayerTimesState = await prayerTimesRepository
-        .getCurrentPrayerTimesState(location, method, timezone);
-
-    var lang = settingsRepository.getLanguage();
-
-    var t = await AppLocalizations.delegate.load(lang);
-    await scheduleNotificationsInner(t,
-        settingsRepository.getNotificationSettings(), prayerTimesState.tenDays);
-  });
-
+  if (sendCrashReports) {
+    await SentryFlutter.init((options) {
+      options.dsn = const String.fromEnvironment('SENTRY_DSN');
+      // Set tracesSampleRate to 1.0 to capture 100% of transactions for performance monitoring.
+      // We recommend adjusting this value in production.
+      options.tracesSampleRate = 0.3;
+      options.sampleRate = 0.3;
+      options.enableAutoPerformanceTracking = true;
+      options.autoAppStart = true;
+      options.enableAppLifecycleBreadcrumbs = true;
+    }, appRunner: () async {
+      await _backgroundRescheduleNotification();
+    });
+  } else {
+    await _backgroundRescheduleNotification();
+  }
   return Future.value(true);
+}
+
+Future<void> _backgroundRescheduleNotification() async {
+  initNotifications();
+
+  tz_init.initializeTimeZones();
+  SettingsRepository settingsRepository = SettingsRepository(
+    await SharedPreferences.getInstance(),
+  );
+
+  var location = settingsRepository.getUserLocation();
+  var method = settingsRepository.getCalculationMethod();
+  var timezone = settingsRepository.getTimezone();
+
+  var prayerTimesRepository =
+      await PrayerTimesRepository.newRepo(location, method, timezone);
+  var prayerTimesState = await prayerTimesRepository.getCurrentPrayerTimesState(
+      location, method, timezone);
+
+  var lang = settingsRepository.getLanguage();
+
+  var t = await AppLocalizations.delegate.load(lang);
+  await scheduleNotificationsInner(t,
+      settingsRepository.getNotificationSettings(), prayerTimesState.tenDays);
 }
 
 void main() async {
@@ -104,7 +117,7 @@ void main() async {
     Workmanager().registerPeriodicTask(
       taskId,
       taskId,
-      frequency: const Duration(hours: 8),
+      frequency: const Duration(days: 2),
     );
   }
 
@@ -146,8 +159,8 @@ void main() async {
       options.dsn = const String.fromEnvironment('SENTRY_DSN');
       // Set tracesSampleRate to 1.0 to capture 100% of transactions for performance monitoring.
       // We recommend adjusting this value in production.
-      options.tracesSampleRate = 0.5;
-      options.sampleRate = 0.5;
+      options.tracesSampleRate = 0.3;
+      options.sampleRate = 0.3;
       options.enableAutoPerformanceTracking = true;
       options.autoAppStart = true;
       options.enableAppLifecycleBreadcrumbs = true;
