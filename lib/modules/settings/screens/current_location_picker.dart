@@ -86,12 +86,18 @@ class _CurrentLocationPickerState extends State<CurrentLocationPicker> {
 
     return Scaffold(
       appBar: AppBar(
+        // change text style to match the app theme
         title: Text(t!.currentLocation),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(children: [
           CSCPicker(
+            // FIXME: find a better way to handle this. can't seem to find a way to control the bg color.
+            selectedItemStyle: TextStyle(
+                color: Theme.of(context).brightness == Brightness.dark
+                    ? Colors.black
+                    : Theme.of(context).textTheme.bodyText1!.color),
             currentCity: userLocation.city,
             currentState: userLocation.state,
             currentCountry: userLocation.country,
