@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:nedaa/modules/settings/models/calculation_method.dart';
 import 'package:nedaa/modules/settings/models/notification_settings.dart';
@@ -176,7 +177,9 @@ class SettingsRepository {
     await _setBool('sendCrashReports', value);
   }
 
+// TODO: return false only if the app was installed from playstore
   bool getSendCrashReports() {
-    return _getBool('sendCrashReports') ?? true;
+    var value = _getBool('sendCrashReports');
+    return value == null ? (Platform.isAndroid ? false : true) : true;
   }
 }
