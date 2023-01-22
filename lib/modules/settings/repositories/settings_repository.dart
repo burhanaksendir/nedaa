@@ -180,6 +180,6 @@ class SettingsRepository {
 // TODO: return false only if the app was installed from playstore
   bool getSendCrashReports() {
     var value = _getBool('sendCrashReports');
-    return value == null ? (Platform.isAndroid ? false : true) : true;
+    return value ?? (Platform.isAndroid ? false : true);
   }
 }
