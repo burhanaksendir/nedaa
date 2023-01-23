@@ -131,6 +131,12 @@ class DBRepository {
     await open();
   }
 
+  Future<void> deleteAll() async {
+    if (db != null) {
+      await db?.delete(prayerTimesTable);
+    }
+  }
+
   Future<void> _deleteDatabase() async {
     if (db != null) {
       await deleteDatabase(db!.path);

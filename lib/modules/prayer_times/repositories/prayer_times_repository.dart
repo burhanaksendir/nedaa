@@ -36,8 +36,8 @@ class PrayerTimesRepository {
     return repo;
   }
 
-  Future<void> cleanCache() {
-    return db.resetDatabase();
+  Future<void> cleanCache() async {
+    await db.deleteAll();
   }
 
   Future<CurrentPrayerTimesState> getCurrentPrayerTimesState(

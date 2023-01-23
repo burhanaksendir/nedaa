@@ -21,6 +21,10 @@ class PrayerTimesBloc extends Bloc<PrayerTimesEvent, PrayerTimesState> {
 
   Future<void> _fetchPrayerTimes(event, emit) async {
     try {
+      if (event.location.location == null &&
+          (event.location.country == null || event.location.city == null)) {
+        return;
+      }
       var currentPrayerTimesState =
           await prayerTimesRepository.getCurrentPrayerTimesState(
         event.location,
@@ -75,8 +79,10 @@ class FetchPrayerTimesEvent extends PrayerTimesEvent {
   FetchPrayerTimesEvent(this.location, this.method, this.timezone);
 }
 
-class CleanFetchPrayerTimesEvent extends FetchPrayerTimesEvent {
-  CleanFetchPrayerTimesEvent(
-      UserLocation location, CalculationMethod method, String timezone)
-      : super(location, method, timezone);
+class CleanFetchPrayerTimesEvent extends PrayerTimesEvent {
+  UserLocation location;
+  CalculationMethod method;
+  String timezone;
+
+  CleanFetchPrayerTimesEvent(this.location, this.method, this.timezone);
 }

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:nedaa/modules/settings/models/calculation_method.dart';
 import 'package:nedaa/modules/settings/models/notification_settings.dart';
@@ -138,6 +139,11 @@ class SettingsRepository {
         }
       } else {
         settingsMap[type] = PrayerNotificationSettings.defaultValue();
+
+        // override Maghrib default value to 5 minutes
+        if (type.name == PrayerType.maghrib.name) {
+          settingsMap[type]?.iqamaSettings.delay = 5;
+        }
       }
     }
     return settingsMap;
@@ -171,7 +177,9 @@ class SettingsRepository {
     await _setBool('sendCrashReports', value);
   }
 
+// TODO: return false only if the app was installed from playstore
   bool getSendCrashReports() {
-    return _getBool('sendCrashReports') ?? true;
+    var value = _getBool('sendCrashReports');
+    return value ?? (Platform.isAndroid ? false : true);
   }
 }

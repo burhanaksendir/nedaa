@@ -12,6 +12,10 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:nedaa/utils/services/rest_api_service.dart';
 import 'package:nedaa/widgets/general_dialog.dart';
 
+Future<bool> checkLocationServiceEnabled() async {
+  return await Geolocator.isLocationServiceEnabled();
+}
+
 Future<bool> checkPermission(BuildContext context) async {
   LocationPermission permission = await Geolocator.checkPermission();
   switch (permission) {
@@ -39,7 +43,7 @@ Future<void> openAppSettings() async {
 checkPermissionsUpdateCurrentLocation(
     BuildContext context, bool Function() isMounted) async {
   var t = AppLocalizations.of(context);
-  if (await checkPermission(context)) {
+  if (await checkLocationServiceEnabled() && await checkPermission(context)) {
     Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.low);
     var mounted = isMounted();

@@ -1,18 +1,18 @@
 const athanRingtones = [
+  NotificationRingtone(displayId: 'takbir', fileName: 'takbir.mp3'),
   NotificationRingtone(displayId: 'knock', fileName: 'knock.mp3'),
   NotificationRingtone(displayId: 'beep', fileName: 'beep.mp3'),
   NotificationRingtone(displayId: 'athan1', fileName: 'athan1.mp3'),
   NotificationRingtone(displayId: 'athan8', fileName: 'athan8.mp3'),
   NotificationRingtone(displayId: 'athan2', fileName: 'athan6.mp3'),
   NotificationRingtone(displayId: 'medina_athan', fileName: 'medina_athan.mp3'),
-  NotificationRingtone(displayId: 'takbir', fileName: 'takbir.mp3'),
 ];
 
 const iqamaRingtones = [
+  NotificationRingtone(displayId: 'takbir', fileName: 'takbir.mp3'),
   NotificationRingtone(displayId: 'knock', fileName: 'knock.mp3'),
   NotificationRingtone(displayId: 'beep', fileName: 'beep.mp3'),
   NotificationRingtone(displayId: 'iqama1', fileName: 'iqama1.mp3'),
-  NotificationRingtone(displayId: 'takbir', fileName: 'takbir.mp3'),
 ];
 
 class NotificationRingtone {
