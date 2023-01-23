@@ -21,6 +21,10 @@ class PrayerTimesBloc extends Bloc<PrayerTimesEvent, PrayerTimesState> {
 
   Future<void> _fetchPrayerTimes(event, emit) async {
     try {
+      if (event.location.location == null &&
+          (event.location.country == null || event.location.city == null)) {
+        return;
+      }
       var currentPrayerTimesState =
           await prayerTimesRepository.getCurrentPrayerTimesState(
         event.location,
