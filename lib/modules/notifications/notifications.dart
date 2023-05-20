@@ -217,7 +217,7 @@ Future<void> scheduleNotificationsInner(
         t.prayerTimeNotificationContent(prayerName),
         prayerTime,
         athanPlatformChannelDetails,
-        androidAllowWhileIdle: true,
+        androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
         uiLocalNotificationDateInterpretation:
             UILocalNotificationDateInterpretation.absoluteTime,
       );
@@ -237,7 +237,7 @@ Future<void> scheduleNotificationsInner(
               translateNumber(t, iqamaSettings.delay.toString()), prayerName),
           iqamaTime,
           iqamaPlatformChannelDetails,
-          androidAllowWhileIdle: true,
+          androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
           uiLocalNotificationDateInterpretation:
               UILocalNotificationDateInterpretation.absoluteTime,
         );
@@ -261,7 +261,7 @@ Future<void> scheduleNotificationsInner(
     t.openAppReminderContent,
     lastTime.add(const Duration(minutes: 10)),
     platformChannelDetails,
-    androidAllowWhileIdle: true,
+    androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
     uiLocalNotificationDateInterpretation:
         UILocalNotificationDateInterpretation.absoluteTime,
   );

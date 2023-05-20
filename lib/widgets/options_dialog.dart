@@ -41,7 +41,7 @@ class OptionsDialog<T> extends StatelessWidget {
       ),
       child: DefaultTextStyle(
         style: DialogTheme.of(context).titleTextStyle ??
-            Theme.of(context).textTheme.headline6!,
+            Theme.of(context).textTheme.titleLarge!,
         child: Semantics(
           container: true,
           child: Text(title),
