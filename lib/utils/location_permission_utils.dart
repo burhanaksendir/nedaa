@@ -40,9 +40,11 @@ Future<void> openAppSettings() async {
   await Geolocator.openAppSettings();
 }
 
+// TODO: use GlobalKey to access the context
 checkPermissionsUpdateCurrentLocation(
     BuildContext context, bool Function() isMounted) async {
   var t = AppLocalizations.of(context);
+  final key = GlobalKey();
   if (await checkLocationServiceEnabled() && await checkPermission(context)) {
     Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.low);
@@ -51,8 +53,8 @@ checkPermissionsUpdateCurrentLocation(
     await updateUserLocation(
         context, position.latitude, position.longitude, isMounted);
   } else {
-    var result = await customAlert(context, t!.requestLocationPermissionTitle,
-        t.requestLocationPermissionContent);
+    var result = await customAlert(key.currentContext!,
+        t!.requestLocationPermissionTitle, t.requestLocationPermissionContent);
 
     var mounted = isMounted();
     if (!mounted) return;

@@ -33,12 +33,12 @@ class _CommonCardHeaderState extends State<CommonCardHeader> {
         Text(
           todaysDate,
           textAlign: TextAlign.center,
-          style: Theme.of(context).textTheme.headline5,
+          style: Theme.of(context).textTheme.headlineSmall,
         ),
         Text(
           todaysDateHijriAr,
           textAlign: TextAlign.center,
-          style: Theme.of(context).textTheme.headline5,
+          style: Theme.of(context).textTheme.headlineSmall,
         ),
         SizedBox(height: MediaQuery.of(context).size.height * 0.01),
         Row(
@@ -57,8 +57,8 @@ class _CommonCardHeaderState extends State<CommonCardHeader> {
             Text(
               currentUserCity ?? '',
               style: MediaQuery.of(context).size.width > 600
-                  ? Theme.of(context).textTheme.headline6
-                  : Theme.of(context).textTheme.headline5,
+                  ? Theme.of(context).textTheme.titleLarge
+                  : Theme.of(context).textTheme.headlineSmall,
             ),
             Padding(
               padding: MediaQuery.of(context).size == Size.zero

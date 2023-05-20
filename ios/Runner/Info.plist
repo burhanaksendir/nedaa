@@ -73,5 +73,7 @@
 	<false/>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>This app uses your location to provide accurate prayer times and reminders based on your current location. Your location data will be used while you are using the app and may also be used in the background to send you notifications about upcoming prayers. Your location data will not be shared with any third parties.</string>
+	<key>UIApplicationSupportsIndirectInputEvents</key>
+	<true/>
 </dict>
 </plist>

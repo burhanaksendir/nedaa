@@ -253,9 +253,10 @@ class _SettingsState extends State<Settings> {
                 ),
                 SettingsTile(
                   onPressed: (context) async {
+                    final key = GlobalKey();
                     if (!await launchUrl(Uri.parse(website))) {
                       showDialog(
-                        context: context,
+                        context: key.currentContext!,
                         builder: (_) {
                           return AlertDialog(
                             title: Text(t.error),

@@ -164,11 +164,11 @@ class _PrayerTimerState extends State<PrayerTimer> {
                   Text(
                     prayersTranslation[
                         timerState?.prayerType ?? PrayerType.fajr]!,
-                    style: Theme.of(context).textTheme.headline5,
+                    style: Theme.of(context).textTheme.headlineSmall,
                   ),
                   Text(
                     (timerState?.shouldCountUp ?? false) ? t.since : t.inTime,
-                    style: Theme.of(context).textTheme.headline5,
+                    style: Theme.of(context).textTheme.headlineSmall,
                   ),
                   (timerState == null || timerDuration == null)
                       ? Container()
@@ -178,8 +178,9 @@ class _PrayerTimerState extends State<PrayerTimer> {
                               ? SlideDirection.up
                               : SlideDirection.down,
                           key: counterKey,
-                          textStyle: Theme.of(context).textTheme.headline5 ??
-                              const TextStyle(color: Colors.black),
+                          textStyle:
+                              Theme.of(context).textTheme.headlineSmall ??
+                                  const TextStyle(color: Colors.black),
                           decoration: BoxDecoration(
                             color: Colors.transparent,
                             borderRadius: BorderRadius.circular(8),
@@ -195,7 +196,7 @@ class _PrayerTimerState extends State<PrayerTimer> {
                   Text(
                     formatted
                         .format(timerState?.timezonedTime ?? DateTime.now()),
-                    style: Theme.of(context).textTheme.headline5,
+                    style: Theme.of(context).textTheme.headlineSmall,
                   ),
                 ],
               ),

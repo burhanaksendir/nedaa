@@ -27,7 +27,7 @@ class _CurrentLocationPickerState extends State<CurrentLocationPicker> {
         location.country != null) {
       return Text(
         "${location.cityAddress}, ${location.country}",
-        style: Theme.of(context).textTheme.headline6,
+        style: Theme.of(context).textTheme.titleLarge,
       );
     } else {
       return Container();
@@ -72,7 +72,7 @@ class _CurrentLocationPickerState extends State<CurrentLocationPicker> {
         await locationFromAddress('$cityValue, $stateValue, $countryValue')
             .then((value) => value[0])
             .catchError((error) {
-      Future.error(error);
+      throw Future.error(error);
     });
     return location;
   }
@@ -97,7 +97,7 @@ class _CurrentLocationPickerState extends State<CurrentLocationPicker> {
             selectedItemStyle: TextStyle(
                 color: Theme.of(context).brightness == Brightness.dark
                     ? Colors.black
-                    : Theme.of(context).textTheme.bodyText1!.color),
+                    : Theme.of(context).textTheme.bodyLarge!.color),
             currentCity: userLocation.city,
             currentState: userLocation.state,
             currentCountry: userLocation.country,

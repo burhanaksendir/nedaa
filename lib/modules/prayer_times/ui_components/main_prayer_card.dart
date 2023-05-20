@@ -14,8 +14,8 @@ class MainPrayerCard extends StatefulWidget {
 class _MainPrayerCardState extends State<MainPrayerCard> {
   @override
   Widget build(BuildContext context) {
-    return PrayerTimesCard(
-      child: Stack(children: const [
+    return const PrayerTimesCard(
+      child: Stack(children: [
         CommonCardHeader(),
         Padding(
           padding: EdgeInsets.only(top: 32),

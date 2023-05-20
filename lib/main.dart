@@ -60,7 +60,7 @@ Future<bool> _task() async {
       // We recommend adjusting this value in production.
       options.tracesSampleRate = 0.3;
       options.sampleRate = 0.3;
-      options.enableAutoPerformanceTracking = true;
+      options.enableAutoPerformanceTracing = true;
       options.autoAppStart = true;
       options.enableAppLifecycleBreadcrumbs = true;
     }, appRunner: () async {
@@ -161,7 +161,7 @@ void main() async {
       // We recommend adjusting this value in production.
       options.tracesSampleRate = 0.3;
       options.sampleRate = 0.3;
-      options.enableAutoPerformanceTracking = true;
+      options.enableAutoPerformanceTracing = true;
       options.autoAppStart = true;
       options.enableAppLifecycleBreadcrumbs = true;
     }, appRunner: () async {
