@@ -1,5 +1,7 @@
 import 'dart:convert';
+import 'dart:io';
 
+import 'package:app_group_directory/app_group_directory.dart';
 import 'package:nedaa/modules/prayer_times/models/prayer_times.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -39,10 +41,20 @@ class DBDayPrayerTimes {
 
 class DBRepository {
   Database? db;
+  final String _appGroupId = 'group.io.nedaa.nedaaApp';
 
   Future<void> open() async {
     // Get a location using getDatabasesPath
     var databasesPath = await getDatabasesPath();
+    // TODO: delete the previous database and create a new one or move the database to the new location
+    // using the app group which is used to share data between the app and the widget
+    if (Platform.isIOS) {
+      final directory =
+          await AppGroupDirectory.getAppGroupDirectory(_appGroupId);
+      if (directory != null) {
+        databasesPath = directory.path;
+      }
+    }
     String path = p.join(databasesPath, dbName);
     await _deleteDatabase();
     db = await openDatabase(path, version: kVersion1,
