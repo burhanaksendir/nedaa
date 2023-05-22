@@ -4,7 +4,7 @@ import SQLite3
 
 
 
-struct PrayerData: Decodable {
+struct PrayersData: Decodable {
     let prayerTimes: PrayerTimes
     let date: String
     let calculationMethod: Int
@@ -20,11 +20,16 @@ struct PrayerTimes: Decodable {
     let Isha: String
 }
 
-func parsePrayerData(jsonString: String) -> PrayerData? {
+struct PrayerData: Decodable {
+    let name: String
+    let date: Date
+}
+
+func parsePrayerData(jsonString: String) -> PrayersData? {
     let data = jsonString.data(using: .utf8)
     let decoder = JSONDecoder()
     do {
-        let prayerData = try decoder.decode(PrayerData.self, from: data!)
+        let prayerData = try decoder.decode(PrayersData.self, from: data!)
         return prayerData
     } catch {
         print("Error decoding JSON: \(error)")
@@ -44,8 +49,7 @@ class DatabaseService {
     private var db: OpaquePointer?
     
     
-    
-    // Function to get timezone
+    // TODO: only do a query if the timezone is nil
     func getTimezone() -> String? {
         let query = "SELECT content from \(prayerTimesTable) LIMIT 1"
         let queryResult = executeSingleResultQuery(query)
@@ -53,15 +57,21 @@ class DatabaseService {
         return parsedData?.timezone
     }
     
-    // Function to get prayer times for a specific date
-    func getDayPrayerTimes(dateInt: Int) -> PrayerTimes? {
+    func getDayPrayerTimes(dateInt: Int) -> [PrayerData]? {
         let query = "SELECT content FROM \(prayerTimesTable) WHERE \(columnDate) = ?"
         let queryResult = executeSingleResultQuery(query, withParameter: Int32(dateInt))
         let parsedData = parsePrayerData(jsonString: queryResult ?? "")
-        return parsedData?.prayerTimes
+        let prayerTimes = [
+            PrayerData(name: "Fajr", date: convertStringToDate(timeString: (parsedData?.prayerTimes.Fajr ?? "") ) ?? Date()),
+            PrayerData(name: "Sunrise", date: convertStringToDate(timeString: (parsedData?.prayerTimes.Sunrise ?? "") ) ?? Date()),
+            PrayerData(name: "Dhuhr", date: convertStringToDate(timeString: (parsedData?.prayerTimes.Dhuhr ?? "") ) ?? Date()),
+            PrayerData(name: "Maghrib", date: convertStringToDate(timeString: (parsedData?.prayerTimes.Maghrib ?? "") ) ?? Date()),
+            PrayerData(name: "Asr", date: convertStringToDate(timeString: (parsedData?.prayerTimes.Asr ?? "") ) ?? Date()),
+            PrayerData(name: "Isha", date: convertStringToDate(timeString: (parsedData?.prayerTimes.Isha ?? "") ) ?? Date())
+        ]
+        return prayerTimes
     }
     
-    // Function to execute a query with a single result
     private func executeSingleResultQuery(_ query: String, withParameter parameter: Int32? = nil) -> String? {
         if !openDB() { return nil }
         // Closing db: not closing it will cause an issue when we open the app
@@ -91,7 +101,7 @@ class DatabaseService {
     }
     
     
-    func parsePrayerData(jsonString: String) -> PrayerData? {
+    func parsePrayerData(jsonString: String) -> PrayersData? {
         guard let data = jsonString.data(using: .utf8) else {
             return nil
         }
@@ -99,7 +109,7 @@ class DatabaseService {
         do {
             let decoder = JSONDecoder()
             decoder.dateDecodingStrategy = .iso8601
-            let prayerData = try decoder.decode(PrayerData.self, from: data)
+            let prayerData = try decoder.decode(PrayersData.self, from: data)
             return prayerData
         } catch {
             debugPrint("Error parsing JSON: \(error)")
@@ -107,9 +117,15 @@ class DatabaseService {
         }
     }
     
+    func convertStringToDate(timeString: String, format: String = "HH:mm") -> Date? {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
+        let date = dateFormatter.date(from: timeString)
+        return date
+    }
     
     
-    // Function to open the database connection
+    
     private func openDB() -> Bool {
         let fileManager = FileManager.default
         let directory = fileManager.containerURL(forSecurityApplicationGroupIdentifier: appGroupId)

@@ -1,11 +1,11 @@
 import Foundation
 
 
+
 struct PrayerDataService {
     var dbService = DatabaseService()
     
-    // Function to get prayer times for a specific date
-    func getDayPrayerTimes(for date: Date) -> PrayerTimes? {
+    func getDayPrayerTimes(for date: Date) -> [PrayerData]? {
         guard let timeZoneString = dbService.getTimezone(),
               let timeZone = TimeZone(identifier: timeZoneString) else {
             print("Error: Could not retrieve timezone")
@@ -20,8 +20,7 @@ struct PrayerDataService {
         return prayerTimes
     }
     
-    // Function to get today's prayer times
-    func getTodaysPrayerTimes() -> PrayerTimes? {
+    func getTodaysPrayerTimes() -> [PrayerData]? {
         guard let timeZoneString = dbService.getTimezone(),
               let timeZone = TimeZone(identifier: timeZoneString) else {
             print("Error: Could not retrieve timezone")
@@ -31,8 +30,7 @@ struct PrayerDataService {
         return getDayPrayerTimes(for: today)
     }
     
-    // Function to get tomorrow's prayer times
-    func getTomorrowsPrayerTimes() -> PrayerTimes? {
+    func getTomorrowsPrayerTimes() -> [PrayerData]? {
         guard let timeZoneString = dbService.getTimezone(),
               let timeZone = TimeZone(identifier: timeZoneString),
               let tomorrow = Calendar.current.date(byAdding: .day, value: 1, to: Date().toLocalTime(timezone: timeZone)) else {
@@ -41,9 +39,8 @@ struct PrayerDataService {
         }
         return getDayPrayerTimes(for: tomorrow)
     }
-
-    // Function to get yesterday's prayer times
-    func getYesterdaysPrayerTimes() -> PrayerTimes? {
+    
+    func getYesterdaysPrayerTimes() -> [PrayerData]? {
         guard let timeZoneString = dbService.getTimezone(),
               let timeZone = TimeZone(identifier: timeZoneString),
               let yesterday = Calendar.current.date(byAdding: .day, value: -1, to: Date().toLocalTime(timezone: timeZone)) else {
@@ -52,15 +49,42 @@ struct PrayerDataService {
         }
         return getDayPrayerTimes(for: yesterday)
     }
-
-    // Function to get date as an integer in the format YYYYMMDD
+    
+    func getNextPrayer() -> PrayerData? {
+        let currentDate = Date()
+        guard let prayerTimes = getTodaysPrayerTimes() else {
+            return nil
+        }
+        
+        
+        
+        // Sort the prayer times by date
+        let sortedPrayerTimes = prayerTimes.sorted(by: { $0.date < $1.date })
+        
+        // Find the first prayer time that is later than the current date
+        for prayer in sortedPrayerTimes {
+            if prayer.date > currentDate {
+                return prayer
+            }
+        }
+        
+        // If no prayer times are later than the current date, return the first prayer time of the next day
+        guard let firstPrayerNextDay = getTomorrowsPrayerTimes()?.sorted(by: { $0.date < $1.date }).first else {
+            // Handle error here
+            return nil
+        }
+        
+        return firstPrayerNextDay
+    }
+    
+    
     private func getDateInt(for date: Date, in timeZone: TimeZone) -> Int {
         var calendar = Calendar.current
         calendar.timeZone = timeZone
         let components = calendar.dateComponents([.year, .month, .day], from: date)
         return components.year! * 10000 + components.month! * 100 + components.day!
     }
-
+    
 }
 
 
