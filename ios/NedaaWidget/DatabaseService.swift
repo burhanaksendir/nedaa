@@ -48,13 +48,14 @@ class DatabaseService {
     
     private var db: OpaquePointer?
     
+    var timeZone: String = ""
     
-    // TODO: only do a query if the timezone is nil
-    func getTimezone() -> String? {
+    
+    func getTimezone()  {
         let query = "SELECT content from \(prayerTimesTable) LIMIT 1"
         let queryResult = executeSingleResultQuery(query)
         let parsedData = parsePrayerData(jsonString: queryResult ?? "")
-        return parsedData?.timezone
+        timeZone =  parsedData?.timezone ?? ""
     }
     
     func getDayPrayerTimes(dateInt: Int) -> [PrayerData]? {

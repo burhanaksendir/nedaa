@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:home_widget/home_widget.dart';
 import 'package:nedaa/constants/app_constans.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -151,9 +152,9 @@ void main() async {
   debugPrint(
       "Splash time: ${DateTime.now().millisecondsSinceEpoch - startTime}ms");
 
+  HomeWidget.setAppGroupId(appGroupId);
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
-
   if (sendCrashReports) {
     await SentryFlutter.init((options) {
       options.dsn = const String.fromEnvironment('SENTRY_DSN');

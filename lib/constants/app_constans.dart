@@ -4,3 +4,5 @@ const Map<String, String> supportedLocales = {
 };
 
 const int minimumSplashScreenTime = 1000; // in milliseconds.
+
+const appGroupId = "group.io.nedaa.nedaaApp";

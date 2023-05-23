@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:app_group_directory/app_group_directory.dart';
+import 'package:home_widget/home_widget.dart';
+import 'package:nedaa/constants/app_constans.dart';
 import 'package:nedaa/modules/prayer_times/models/prayer_times.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -41,7 +43,6 @@ class DBDayPrayerTimes {
 
 class DBRepository {
   Database? db;
-  final String _appGroupId = 'group.io.nedaa.nedaaApp';
 
   Future<void> open() async {
     // Get a location using getDatabasesPath
@@ -50,7 +51,7 @@ class DBRepository {
     // using the app group which is used to share data between the app and the widget
     if (Platform.isIOS) {
       final directory =
-          await AppGroupDirectory.getAppGroupDirectory(_appGroupId);
+          await AppGroupDirectory.getAppGroupDirectory(appGroupId);
       if (directory != null) {
         databasesPath = directory.path;
       }
@@ -127,6 +128,12 @@ class DBRepository {
         for (DayPrayerTimes prayerTime in prayerTimes) {
           await _savePrayerTimes(txn, DBDayPrayerTimes(prayerTime));
         }
+        // update the widget after updating the database
+        await HomeWidget.updateWidget(
+          name: 'NedaaWidget',
+          iOSName: 'NedaaWidget',
+          androidName: 'NedaaWidget',
+        );
       });
     }
   }
