@@ -130,7 +130,7 @@ func dataToShow(entry: CountdownLockScreenViewProvider.Entry, geometry: Geometry
                         Text(nextPrayer.date, style: .timer)
                             .multilineTextAlignment(.center)
                             .lineLimit(1)
-                            .minimumScaleFactor(1)
+                            .minimumScaleFactor(0.5)
                             .font(.system(size: geometry.size.width * 0.2))
                     }
                     else {
