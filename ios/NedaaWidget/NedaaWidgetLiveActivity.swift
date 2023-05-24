@@ -7,11 +7,12 @@ struct NedaaWidgetAttributes: ActivityAttributes {
         // Dynamic stateful properties about your activity go here!
         var value: Int
     }
-
+    
     // Fixed non-changing properties about your activity go here!
     var name: String
 }
 
+@available(iOSApplicationExtension 16.2, *)
 struct NedaaWidgetLiveActivity: Widget {
     var body: some WidgetConfiguration {
         ActivityConfiguration(for: NedaaWidgetAttributes.self) { context in
@@ -21,7 +22,7 @@ struct NedaaWidgetLiveActivity: Widget {
             }
             .activityBackgroundTint(Color.cyan)
             .activitySystemActionForegroundColor(Color.black)
-
+            
         } dynamicIsland: { context in
             DynamicIsland {
                 // Expanded UI goes here.  Compose the expanded UI through
@@ -49,10 +50,11 @@ struct NedaaWidgetLiveActivity: Widget {
     }
 }
 
+@available(iOSApplicationExtension 16.2, *)
 struct NedaaWidgetLiveActivity_Previews: PreviewProvider {
     static let attributes = NedaaWidgetAttributes(name: "Me")
     static let contentState = NedaaWidgetAttributes.ContentState(value: 3)
-
+    
     static var previews: some View {
         attributes
             .previewContext(contentState, viewKind: .dynamicIsland(.compact))

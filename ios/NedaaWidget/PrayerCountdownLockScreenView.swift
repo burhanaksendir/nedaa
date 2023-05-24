@@ -51,7 +51,7 @@ struct CountdownLockScreenViewProvider: IntentTimelineProvider {
     }
 }
 
-
+@available(iOSApplicationExtension 16.0, *)
 struct PrayerCountdownLockScreenView: View {
     var entry: CountdownLockScreenViewProvider.Entry
     
@@ -70,7 +70,7 @@ struct PrayerCountdownLockScreenView: View {
     }
     
 }
-
+@available(iOSApplicationExtension 16.0, *)
 struct RectangularView: View {
     var entry: CountdownLockScreenViewProvider.Entry
     
@@ -87,6 +87,7 @@ struct RectangularView: View {
     }
 }
 
+@available(iOSApplicationExtension 16.0, *)
 struct CircularView: View {
     var entry: CountdownLockScreenViewProvider.Entry
     
@@ -144,7 +145,7 @@ func dataToShow(entry: CountdownLockScreenViewProvider.Entry, geometry: Geometry
     }
 }
 
-
+@available(iOSApplicationExtension 16.0, *)
 struct PrayerCountdownLockScreenWidget: Widget {
     // TODO: keep track of the widget kind so we can use it to update the widget
     // in case the user changes the location
@@ -161,6 +162,7 @@ struct PrayerCountdownLockScreenWidget: Widget {
     }
 }
 
+@available(iOSApplicationExtension 16.0, *)
 struct PrayerCountdownLockScreenView_Previews: PreviewProvider {
     static var previews: some View {
         PrayerCountdownLockScreenView(entry: PrayerEntry(date: Date(), configuration: ConfigurationIntent(), nextPrayer: PrayerData(name: "Maghrib", date: Date()), previousPrayer: PrayerData(name: "Maghrib", date: Date())))
