@@ -16,15 +16,12 @@ struct Provider: IntentTimelineProvider {
     }
     
     func getTimeline(for configuration: ConfigurationIntent, in context: Context, completion: @escaping (Timeline<PrayerEntry>) -> ()) {
-        var _: [        PrayerEntry] = []
+        var _: [PrayerEntry] = []
         let prayerService = PrayerDataService()
-        let nextPrayer = prayerService.getNextPrayer() ?? PrayerData(name: "GET NOT WOKRING", date: Date())
-        let previousPrayer = prayerService.getPreviousPrayer() ?? PrayerData(name: "GET NOT WOKRING", date: Date())
+        let showSunrise = configuration.showSunrise as! Bool?
+        let nextPrayer = prayerService.getNextPrayer(showSunrise: showSunrise ?? true) ?? PrayerData(name: "GET NOT WOKRING", date: Date())
+        let previousPrayer = prayerService.getPreviousPrayer(showSunrise: showSunrise ?? true) ?? PrayerData(name: "GET NOT WOKRING", date: Date())
         let currentDate = Date()
-        debugPrint("Current Date")
-        debugPrint(currentDate)
-        debugPrint("Next Prayer  Date")
-        debugPrint(nextPrayer.date)
         
         let nextUpdateDate = calculateNextUpdateDate(currentDate: currentDate, nextPrayerDate: nextPrayer.date, previousPrayerDate: previousPrayer.date)
         
@@ -71,13 +68,15 @@ struct NedaaWidgetEntryView : View {
 struct NedaaWidget: Widget {
     let kind: String = "NedaaWidget"
     
+    
     var body: some WidgetConfiguration {
         IntentConfiguration(kind: kind, intent: ConfigurationIntent.self, provider: Provider()) { entry in
-//            NedaaWidgetEntryView(entry: entry)
-            PrayerCountdownView(entry: entry)
+            NedaaWidgetEntryView(entry: entry)
+            
         }
         .configurationDisplayName("My Widget")
         .description("This is an example widget.")
+        
     }
 }
 
