@@ -6,8 +6,12 @@ let appGroupId = "group.io.nedaa.nedaaApp"
 @main
 struct NedaaWidgetBundle: WidgetBundle {
     var body: some Widget {
-//        NedaaWidget()
+        if #available(iOS 16.0, *) {
+            PrayerCountdownLockScreenWidget()
+        }
+        //        NedaaWidget()
         PrayerCountdownWidget()
-//        NedaaWidgetLiveActivity()
+        //        NedaaWidgetLiveActivity()
+        
     }
 }

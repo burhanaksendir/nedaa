@@ -28,6 +28,7 @@
 		35ED90B72A1E04AB001D7EDF /* DatabaseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35ED90B62A1E04AB001D7EDF /* DatabaseService.swift */; };
 		35ED90B92A1E04D1001D7EDF /* PrayerDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35ED90B82A1E04D1001D7EDF /* PrayerDataService.swift */; };
 		35ED90BB2A1E051D001D7EDF /* PrayerCountdownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35ED90BA2A1E051D001D7EDF /* PrayerCountdownView.swift */; };
+		35ED90BD2A1E241D001D7EDF /* PrayerCountdownLockScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35ED90BC2A1E241D001D7EDF /* PrayerCountdownLockScreenView.swift */; };
 		36DE35344DFB03E497F7969E /* Pods_Runner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 700ADC44F5530E8D552481ED /* Pods_Runner.framework */; };
 		3B3967161E833CAA004F5970 /* AppFrameworkInfo.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */; };
 		74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74858FAE1ED2DC5600515810 /* AppDelegate.swift */; };
@@ -97,6 +98,7 @@
 		35ED90B62A1E04AB001D7EDF /* DatabaseService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseService.swift; sourceTree = "<group>"; };
 		35ED90B82A1E04D1001D7EDF /* PrayerDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayerDataService.swift; sourceTree = "<group>"; };
 		35ED90BA2A1E051D001D7EDF /* PrayerCountdownView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayerCountdownView.swift; sourceTree = "<group>"; };
+		35ED90BC2A1E241D001D7EDF /* PrayerCountdownLockScreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayerCountdownLockScreenView.swift; sourceTree = "<group>"; };
 		3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = AppFrameworkInfo.plist; path = Flutter/AppFrameworkInfo.plist; sourceTree = "<group>"; };
 		700ADC44F5530E8D552481ED /* Pods_Runner.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Runner.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		74858FAD1ED2DC5600515810 /* Runner-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Runner-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -170,6 +172,7 @@
 				35ED90B62A1E04AB001D7EDF /* DatabaseService.swift */,
 				35ED90B82A1E04D1001D7EDF /* PrayerDataService.swift */,
 				35ED90BA2A1E051D001D7EDF /* PrayerCountdownView.swift */,
+				35ED90BC2A1E241D001D7EDF /* PrayerCountdownLockScreenView.swift */,
 			);
 			path = NedaaWidget;
 			sourceTree = "<group>";
@@ -430,6 +433,7 @@
 				35ED90B72A1E04AB001D7EDF /* DatabaseService.swift in Sources */,
 				35ED90A12A1E008D001D7EDF /* NedaaWidget.swift in Sources */,
 				35ED90A62A1E008E001D7EDF /* NedaaWidget.intentdefinition in Sources */,
+				35ED90BD2A1E241D001D7EDF /* PrayerCountdownLockScreenView.swift in Sources */,
 				35ED909D2A1E008D001D7EDF /* NedaaWidgetBundle.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
