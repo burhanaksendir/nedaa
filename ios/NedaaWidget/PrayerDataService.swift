@@ -1,4 +1,3 @@
-
 import Foundation
 
 
@@ -79,7 +78,7 @@ struct PrayerDataService {
         return getDayPrayerTimes(for: yesterday)
     }
     
-    func getNextPrayer() -> PrayerData? {
+    func getNextPrayer(showSunrise: Bool = true) -> PrayerData? {
         let currentDate = Date()
         guard let prayerTimes = getTodaysPrayerTimes() else {
             return nil
@@ -92,6 +91,10 @@ struct PrayerDataService {
         
         // Find the first prayer time that is later than the current date
         for prayer in sortedPrayerTimes {
+            // If the prayer is sunrise and we don't want to show sunrise, skip it
+            if prayer.name == "Sunrise" && !showSunrise {
+                continue
+            }
             if prayer.date > currentDate {
                 return prayer
             }
@@ -106,7 +109,7 @@ struct PrayerDataService {
         return firstPrayerNextDay
     }
     
-    func getPreviousPrayer() -> PrayerData? {
+    func getPreviousPrayer(showSunrise: Bool = true) -> PrayerData? {
         let currentDate = Date()
         guard let prayerTimes = getTodaysPrayerTimes() else {
             return nil
@@ -117,6 +120,10 @@ struct PrayerDataService {
         
         // Find the last prayer time that is earlier than the current date
         for prayer in sortedPrayerTimes.reversed() {
+            // If the prayer is sunrise and we don't want to show sunrise, skip it
+            if prayer.name == "Sunrise" && !showSunrise {
+                continue
+            }
             if prayer.date < currentDate {
                 return prayer
             }

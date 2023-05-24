@@ -5,5 +5,6 @@ import SwiftUI
 struct NedaaWidgetBundle: WidgetBundle {
     var body: some Widget {
         NedaaWidget()
+//        NedaaWidgetLiveActivity()
     }
 }

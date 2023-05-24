@@ -1,19 +1,22 @@
 import WidgetKit
 import SwiftUI
-let  _appGroupId = "group.io.nedaa.nedaaApp";
-var nextUpdate: String = "NO DATE YET"
-struct Provider: TimelineProvider {
-    func placeholder(in context: Context) -> SimpleEntry {
-        SimpleEntry(date: Date(), nextPrayer:  PrayerData(name: "PlaceHolder", date: Date()), previousPrayer: PrayerData(name: "PlaceHolder", date: Date()))
+import Intents
+
+struct Provider: IntentTimelineProvider {
+    typealias Entry = PrayerEntry
+    typealias Intent = ConfigurationIntent
+    
+    func placeholder(in context: Context) -> PrayerEntry {
+        PrayerEntry(date: Date(), configuration: ConfigurationIntent(), nextPrayer: PrayerData(name: "Fajr", date: Date()), previousPrayer: PrayerData(name: "Fajr", date: Date()) )
     }
     
-    func getSnapshot(in context: Context, completion: @escaping (SimpleEntry) -> ()) {
-        let entry = SimpleEntry(date: Date(), nextPrayer:  PrayerData(name: "SNAP SHOT", date: Date()), previousPrayer: PrayerData(name: "PlaceHolder", date: Date()))
+    func getSnapshot(for configuration: ConfigurationIntent, in context: Context, completion: @escaping (PrayerEntry) -> ()) {
+        let entry = PrayerEntry(date: Date(), configuration: configuration, nextPrayer: PrayerData(name: "Fajr", date: Date()), previousPrayer: PrayerData(name: "Fajr", date: Date()))
         completion(entry)
     }
     
-    func getTimeline(in context: Context, completion: @escaping (Timeline<SimpleEntry>) -> ()) {
-        var _: [SimpleEntry] = []
+    func getTimeline(for configuration: ConfigurationIntent, in context: Context, completion: @escaping (Timeline<PrayerEntry>) -> ()) {
+        var _: [        PrayerEntry] = []
         let prayerService = PrayerDataService()
         let nextPrayer = prayerService.getNextPrayer() ?? PrayerData(name: "GET NOT WOKRING", date: Date())
         let previousPrayer = prayerService.getPreviousPrayer() ?? PrayerData(name: "GET NOT WOKRING", date: Date())
@@ -22,16 +25,14 @@ struct Provider: TimelineProvider {
         debugPrint(currentDate)
         debugPrint("Next Prayer  Date")
         debugPrint(nextPrayer.date)
-     
+        
         let nextUpdateDate = calculateNextUpdateDate(currentDate: currentDate, nextPrayerDate: nextPrayer.date, previousPrayerDate: previousPrayer.date)
         
-        let entry = SimpleEntry(date: currentDate, nextPrayer: nextPrayer, previousPrayer: previousPrayer)
+        let entry = PrayerEntry(date: currentDate,configuration: configuration, nextPrayer: nextPrayer, previousPrayer: previousPrayer)
         let timeline = Timeline(entries: [entry], policy: .after(nextUpdateDate))
         let dateformat = DateFormatter()
-            dateformat.dateFormat = "h:mm a"
-        nextUpdate = dateformat.string(from: nextUpdateDate)
-        debugPrint("Next update at")
-        debugPrint(nextUpdateDate)
+        dateformat.dateFormat = "h:mm a"
+        
         completion(timeline)
     }
     
@@ -50,20 +51,17 @@ struct Provider: TimelineProvider {
             return nextPrayerDate.addingTimeInterval(1800)
         }
     }
-
-
-    
 }
 
-struct SimpleEntry: TimelineEntry {
+struct PrayerEntry: TimelineEntry {
     let date: Date
+    let configuration: ConfigurationIntent
     let nextPrayer: PrayerData?
     let previousPrayer: PrayerData?
 }
 
 struct NedaaWidgetEntryView : View {
     var entry: Provider.Entry
-    let data = UserDefaults.init(suiteName:_appGroupId)
     
     var body: some View {
         Text(entry.date, style: .time)
@@ -74,8 +72,8 @@ struct NedaaWidget: Widget {
     let kind: String = "NedaaWidget"
     
     var body: some WidgetConfiguration {
-        StaticConfiguration(kind: kind, provider: Provider()) { entry in
-            // NedaaWidgetEntryView(entry: entry)
+        IntentConfiguration(kind: kind, intent: ConfigurationIntent.self, provider: Provider()) { entry in
+//            NedaaWidgetEntryView(entry: entry)
             PrayerCountdownView(entry: entry)
         }
         .configurationDisplayName("My Widget")
@@ -85,7 +83,7 @@ struct NedaaWidget: Widget {
 
 struct NedaaWidget_Previews: PreviewProvider {
     static var previews: some View {
-        NedaaWidgetEntryView(entry: SimpleEntry(date: Date(), nextPrayer: PrayerData(name: "SIM", date: Date()), previousPrayer: PrayerData(name: "SIM", date: Date())))
+        NedaaWidgetEntryView(entry: PrayerEntry(date: Date(), configuration: ConfigurationIntent(), nextPrayer: PrayerData(name: "Fajr", date: Date()), previousPrayer: PrayerData(name: "Fajr", date: Date())))
             .previewContext(WidgetPreviewContext(family: .systemSmall))
     }
 }

@@ -8,14 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		1498D2341E8E89220040F4C2 /* GeneratedPluginRegistrant.m in Sources */ = {isa = PBXBuildFile; fileRef = 1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */; };
-		353254F42A199B68009C7397 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 353254D62A1998BD009C7397 /* WidgetKit.framework */; };
-		353254F52A199B68009C7397 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 353254D82A1998BD009C7397 /* SwiftUI.framework */; };
-		353254F82A199B68009C7397 /* NedaaWidgetBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 353254F72A199B68009C7397 /* NedaaWidgetBundle.swift */; };
-		353254FA2A199B68009C7397 /* NedaaWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 353254F92A199B68009C7397 /* NedaaWidget.swift */; };
-		353254FC2A199B68009C7397 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 353254FB2A199B68009C7397 /* Assets.xcassets */; };
-		353255002A199B68009C7397 /* NedaaWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 353254F32A199B68009C7397 /* NedaaWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		353255062A199B82009C7397 /* DatabaseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 353255052A199B82009C7397 /* DatabaseService.swift */; };
-		353255082A199B96009C7397 /* PrayerDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 353255072A199B96009C7397 /* PrayerDataService.swift */; };
 		3558854728D0CDCA00A4AF43 /* iqama1.m4r in Resources */ = {isa = PBXBuildFile; fileRef = 3558854628D0CDCA00A4AF43 /* iqama1.m4r */; };
 		3558854928D0D21400A4AF43 /* athan1.m4r in Resources */ = {isa = PBXBuildFile; fileRef = 3558854828D0D21400A4AF43 /* athan1.m4r */; };
 		35C8AEA828D21DE900E14B6F /* beep.m4r in Resources */ = {isa = PBXBuildFile; fileRef = 35C8AEA728D21DE900E14B6F /* beep.m4r */; };
@@ -24,7 +16,18 @@
 		35D92DA02877327500FEC8B3 /* athan8.m4r in Resources */ = {isa = PBXBuildFile; fileRef = 35D92D9E2877327500FEC8B3 /* athan8.m4r */; };
 		35D92DA12877327500FEC8B3 /* knock.m4r in Resources */ = {isa = PBXBuildFile; fileRef = 35D92D9F2877327500FEC8B3 /* knock.m4r */; };
 		35D92DA32877328A00FEC8B3 /* athan6.m4r in Resources */ = {isa = PBXBuildFile; fileRef = 35D92DA22877328A00FEC8B3 /* athan6.m4r */; };
-		35ED903C2A1BCF94001D7EDF /* PrayerCountdownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35ED903B2A1BCF94001D7EDF /* PrayerCountdownView.swift */; };
+		35ED90992A1E008D001D7EDF /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 353254D62A1998BD009C7397 /* WidgetKit.framework */; };
+		35ED909A2A1E008D001D7EDF /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 353254D82A1998BD009C7397 /* SwiftUI.framework */; };
+		35ED909D2A1E008D001D7EDF /* NedaaWidgetBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35ED909C2A1E008D001D7EDF /* NedaaWidgetBundle.swift */; };
+		35ED909F2A1E008D001D7EDF /* NedaaWidgetLiveActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35ED909E2A1E008D001D7EDF /* NedaaWidgetLiveActivity.swift */; };
+		35ED90A12A1E008D001D7EDF /* NedaaWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35ED90A02A1E008D001D7EDF /* NedaaWidget.swift */; };
+		35ED90A42A1E008E001D7EDF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 35ED90A32A1E008E001D7EDF /* Assets.xcassets */; };
+		35ED90A62A1E008E001D7EDF /* NedaaWidget.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 35ED90A22A1E008D001D7EDF /* NedaaWidget.intentdefinition */; };
+		35ED90A72A1E008E001D7EDF /* NedaaWidget.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 35ED90A22A1E008D001D7EDF /* NedaaWidget.intentdefinition */; };
+		35ED90AA2A1E008E001D7EDF /* NedaaWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 35ED90982A1E008D001D7EDF /* NedaaWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		35ED90B72A1E04AB001D7EDF /* DatabaseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35ED90B62A1E04AB001D7EDF /* DatabaseService.swift */; };
+		35ED90B92A1E04D1001D7EDF /* PrayerDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35ED90B82A1E04D1001D7EDF /* PrayerDataService.swift */; };
+		35ED90BB2A1E051D001D7EDF /* PrayerCountdownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35ED90BA2A1E051D001D7EDF /* PrayerCountdownView.swift */; };
 		36DE35344DFB03E497F7969E /* Pods_Runner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 700ADC44F5530E8D552481ED /* Pods_Runner.framework */; };
 		3B3967161E833CAA004F5970 /* AppFrameworkInfo.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */; };
 		74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74858FAE1ED2DC5600515810 /* AppDelegate.swift */; };
@@ -34,11 +37,11 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		353254FE2A199B68009C7397 /* PBXContainerItemProxy */ = {
+		35ED90A82A1E008E001D7EDF /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 97C146E61CF9000F007C117D /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 353254F22A199B68009C7397;
+			remoteGlobalIDString = 35ED90972A1E008D001D7EDF;
 			remoteInfo = NedaaWidgetExtension;
 		};
 /* End PBXContainerItemProxy section */
@@ -50,7 +53,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				353255002A199B68009C7397 /* NedaaWidgetExtension.appex in Embed Foundation Extensions */,
+				35ED90AA2A1E008E001D7EDF /* NedaaWidgetExtension.appex in Embed Foundation Extensions */,
 			);
 			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -74,13 +77,6 @@
 		1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeneratedPluginRegistrant.m; sourceTree = "<group>"; };
 		353254D62A1998BD009C7397 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 		353254D82A1998BD009C7397 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
-		353254F32A199B68009C7397 /* NedaaWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = NedaaWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
-		353254F72A199B68009C7397 /* NedaaWidgetBundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NedaaWidgetBundle.swift; sourceTree = "<group>"; };
-		353254F92A199B68009C7397 /* NedaaWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NedaaWidget.swift; sourceTree = "<group>"; };
-		353254FB2A199B68009C7397 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		353254FD2A199B68009C7397 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		353255052A199B82009C7397 /* DatabaseService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseService.swift; sourceTree = "<group>"; };
-		353255072A199B96009C7397 /* PrayerDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayerDataService.swift; sourceTree = "<group>"; };
 		3532550A2A199C3D009C7397 /* NedaaWidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = NedaaWidgetExtension.entitlements; sourceTree = "<group>"; };
 		3558854628D0CDCA00A4AF43 /* iqama1.m4r */ = {isa = PBXFileReference; lastKnownFileType = file; path = iqama1.m4r; sourceTree = "<group>"; };
 		3558854828D0D21400A4AF43 /* athan1.m4r */ = {isa = PBXFileReference; lastKnownFileType = file; path = athan1.m4r; sourceTree = "<group>"; };
@@ -91,7 +87,16 @@
 		35D92D9E2877327500FEC8B3 /* athan8.m4r */ = {isa = PBXFileReference; lastKnownFileType = file; path = athan8.m4r; sourceTree = "<group>"; };
 		35D92D9F2877327500FEC8B3 /* knock.m4r */ = {isa = PBXFileReference; lastKnownFileType = file; path = knock.m4r; sourceTree = "<group>"; };
 		35D92DA22877328A00FEC8B3 /* athan6.m4r */ = {isa = PBXFileReference; lastKnownFileType = file; path = athan6.m4r; sourceTree = "<group>"; };
-		35ED903B2A1BCF94001D7EDF /* PrayerCountdownView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayerCountdownView.swift; sourceTree = "<group>"; };
+		35ED90982A1E008D001D7EDF /* NedaaWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = NedaaWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		35ED909C2A1E008D001D7EDF /* NedaaWidgetBundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NedaaWidgetBundle.swift; sourceTree = "<group>"; };
+		35ED909E2A1E008D001D7EDF /* NedaaWidgetLiveActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NedaaWidgetLiveActivity.swift; sourceTree = "<group>"; };
+		35ED90A02A1E008D001D7EDF /* NedaaWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NedaaWidget.swift; sourceTree = "<group>"; };
+		35ED90A22A1E008D001D7EDF /* NedaaWidget.intentdefinition */ = {isa = PBXFileReference; lastKnownFileType = file.intentdefinition; path = NedaaWidget.intentdefinition; sourceTree = "<group>"; };
+		35ED90A32A1E008E001D7EDF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		35ED90A52A1E008E001D7EDF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		35ED90B62A1E04AB001D7EDF /* DatabaseService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseService.swift; sourceTree = "<group>"; };
+		35ED90B82A1E04D1001D7EDF /* PrayerDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayerDataService.swift; sourceTree = "<group>"; };
+		35ED90BA2A1E051D001D7EDF /* PrayerCountdownView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayerCountdownView.swift; sourceTree = "<group>"; };
 		3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = AppFrameworkInfo.plist; path = Flutter/AppFrameworkInfo.plist; sourceTree = "<group>"; };
 		700ADC44F5530E8D552481ED /* Pods_Runner.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Runner.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		74858FAD1ED2DC5600515810 /* Runner-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Runner-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -108,12 +113,12 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		353254F02A199B68009C7397 /* Frameworks */ = {
+		35ED90952A1E008D001D7EDF /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				353254F52A199B68009C7397 /* SwiftUI.framework in Frameworks */,
-				353254F42A199B68009C7397 /* WidgetKit.framework in Frameworks */,
+				35ED909A2A1E008D001D7EDF /* SwiftUI.framework in Frameworks */,
+				35ED90992A1E008D001D7EDF /* WidgetKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -138,20 +143,6 @@
 			path = Pods;
 			sourceTree = "<group>";
 		};
-		353254F62A199B68009C7397 /* NedaaWidget */ = {
-			isa = PBXGroup;
-			children = (
-				353254F72A199B68009C7397 /* NedaaWidgetBundle.swift */,
-				353254F92A199B68009C7397 /* NedaaWidget.swift */,
-				353254FB2A199B68009C7397 /* Assets.xcassets */,
-				353254FD2A199B68009C7397 /* Info.plist */,
-				353255052A199B82009C7397 /* DatabaseService.swift */,
-				353255072A199B96009C7397 /* PrayerDataService.swift */,
-				35ED903B2A1BCF94001D7EDF /* PrayerCountdownView.swift */,
-			);
-			path = NedaaWidget;
-			sourceTree = "<group>";
-		};
 		35AE72AE287725A900B5A1E9 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
@@ -165,6 +156,22 @@
 				35D92D9F2877327500FEC8B3 /* knock.m4r */,
 			);
 			path = Resources;
+			sourceTree = "<group>";
+		};
+		35ED909B2A1E008D001D7EDF /* NedaaWidget */ = {
+			isa = PBXGroup;
+			children = (
+				35ED909C2A1E008D001D7EDF /* NedaaWidgetBundle.swift */,
+				35ED909E2A1E008D001D7EDF /* NedaaWidgetLiveActivity.swift */,
+				35ED90A02A1E008D001D7EDF /* NedaaWidget.swift */,
+				35ED90A22A1E008D001D7EDF /* NedaaWidget.intentdefinition */,
+				35ED90A32A1E008E001D7EDF /* Assets.xcassets */,
+				35ED90A52A1E008E001D7EDF /* Info.plist */,
+				35ED90B62A1E04AB001D7EDF /* DatabaseService.swift */,
+				35ED90B82A1E04D1001D7EDF /* PrayerDataService.swift */,
+				35ED90BA2A1E051D001D7EDF /* PrayerCountdownView.swift */,
+			);
+			path = NedaaWidget;
 			sourceTree = "<group>";
 		};
 		6DE4D500272B8EC12F5F21F7 /* Frameworks */ = {
@@ -195,7 +202,7 @@
 				35AE72AE287725A900B5A1E9 /* Resources */,
 				9740EEB11CF90186004384FC /* Flutter */,
 				97C146F01CF9000F007C117D /* Runner */,
-				353254F62A199B68009C7397 /* NedaaWidget */,
+				35ED909B2A1E008D001D7EDF /* NedaaWidget */,
 				97C146EF1CF9000F007C117D /* Products */,
 				2BEB4CF1BE1835790FBD9BE7 /* Pods */,
 				6DE4D500272B8EC12F5F21F7 /* Frameworks */,
@@ -206,7 +213,7 @@
 			isa = PBXGroup;
 			children = (
 				97C146EE1CF9000F007C117D /* Runner.app */,
-				353254F32A199B68009C7397 /* NedaaWidgetExtension.appex */,
+				35ED90982A1E008D001D7EDF /* NedaaWidgetExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -230,13 +237,13 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		353254F22A199B68009C7397 /* NedaaWidgetExtension */ = {
+		35ED90972A1E008D001D7EDF /* NedaaWidgetExtension */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 353255012A199B68009C7397 /* Build configuration list for PBXNativeTarget "NedaaWidgetExtension" */;
+			buildConfigurationList = 35ED90AB2A1E008E001D7EDF /* Build configuration list for PBXNativeTarget "NedaaWidgetExtension" */;
 			buildPhases = (
-				353254EF2A199B68009C7397 /* Sources */,
-				353254F02A199B68009C7397 /* Frameworks */,
-				353254F12A199B68009C7397 /* Resources */,
+				35ED90942A1E008D001D7EDF /* Sources */,
+				35ED90952A1E008D001D7EDF /* Frameworks */,
+				35ED90962A1E008D001D7EDF /* Resources */,
 			);
 			buildRules = (
 			);
@@ -244,7 +251,7 @@
 			);
 			name = NedaaWidgetExtension;
 			productName = NedaaWidgetExtension;
-			productReference = 353254F32A199B68009C7397 /* NedaaWidgetExtension.appex */;
+			productReference = 35ED90982A1E008D001D7EDF /* NedaaWidgetExtension.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
 		97C146ED1CF9000F007C117D /* Runner */ = {
@@ -264,7 +271,7 @@
 			buildRules = (
 			);
 			dependencies = (
-				353254FF2A199B68009C7397 /* PBXTargetDependency */,
+				35ED90A92A1E008E001D7EDF /* PBXTargetDependency */,
 			);
 			name = Runner;
 			productName = Runner;
@@ -281,7 +288,7 @@
 				LastUpgradeCheck = 1300;
 				ORGANIZATIONNAME = "";
 				TargetAttributes = {
-					353254F22A199B68009C7397 = {
+					35ED90972A1E008D001D7EDF = {
 						CreatedOnToolsVersion = 14.3;
 					};
 					97C146ED1CF9000F007C117D = {
@@ -304,17 +311,17 @@
 			projectRoot = "";
 			targets = (
 				97C146ED1CF9000F007C117D /* Runner */,
-				353254F22A199B68009C7397 /* NedaaWidgetExtension */,
+				35ED90972A1E008D001D7EDF /* NedaaWidgetExtension */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		353254F12A199B68009C7397 /* Resources */ = {
+		35ED90962A1E008D001D7EDF /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				353254FC2A199B68009C7397 /* Assets.xcassets in Resources */,
+				35ED90A42A1E008E001D7EDF /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -413,15 +420,17 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		353254EF2A199B68009C7397 /* Sources */ = {
+		35ED90942A1E008D001D7EDF /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				35ED903C2A1BCF94001D7EDF /* PrayerCountdownView.swift in Sources */,
-				353255082A199B96009C7397 /* PrayerDataService.swift in Sources */,
-				353255062A199B82009C7397 /* DatabaseService.swift in Sources */,
-				353254F82A199B68009C7397 /* NedaaWidgetBundle.swift in Sources */,
-				353254FA2A199B68009C7397 /* NedaaWidget.swift in Sources */,
+				35ED90B92A1E04D1001D7EDF /* PrayerDataService.swift in Sources */,
+				35ED90BB2A1E051D001D7EDF /* PrayerCountdownView.swift in Sources */,
+				35ED909F2A1E008D001D7EDF /* NedaaWidgetLiveActivity.swift in Sources */,
+				35ED90B72A1E04AB001D7EDF /* DatabaseService.swift in Sources */,
+				35ED90A12A1E008D001D7EDF /* NedaaWidget.swift in Sources */,
+				35ED90A62A1E008E001D7EDF /* NedaaWidget.intentdefinition in Sources */,
+				35ED909D2A1E008D001D7EDF /* NedaaWidgetBundle.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -430,6 +439,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */,
+				35ED90A72A1E008E001D7EDF /* NedaaWidget.intentdefinition in Sources */,
 				1498D2341E8E89220040F4C2 /* GeneratedPluginRegistrant.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -437,10 +447,10 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		353254FF2A199B68009C7397 /* PBXTargetDependency */ = {
+		35ED90A92A1E008E001D7EDF /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 353254F22A199B68009C7397 /* NedaaWidgetExtension */;
-			targetProxy = 353254FE2A199B68009C7397 /* PBXContainerItemProxy */;
+			target = 35ED90972A1E008D001D7EDF /* NedaaWidgetExtension */;
+			targetProxy = 35ED90A82A1E008E001D7EDF /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -525,7 +535,7 @@
 				CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 11;
+				CURRENT_PROJECT_VERSION = 15;
 				DEVELOPMENT_TEAM = MBFRA8P6N9;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Runner/Info.plist;
@@ -549,7 +559,7 @@
 			};
 			name = Profile;
 		};
-		353255022A199B68009C7397 /* Debug */ = {
+		35ED90AC2A1E008E001D7EDF /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -562,14 +572,14 @@
 				CODE_SIGN_ENTITLEMENTS = NedaaWidgetExtension.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 11;
+				CURRENT_PROJECT_VERSION = 15;
 				DEVELOPMENT_TEAM = MBFRA8P6N9;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = NedaaWidget/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = NedaaWidget;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -585,11 +595,11 @@
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
-		353255032A199B68009C7397 /* Release */ = {
+		35ED90AD2A1E008E001D7EDF /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -603,14 +613,14 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 11;
+				CURRENT_PROJECT_VERSION = 15;
 				DEVELOPMENT_TEAM = MBFRA8P6N9;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = NedaaWidget/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = NedaaWidget;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -623,11 +633,11 @@
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
-		353255042A199B68009C7397 /* Profile */ = {
+		35ED90AE2A1E008E001D7EDF /* Profile */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -640,14 +650,14 @@
 				CODE_SIGN_ENTITLEMENTS = NedaaWidgetExtension.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 11;
+				CURRENT_PROJECT_VERSION = 15;
 				DEVELOPMENT_TEAM = MBFRA8P6N9;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = NedaaWidget/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = NedaaWidget;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -660,7 +670,7 @@
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Profile;
 		};
@@ -784,7 +794,7 @@
 				CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 11;
+				CURRENT_PROJECT_VERSION = 15;
 				DEVELOPMENT_TEAM = MBFRA8P6N9;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Runner/Info.plist;
@@ -820,7 +830,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 11;
+				CURRENT_PROJECT_VERSION = 15;
 				DEVELOPMENT_TEAM = MBFRA8P6N9;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Runner/Info.plist;
@@ -847,12 +857,12 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		353255012A199B68009C7397 /* Build configuration list for PBXNativeTarget "NedaaWidgetExtension" */ = {
+		35ED90AB2A1E008E001D7EDF /* Build configuration list for PBXNativeTarget "NedaaWidgetExtension" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				353255022A199B68009C7397 /* Debug */,
-				353255032A199B68009C7397 /* Release */,
-				353255042A199B68009C7397 /* Profile */,
+				35ED90AC2A1E008E001D7EDF /* Debug */,
+				35ED90AD2A1E008E001D7EDF /* Release */,
+				35ED90AE2A1E008E001D7EDF /* Profile */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
