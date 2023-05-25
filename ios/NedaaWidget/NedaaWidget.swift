@@ -2,6 +2,7 @@ import WidgetKit
 import SwiftUI
 import Intents
 
+
 struct Provider: IntentTimelineProvider {
     typealias Entry = PrayerEntry
     typealias Intent = ConfigurationIntent
@@ -86,3 +87,4 @@ struct NedaaWidget_Previews: PreviewProvider {
             .previewContext(WidgetPreviewContext(family: .systemSmall))
     }
 }
+

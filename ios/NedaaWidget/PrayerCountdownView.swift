@@ -51,53 +51,101 @@ struct CountdownViewProvider: IntentTimelineProvider {
 }
 
 struct PrayerCountdownView: View {
+    @Environment(\.colorScheme) var colorScheme
     var entry: CountdownViewProvider.Entry
-    
-    let primaryColor = Color(red: 0x12 / 255, green: 0x55 / 255, blue: 0x79 / 255)
-    let secondaryColor = Color(red: 0xB1 / 255, green: 0x8A / 255, blue: 0x37 / 255)
-    let tertiaryColor = Color(red: 0x62 / 255, green: 0x9A / 255, blue: 0xA2 / 255)
-    let backgroundColor = Color(red: 0x00 / 255, green: 0x7A / 255, blue: 0x97 / 255)
-    let white = Color(red: 0xFF / 255, green: 0xFF / 255, blue: 0xFF / 255)
+    var theme: Theme {
+        getTheme(colorScheme: colorScheme)
+    }
     
     var body: some View {
-        GeometryReader { _ in
+        GeometryReader { geometry in
             ZStack {
-                primaryColor.edgesIgnoringSafeArea(.all)
-                VStack {
-                    Spacer()
+                theme.backgroundColor.edgesIgnoringSafeArea(.all)
+                VStack(spacing: 0) {
                     if let nextPrayer = entry.nextPrayer, let previousPrayer = entry.previousPrayer {
-                        // Check if the previous prayer was within the last 30 minutes
-                        if Calendar.current.dateComponents([.minute], from: previousPrayer.date, to: Date()).minute ?? 0 < 30 && (entry.configuration.showTimer == true) {
-                            Text(previousPrayer.name)
-                                .foregroundColor(white)
-                            Text(previousPrayer.date, style: .timer)
-                                .fontWeight(.bold)
-                                .foregroundColor(secondaryColor)
-                                .multilineTextAlignment(.center)
+                        // Display previous prayer
+                        ZStack {
+                            VStack {
+                                Text(previousPrayer.name)
+                                    .font(.caption)
+                                    .fontWeight(.regular)
+                                    .foregroundColor(colorScheme == .dark ? theme.backgroundColor : theme.primaryColor)
+                                    .minimumScaleFactor(0.5)
+                                // Display previous prayer time
+                                Text(previousPrayer.date, style: .time)
+                                    .font(.caption)
+                                    .bold()
+                                    .foregroundColor(colorScheme == .dark ? theme.backgroundColor : theme.primaryColor)
+                                    .minimumScaleFactor(0.5)
+                            }
                         }
-                        else {
+                        .frame(maxWidth: geometry.size.width * 0.8 , alignment: .center)
+                        .frame(maxHeight: geometry.size.height * 0.6 , alignment: .center)
+                        .background(theme.tertiaryColor)
+                        .cornerRadius(10)
+                        .padding(EdgeInsets(top: CGFloat(8),
+                                            leading: CGFloat(0),
+                                            bottom: CGFloat(0),
+                                            trailing: CGFloat(0)))
+                        .layoutPriority(-1)
+                        
+                        // Custom curved divider
+                        CurvedDivider(color: theme.primaryColor)
+                            .padding(.bottom, 0)
+                        
+                        // Display next prayer
+                        VStack(spacing: 0) {
                             Text(nextPrayer.name)
-                                .foregroundColor(white)
+                                .font(.title)
+                                .fontWeight(.bold)
+                                .foregroundColor(theme.primaryColor)
+                                .minimumScaleFactor(0.5)
+                            
+                            // Display next prayer time or timer
                             if Calendar.current.dateComponents([.minute], from: Date(), to: nextPrayer.date).minute ?? 0 <= 60 && (entry.configuration.showTimer == true) {
                                 Text(nextPrayer.date, style: .timer)
-                                    .fontWeight(.bold)
-                                    .foregroundColor(secondaryColor)
+                                    .font(.title2)
+                                    .fontWeight(.semibold)
+                                    .foregroundColor(theme.secondaryColor)
                                     .multilineTextAlignment(.center)
+                                    .minimumScaleFactor(0.5)
                             }
                             else {
                                 Text(nextPrayer.date, style: .time)
-                                    .fontWeight(.bold)
-                                    .foregroundColor(tertiaryColor)
+                                    .font(.title2)
+                                    .fontWeight(.semibold)
+                                    .foregroundColor(theme.secondaryColor)
+                                    .minimumScaleFactor(0.5)
                             }
                         }
+                        .layoutPriority(1)
+                        .padding(.top, 0)
                     } else {
                         Text("No upcoming prayers")
-                            .foregroundColor(primaryColor)
+                            .font(.caption)
+                            .fontWeight(.regular)
+                            .foregroundColor(theme.primaryColor)
                     }
                     Spacer()
                 }
             }
         }
+    }
+}
+
+// Custom curved divider
+struct CurvedDivider: View {
+    var color: Color
+    
+    var body: some View {
+        GeometryReader { geometry in
+            Path { path in
+                path.move(to: CGPoint(x: 0, y: 0))
+                path.addQuadCurve(to: CGPoint(x: geometry.size.width, y: 0), control: CGPoint(x: geometry.size.width / 2, y: 30))
+            }
+            .stroke(color, lineWidth: 3)
+        }
+        .frame(height: 30)
     }
 }
 
@@ -119,6 +167,7 @@ struct PrayerCountdownWidget: Widget {
 
 struct PrayerCountdownView_Previews: PreviewProvider {
     static var previews: some View {
-        PrayerCountdownView(entry: PrayerEntry(date: Date(), configuration: ConfigurationIntent(), nextPrayer: PrayerData(name: "Isha", date: Date()), previousPrayer: PrayerData(name: "Isha", date: Date())))
+        PrayerCountdownView(entry: PrayerEntry(date: Date(), configuration: ConfigurationIntent(), nextPrayer: PrayerData(name: "Isha", date: Date()), previousPrayer: PrayerData(name: "Maghrib", date: Date())))
+            .previewContext(WidgetPreviewContext(family: .systemSmall))
     }
 }

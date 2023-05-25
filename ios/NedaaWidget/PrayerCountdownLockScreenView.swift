@@ -81,8 +81,6 @@ struct RectangularView: View {
                     .cornerRadius(6)
                 dataToShow(entry: entry, geometry: geometry)
             }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .frame(width: (geometry.size.width / 4) * 2.4, height: (geometry.size.height / 4) * 2.5)
         }
     }
 }
@@ -147,8 +145,6 @@ func dataToShow(entry: CountdownLockScreenViewProvider.Entry, geometry: Geometry
 
 @available(iOSApplicationExtension 16.0, *)
 struct PrayerCountdownLockScreenWidget: Widget {
-    // TODO: keep track of the widget kind so we can use it to update the widget
-    // in case the user changes the location
     let kind: String = "PrayerCountdownLockScreenWidget"
     
     var body: some WidgetConfiguration {

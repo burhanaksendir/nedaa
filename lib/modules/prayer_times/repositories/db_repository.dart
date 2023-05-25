@@ -129,11 +129,13 @@ class DBRepository {
           await _savePrayerTimes(txn, DBDayPrayerTimes(prayerTime));
         }
         // update the widget after updating the database
-        await HomeWidget.updateWidget(
-          name: 'NedaaWidget',
-          iOSName: 'NedaaWidget',
-          androidName: 'NedaaWidget',
-        );
+        for (var name in iOSWidgetNames) {
+          await HomeWidget.updateWidget(
+            name: name,
+            iOSName: name,
+            androidName: 'NedaaWidget',
+          );
+        }
       });
     }
   }
