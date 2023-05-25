@@ -8,11 +8,11 @@ struct CountdownLockScreenViewProvider: IntentTimelineProvider {
     typealias Intent = ConfigurationIntent
     
     func placeholder(in context: Context) -> PrayerEntry {
-        PrayerEntry(date: Date(), configuration: ConfigurationIntent(), nextPrayer: PrayerData(name: "Fajr", date: Date()), previousPrayer: PrayerData(name: "Fajr", date: Date()) )
+        PrayerEntry(date: Date(), configuration: ConfigurationIntent(), nextPrayer: PrayerData(name: NSLocalizedString("fajr", comment: "fajr"), date: Date()), previousPrayer: PrayerData(name: "Fajr", date: Date()) )
     }
     
     func getSnapshot(for configuration: ConfigurationIntent, in context: Context, completion: @escaping (PrayerEntry) -> ()) {
-        let entry = PrayerEntry(date: Date(), configuration: configuration, nextPrayer: PrayerData(name: "Fajr", date: Date()), previousPrayer: PrayerData(name: "Fajr", date: Date()))
+        let entry = PrayerEntry(date: Date(), configuration: configuration, nextPrayer: PrayerData(name: NSLocalizedString("fajr", comment: "fajr"), date: Date()), previousPrayer: PrayerData(name: "Fajr", date: Date()))
         completion(entry)
     }
     
@@ -106,7 +106,7 @@ func dataToShow(entry: CountdownLockScreenViewProvider.Entry, geometry: Geometry
             // Check if the previous prayer was within the last 30 minutes
             if Calendar.current.dateComponents([.minute], from: previousPrayer.date, to: Date()).minute ?? 0 < 30 && (entry.configuration.showTimer == true) {
                 VStack {
-                    Text(previousPrayer.name)
+                    Text(NSLocalizedString(previousPrayer.name, comment: "Previous prayer"))
                         .multilineTextAlignment(.center)
                         .font(.system(size: geometry.size.width * 0.2))
                     Text(previousPrayer.date, style: .timer)
@@ -118,7 +118,7 @@ func dataToShow(entry: CountdownLockScreenViewProvider.Entry, geometry: Geometry
             }
             else {
                 VStack {
-                    Text(nextPrayer.name)
+                    Text(NSLocalizedString(nextPrayer.name, comment: "Next prayer"))
                         .font(.system(size: geometry.size.width * 0.2))
                         .lineLimit(1)
                         .minimumScaleFactor(0.5)

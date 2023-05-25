@@ -63,12 +63,12 @@ class DatabaseService {
         let queryResult = executeSingleResultQuery(query, withParameter: Int32(dateInt))
         let parsedData = parsePrayerData(jsonString: queryResult ?? "")
         let prayerTimes = [
-            PrayerData(name: "Fajr", date: convertStringToDate(timeString: (parsedData?.prayerTimes.Fajr ?? "") ) ?? Date()),
-            PrayerData(name: "Sunrise", date: convertStringToDate(timeString: (parsedData?.prayerTimes.Sunrise ?? "") ) ?? Date()),
-            PrayerData(name: "Dhuhr", date: convertStringToDate(timeString: (parsedData?.prayerTimes.Dhuhr ?? "") ) ?? Date()),
-            PrayerData(name: "Maghrib", date: convertStringToDate(timeString: (parsedData?.prayerTimes.Maghrib ?? "") ) ?? Date()),
-            PrayerData(name: "Asr", date: convertStringToDate(timeString: (parsedData?.prayerTimes.Asr ?? "") ) ?? Date()),
-            PrayerData(name: "Isha", date: convertStringToDate(timeString: (parsedData?.prayerTimes.Isha ?? "") ) ?? Date())
+            PrayerData(name: "fajr", date: convertStringToDate(timeString: (parsedData?.prayerTimes.Fajr ?? "") ) ?? Date()),
+            PrayerData(name: "sunrise", date: convertStringToDate(timeString: (parsedData?.prayerTimes.Sunrise ?? "") ) ?? Date()),
+            PrayerData(name: "dhuhr", date: convertStringToDate(timeString: (parsedData?.prayerTimes.Dhuhr ?? "") ) ?? Date()),
+            PrayerData(name: "maghrib", date: convertStringToDate(timeString: (parsedData?.prayerTimes.Maghrib ?? "") ) ?? Date()),
+            PrayerData(name: "asr", date: convertStringToDate(timeString: (parsedData?.prayerTimes.Asr ?? "") ) ?? Date()),
+            PrayerData(name: "isha", date: convertStringToDate(timeString: (parsedData?.prayerTimes.Isha ?? "") ) ?? Date())
         ]
         return prayerTimes
     }

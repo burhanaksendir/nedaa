@@ -7,11 +7,11 @@ struct CountdownViewProvider: IntentTimelineProvider {
     typealias Intent = ConfigurationIntent
     
     func placeholder(in context: Context) -> PrayerEntry {
-        PrayerEntry(date: Date(), configuration: ConfigurationIntent(), nextPrayer: PrayerData(name: "Fajr", date: Date()), previousPrayer: PrayerData(name: "Fajr", date: Date()) )
+        PrayerEntry(date: Date(), configuration: ConfigurationIntent(), nextPrayer: PrayerData(name:NSLocalizedString("fajr", comment: "fajr"), date: Date().addingTimeInterval(TimeInterval(-60 * 5))), previousPrayer: PrayerData(name: NSLocalizedString("isha", comment: "isha"), date: Date()) )
     }
     
     func getSnapshot(for configuration: ConfigurationIntent, in context: Context, completion: @escaping (PrayerEntry) -> ()) {
-        let entry = PrayerEntry(date: Date(), configuration: configuration, nextPrayer: PrayerData(name: "Fajr", date: Date()), previousPrayer: PrayerData(name: "Fajr", date: Date()))
+        let entry = PrayerEntry(date: Date(), configuration: configuration, nextPrayer: PrayerData(name: NSLocalizedString("fajr", comment: "fajr"), date: Date()), previousPrayer: PrayerData(name: NSLocalizedString("isha", comment: "Isha"), date: Date()))
         completion(entry)
     }
     
@@ -66,7 +66,7 @@ struct PrayerCountdownView: View {
                         // Display previous prayer
                         ZStack {
                             VStack {
-                                Text(previousPrayer.name)
+                                Text(NSLocalizedString(previousPrayer.name, comment: "Previous prayer"))
                                     .font(.caption)
                                     .fontWeight(.regular)
                                     .foregroundColor(colorScheme == .dark ? theme.backgroundColor : theme.primaryColor)
@@ -95,7 +95,7 @@ struct PrayerCountdownView: View {
                         
                         // Display next prayer
                         VStack(spacing: 0) {
-                            Text(nextPrayer.name)
+                            Text(NSLocalizedString(nextPrayer.name, comment: "Next prayer"))
                                 .font(.title)
                                 .fontWeight(.bold)
                                 .foregroundColor(theme.primaryColor)
@@ -167,7 +167,7 @@ struct PrayerCountdownWidget: Widget {
 
 struct PrayerCountdownView_Previews: PreviewProvider {
     static var previews: some View {
-        PrayerCountdownView(entry: PrayerEntry(date: Date(), configuration: ConfigurationIntent(), nextPrayer: PrayerData(name: "Isha", date: Date()), previousPrayer: PrayerData(name: "Maghrib", date: Date())))
+        PrayerCountdownView(entry: PrayerEntry(date: Date(), configuration: ConfigurationIntent(), nextPrayer: PrayerData(name: NSLocalizedString("isha", comment: "Next prayer"), date: Date()), previousPrayer: PrayerData(name: NSLocalizedString("Maghrib", comment: "Next prayer"), date: Date())))
             .previewContext(WidgetPreviewContext(family: .systemSmall))
     }
 }

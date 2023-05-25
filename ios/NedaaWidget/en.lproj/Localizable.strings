@@ -1,0 +1,10 @@
+/*
+  en.strings
+*/
+
+"fajr" = "Fajr";
+"sunrise" = "Sunrise";
+"dhuhr" = "Dhuhr";
+"maghrib" = "Maghrib";
+"asr" = "Asr";
+"isha" = "Isha";
