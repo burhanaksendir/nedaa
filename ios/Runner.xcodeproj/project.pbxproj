@@ -15,6 +15,8 @@
 		35C8AEAE28D220D900E14B6F /* takbir.m4r in Resources */ = {isa = PBXBuildFile; fileRef = 35C8AEAD28D220D900E14B6F /* takbir.m4r */; };
 		35CEB4632A1F479200B4CF73 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35CEB4622A1F479200B4CF73 /* Theme.swift */; };
 		35CEB4662A1F50F900B4CF73 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 35CEB4682A1F50F900B4CF73 /* Localizable.strings */; };
+		35CEB46C2A1F5A9400B4CF73 /* NedaaWidget.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 35CEB46F2A1F5A9400B4CF73 /* NedaaWidget.intentdefinition */; };
+		35CEB46D2A1F5A9400B4CF73 /* NedaaWidget.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 35CEB46F2A1F5A9400B4CF73 /* NedaaWidget.intentdefinition */; };
 		35D92DA02877327500FEC8B3 /* athan8.m4r in Resources */ = {isa = PBXBuildFile; fileRef = 35D92D9E2877327500FEC8B3 /* athan8.m4r */; };
 		35D92DA12877327500FEC8B3 /* knock.m4r in Resources */ = {isa = PBXBuildFile; fileRef = 35D92D9F2877327500FEC8B3 /* knock.m4r */; };
 		35D92DA32877328A00FEC8B3 /* athan6.m4r in Resources */ = {isa = PBXBuildFile; fileRef = 35D92DA22877328A00FEC8B3 /* athan6.m4r */; };
@@ -24,8 +26,6 @@
 		35ED909F2A1E008D001D7EDF /* NedaaWidgetLiveActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35ED909E2A1E008D001D7EDF /* NedaaWidgetLiveActivity.swift */; };
 		35ED90A12A1E008D001D7EDF /* NedaaWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35ED90A02A1E008D001D7EDF /* NedaaWidget.swift */; };
 		35ED90A42A1E008E001D7EDF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 35ED90A32A1E008E001D7EDF /* Assets.xcassets */; };
-		35ED90A62A1E008E001D7EDF /* NedaaWidget.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 35ED90A22A1E008D001D7EDF /* NedaaWidget.intentdefinition */; };
-		35ED90A72A1E008E001D7EDF /* NedaaWidget.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 35ED90A22A1E008D001D7EDF /* NedaaWidget.intentdefinition */; };
 		35ED90AA2A1E008E001D7EDF /* NedaaWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 35ED90982A1E008D001D7EDF /* NedaaWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		35ED90B72A1E04AB001D7EDF /* DatabaseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35ED90B62A1E04AB001D7EDF /* DatabaseService.swift */; };
 		35ED90B92A1E04D1001D7EDF /* PrayerDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35ED90B82A1E04D1001D7EDF /* PrayerDataService.swift */; };
@@ -92,6 +92,8 @@
 		35CEB4692A1F511100B4CF73 /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/Main.strings; sourceTree = "<group>"; };
 		35CEB46A2A1F511100B4CF73 /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		35CEB46B2A1F511100B4CF73 /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/Localizable.strings; sourceTree = "<group>"; };
+		35CEB46E2A1F5A9400B4CF73 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.intentdefinition; name = en; path = en.lproj/NedaaWidget.intentdefinition; sourceTree = "<group>"; };
+		35CEB4712A1F5A9A00B4CF73 /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/NedaaWidget.strings; sourceTree = "<group>"; };
 		35D92D9E2877327500FEC8B3 /* athan8.m4r */ = {isa = PBXFileReference; lastKnownFileType = file; path = athan8.m4r; sourceTree = "<group>"; };
 		35D92D9F2877327500FEC8B3 /* knock.m4r */ = {isa = PBXFileReference; lastKnownFileType = file; path = knock.m4r; sourceTree = "<group>"; };
 		35D92DA22877328A00FEC8B3 /* athan6.m4r */ = {isa = PBXFileReference; lastKnownFileType = file; path = athan6.m4r; sourceTree = "<group>"; };
@@ -99,7 +101,6 @@
 		35ED909C2A1E008D001D7EDF /* NedaaWidgetBundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NedaaWidgetBundle.swift; sourceTree = "<group>"; };
 		35ED909E2A1E008D001D7EDF /* NedaaWidgetLiveActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NedaaWidgetLiveActivity.swift; sourceTree = "<group>"; };
 		35ED90A02A1E008D001D7EDF /* NedaaWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NedaaWidget.swift; sourceTree = "<group>"; };
-		35ED90A22A1E008D001D7EDF /* NedaaWidget.intentdefinition */ = {isa = PBXFileReference; lastKnownFileType = file.intentdefinition; path = NedaaWidget.intentdefinition; sourceTree = "<group>"; };
 		35ED90A32A1E008E001D7EDF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		35ED90A52A1E008E001D7EDF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		35ED90B62A1E04AB001D7EDF /* DatabaseService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseService.swift; sourceTree = "<group>"; };
@@ -173,7 +174,7 @@
 				35ED909C2A1E008D001D7EDF /* NedaaWidgetBundle.swift */,
 				35ED909E2A1E008D001D7EDF /* NedaaWidgetLiveActivity.swift */,
 				35ED90A02A1E008D001D7EDF /* NedaaWidget.swift */,
-				35ED90A22A1E008D001D7EDF /* NedaaWidget.intentdefinition */,
+				35CEB46F2A1F5A9400B4CF73 /* NedaaWidget.intentdefinition */,
 				35ED90A32A1E008E001D7EDF /* Assets.xcassets */,
 				35ED90A52A1E008E001D7EDF /* Info.plist */,
 				35ED90B62A1E04AB001D7EDF /* DatabaseService.swift */,
@@ -444,7 +445,7 @@
 				35ED909F2A1E008D001D7EDF /* NedaaWidgetLiveActivity.swift in Sources */,
 				35ED90B72A1E04AB001D7EDF /* DatabaseService.swift in Sources */,
 				35ED90A12A1E008D001D7EDF /* NedaaWidget.swift in Sources */,
-				35ED90A62A1E008E001D7EDF /* NedaaWidget.intentdefinition in Sources */,
+				35CEB46D2A1F5A9400B4CF73 /* NedaaWidget.intentdefinition in Sources */,
 				35ED90BD2A1E241D001D7EDF /* PrayerCountdownLockScreenView.swift in Sources */,
 				35ED909D2A1E008D001D7EDF /* NedaaWidgetBundle.swift in Sources */,
 			);
@@ -455,7 +456,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */,
-				35ED90A72A1E008E001D7EDF /* NedaaWidget.intentdefinition in Sources */,
+				35CEB46C2A1F5A9400B4CF73 /* NedaaWidget.intentdefinition in Sources */,
 				1498D2341E8E89220040F4C2 /* GeneratedPluginRegistrant.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -478,6 +479,15 @@
 				35CEB46B2A1F511100B4CF73 /* ar */,
 			);
 			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+		35CEB46F2A1F5A9400B4CF73 /* NedaaWidget.intentdefinition */ = {
+			isa = PBXVariantGroup;
+			children = (
+				35CEB46E2A1F5A9400B4CF73 /* en */,
+				35CEB4712A1F5A9A00B4CF73 /* ar */,
+			);
+			name = NedaaWidget.intentdefinition;
 			sourceTree = "<group>";
 		};
 		97C146FA1CF9000F007C117D /* Main.storyboard */ = {
@@ -563,7 +573,7 @@
 				CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 16;
+				CURRENT_PROJECT_VERSION = 17;
 				DEVELOPMENT_TEAM = MBFRA8P6N9;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Runner/Info.plist;
@@ -600,7 +610,7 @@
 				CODE_SIGN_ENTITLEMENTS = NedaaWidgetExtension.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 16;
+				CURRENT_PROJECT_VERSION = 17;
 				DEVELOPMENT_TEAM = MBFRA8P6N9;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -641,7 +651,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 16;
+				CURRENT_PROJECT_VERSION = 17;
 				DEVELOPMENT_TEAM = MBFRA8P6N9;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -678,7 +688,7 @@
 				CODE_SIGN_ENTITLEMENTS = NedaaWidgetExtension.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 16;
+				CURRENT_PROJECT_VERSION = 17;
 				DEVELOPMENT_TEAM = MBFRA8P6N9;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -824,7 +834,7 @@
 				CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 16;
+				CURRENT_PROJECT_VERSION = 17;
 				DEVELOPMENT_TEAM = MBFRA8P6N9;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Runner/Info.plist;
@@ -860,7 +870,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 16;
+				CURRENT_PROJECT_VERSION = 17;
 				DEVELOPMENT_TEAM = MBFRA8P6N9;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Runner/Info.plist;

@@ -8,11 +8,11 @@ struct CountdownLockScreenViewProvider: IntentTimelineProvider {
     typealias Intent = ConfigurationIntent
     
     func placeholder(in context: Context) -> PrayerEntry {
-        PrayerEntry(date: Date(), configuration: ConfigurationIntent(), nextPrayer: PrayerData(name: NSLocalizedString("fajr", comment: "fajr"), date: Date()), previousPrayer: PrayerData(name: "Fajr", date: Date()) )
+        PrayerEntry(date: Date(), configuration: ConfigurationIntent(), nextPrayer: PrayerData(name: NSLocalizedString("isha", comment: "isha"), date: Date().addingTimeInterval(3600)), previousPrayer: PrayerData(name: "isha", date: Date().addingTimeInterval(3600)) )
     }
     
     func getSnapshot(for configuration: ConfigurationIntent, in context: Context, completion: @escaping (PrayerEntry) -> ()) {
-        let entry = PrayerEntry(date: Date(), configuration: configuration, nextPrayer: PrayerData(name: NSLocalizedString("fajr", comment: "fajr"), date: Date()), previousPrayer: PrayerData(name: "Fajr", date: Date()))
+        let entry = PrayerEntry(date: Date(), configuration: configuration, nextPrayer: PrayerData(name: NSLocalizedString("isha", comment: "isha"), date: Date().addingTimeInterval(3600)), previousPrayer: PrayerData(name: NSLocalizedString("isha", comment: "isha"), date: Date().addingTimeInterval(3600)))
         completion(entry)
     }
     
@@ -151,8 +151,8 @@ struct PrayerCountdownLockScreenWidget: Widget {
         IntentConfiguration(kind: kind, intent: ConfigurationIntent.self, provider: Provider()) { entry in
             PrayerCountdownLockScreenView(entry: entry)
         }
-        .configurationDisplayName("Lock screen Next prayer with timer")
-        .description("This widget will show the next prayer and time. \nit will show a countdonw 60 mintues before the prayer. \nit will countup for 30min after the prayer")
+        .configurationDisplayName(NSLocalizedString("nextPrayerLockScreenWidgetTitle", comment: "Lock screen widget title"))
+        .description(NSLocalizedString("nextPrayerLockScreenWidgetDesc", comment: "Lock screen widget description"))
         .supportedFamilies([.accessoryCircular, .accessoryRectangular])
         
     }

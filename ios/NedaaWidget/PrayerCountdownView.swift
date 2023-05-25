@@ -7,11 +7,11 @@ struct CountdownViewProvider: IntentTimelineProvider {
     typealias Intent = ConfigurationIntent
     
     func placeholder(in context: Context) -> PrayerEntry {
-        PrayerEntry(date: Date(), configuration: ConfigurationIntent(), nextPrayer: PrayerData(name:NSLocalizedString("fajr", comment: "fajr"), date: Date().addingTimeInterval(TimeInterval(-60 * 5))), previousPrayer: PrayerData(name: NSLocalizedString("isha", comment: "isha"), date: Date()) )
+        PrayerEntry(date: Date(), configuration: ConfigurationIntent(), nextPrayer: PrayerData(name:NSLocalizedString("fajr", comment: "fajr"), date: Date().addingTimeInterval(TimeInterval(60 * 5))), previousPrayer: PrayerData(name: NSLocalizedString("isha", comment: "isha"), date: Date().addingTimeInterval(3600)) )
     }
     
     func getSnapshot(for configuration: ConfigurationIntent, in context: Context, completion: @escaping (PrayerEntry) -> ()) {
-        let entry = PrayerEntry(date: Date(), configuration: configuration, nextPrayer: PrayerData(name: NSLocalizedString("fajr", comment: "fajr"), date: Date()), previousPrayer: PrayerData(name: NSLocalizedString("isha", comment: "Isha"), date: Date()))
+        let entry = PrayerEntry(date: Date(), configuration: configuration, nextPrayer: PrayerData(name: NSLocalizedString("fajr", comment: "fajr"), date: Date().addingTimeInterval(3600)), previousPrayer: PrayerData(name: NSLocalizedString("isha", comment: "Isha"), date: Date().addingTimeInterval(3600)))
         completion(entry)
     }
     
@@ -79,14 +79,11 @@ struct PrayerCountdownView: View {
                                     .minimumScaleFactor(0.5)
                             }
                         }
-                        .frame(maxWidth: geometry.size.width * 0.8 , alignment: .center)
+                        .frame(maxWidth: geometry.size.width * 0.8, alignment: .center)
                         .frame(maxHeight: geometry.size.height * 0.6 , alignment: .center)
                         .background(theme.tertiaryColor)
                         .cornerRadius(10)
-                        .padding(EdgeInsets(top: CGFloat(8),
-                                            leading: CGFloat(0),
-                                            bottom: CGFloat(0),
-                                            trailing: CGFloat(0)))
+                        .padding(.top, 8)
                         .layoutPriority(-1)
                         
                         // Custom curved divider
@@ -121,7 +118,7 @@ struct PrayerCountdownView: View {
                         .layoutPriority(1)
                         .padding(.top, 0)
                     } else {
-                        Text("No upcoming prayers")
+                        Text(NSLocalizedString("noData", comment: "No Data available"))
                             .font(.caption)
                             .fontWeight(.regular)
                             .foregroundColor(theme.primaryColor)
@@ -150,16 +147,14 @@ struct CurvedDivider: View {
 }
 
 struct PrayerCountdownWidget: Widget {
-    // TODO: keep track of the widget kind so we can use it to update the widget
-    // in case the user changes the location
     let kind: String = "PrayerCountdownWidget"
     
     var body: some WidgetConfiguration {
         IntentConfiguration(kind: kind, intent: ConfigurationIntent.self, provider: Provider()) { entry in
             PrayerCountdownView(entry: entry)
         }
-        .configurationDisplayName("Next prayer with timer")
-        .description("This widget will show the next prayer and time. \nit will show a countdonw 60 mintues before the prayer. \nit will countup for 30min after the prayer")
+        .configurationDisplayName(NSLocalizedString("nextPreviousWidgetTitle", comment: "Next/Previous prayer title"))
+        .description(NSLocalizedString("nextPreviousWidgetDesc", comment: "Next/Previous prayer description"))
         .supportedFamilies([.systemSmall])
         
     }

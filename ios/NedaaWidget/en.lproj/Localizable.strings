@@ -8,3 +8,8 @@
 "maghrib" = "Maghrib";
 "asr" = "Asr";
 "isha" = "Isha";
+"noData" = "No data please open the app";
+"nextPreviousWidgetTitle" = "Next/Previous Prayer";
+"nextPreviousWidgetDesc" = "This widget will show the next and the previous prayer \n it'll show a countdown 60 minutes before the prayer  \n and will counter for 30 min after the prayer \n you may turn it off from the widget settings";
+"nextPrayerLockScreenWidgetTitle" = "Next Prayer";
+"nextPrayerLockScreenWidgetDesc" = "Displays the next prayer. it shows a countdown timer 60 minutes before the prayer. And count up 30 minutes after";
