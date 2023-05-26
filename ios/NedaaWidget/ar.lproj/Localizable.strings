@@ -8,8 +8,11 @@
 "maghrib" = "المغرب";
 "asr" = "العصر";
 "isha" = "العشاء";
+"jumuah" = "الجمعة";
 "noData" = "لا يوجد بيانات الرجاء فتح التطبيق";
 "nextPreviousWidgetTitle" = "الصلاة السابقة و القادمة";
 "nextPreviousWidgetDesc" = "الصلاة القادمة والصلاة السابقة \n سيظهر العد التنازلي 60 دقيقة قبل الصلاة \n وسيعد لمدة 30 دقيقة بعد الصلاة \n يمكنك إيقافه من إعدادات الويدجت.";
 "nextPrayerLockScreenWidgetTitle" = "الصلاة القادمة";
 "nextPrayerLockScreenWidgetDesc" = "يعرض وقت الصلاة القادمة. يظهر مؤقت العد التنازلي 60 دقيقة قبل الصلاة. ويبدأ العد 30 دقيقة بعد الصلاة";
+"allPrayersWidgetTitle" = "صلوات اليوم";
+"allPrayersWidgetDesc" = "أوقات الصلاة لليوم الحالي";

@@ -11,6 +11,7 @@ struct NedaaWidgetBundle: WidgetBundle {
         }
         //        NedaaWidget()
         PrayerCountdownWidget()
+        AllPrayersWidget()
         //        NedaaWidgetLiveActivity()
         
     }

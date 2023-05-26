@@ -21,7 +21,7 @@ struct PrayerTimes: Decodable {
 }
 
 struct PrayerData: Decodable {
-    let name: String
+    var name: String
     let date: Date
 }
 

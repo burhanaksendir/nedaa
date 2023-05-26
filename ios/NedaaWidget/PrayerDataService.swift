@@ -24,7 +24,7 @@ struct PrayerDataService {
         return prayerTimes
     }
     
-    func getTodaysPrayerTimes() -> [PrayerData]? {
+    func getTodaysPrayerTimes(showSunrise: Bool = true) -> [PrayerData]? {
         if dbService.timeZone.isEmpty {
             dbService.getTimezone()
         }
@@ -36,7 +36,27 @@ struct PrayerDataService {
             
         };
         let today = Date().toLocalTime(timezone: timeZoneObj)
-        return getDayPrayerTimes(for: today)
+        var prayers =  getDayPrayerTimes(for: today)
+        guard var prayerTimes = prayers else {
+            return nil
+        }
+        prayerTimes = prayerTimes.sorted(by: { $0.date < $1.date })
+        
+        // check if today is Friday and if so, rename Dhuhr to Jumuah
+        if Calendar.current.component(.weekday, from: today) == 6 {
+            prayerTimes[2].name = "jumuah"
+        }
+        
+        if(showSunrise == false){
+           // Remove the sunrise 
+           // after sorting, the sunrise will always be at index 1
+            prayerTimes.remove(at: 1)
+        }
+
+
+        
+        return prayerTimes
+        
     }
     
     func getTomorrowsPrayerTimes() -> [PrayerData]? {
@@ -80,7 +100,7 @@ struct PrayerDataService {
     
     func getNextPrayer(showSunrise: Bool = true) -> PrayerData? {
         let currentDate = Date()
-        guard let prayerTimes = getTodaysPrayerTimes() else {
+        guard let prayerTimes = getTodaysPrayerTimes(showSunrise: showSunrise) else {
             return nil
         }
         
@@ -91,10 +111,6 @@ struct PrayerDataService {
         
         // Find the first prayer time that is later than the current date
         for prayer in sortedPrayerTimes {
-            // If the prayer is sunrise and we don't want to show sunrise, skip it
-            if prayer.name == "Sunrise" && !showSunrise {
-                continue
-            }
             if prayer.date > currentDate {
                 return prayer
             }
@@ -111,7 +127,7 @@ struct PrayerDataService {
     
     func getPreviousPrayer(showSunrise: Bool = true) -> PrayerData? {
         let currentDate = Date()
-        guard let prayerTimes = getTodaysPrayerTimes() else {
+        guard let prayerTimes = getTodaysPrayerTimes(showSunrise: showSunrise) else {
             return nil
         }
         
@@ -120,10 +136,6 @@ struct PrayerDataService {
         
         // Find the last prayer time that is earlier than the current date
         for prayer in sortedPrayerTimes.reversed() {
-            // If the prayer is sunrise and we don't want to show sunrise, skip it
-            if prayer.name == "Sunrise" && !showSunrise {
-                continue
-            }
             if prayer.date < currentDate {
                 return prayer
             }
