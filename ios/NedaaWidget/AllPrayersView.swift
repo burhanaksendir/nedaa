@@ -28,11 +28,17 @@ struct AllPrayersViewProvider: IntentTimelineProvider {
         var _: [AllPrayerEntry] = []
         let prayerService = PrayerDataService()
         let showSunrise = configuration.showSunrise as! Bool?
-        let todaysPrayers = prayerService.getTodaysPrayerTimes(showSunrise: showSunrise ?? true)
+        var todaysPrayers = prayerService.getTodaysPrayerTimes(showSunrise: showSunrise ?? true)
         let nextPrayer = prayerService.getNextPrayer(showSunrise: showSunrise ?? true) ?? PrayerData(name: "DB ERROR", date: Date())
         let currentDate = Date()
-        print(nextPrayer.name)
         let nextUpdateDate = calculateNextUpdateDate(currentDate: currentDate, nextPrayerDate: nextPrayer.date)
+        
+        
+        // if the current date is after the last prayer(Isha) of the day, then we need to get tomorrow's prayer times
+        if(currentDate > todaysPrayers?.last?.date ?? Date()) {
+            todaysPrayers = prayerService.getTomorrowsPrayerTimes(showSunrise: showSunrise ?? true) 
+        }
+        
         
         let entry = AllPrayerEntry(date: currentDate,configuration: configuration, allPrayers: todaysPrayers, nextPrayer: nextPrayer)
         let timeline = Timeline(entries: [entry], policy: .after(nextUpdateDate))
