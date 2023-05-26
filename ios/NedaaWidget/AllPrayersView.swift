@@ -104,7 +104,7 @@ struct AllPrayersView: View {
     func PrayerTimeText(prayer: PrayerData, fontHeight: CGFloat) -> some View {
         let isNextPrayer = prayer.name == entry.nextPrayer?.name
         if isNextPrayer {
-            let isSoon = Calendar.current.dateComponents([.minute], from: Date(), to: prayer.date).minute ?? 0 <= 60
+            let isSoon = Calendar.current.dateComponents([.minute], from: Date(), to: prayer.date).minute ?? 0 <= 60 && entry.configuration.showTimer == true
             let timeStyle: Text.DateStyle = isSoon ? .timer : .time
             return Text(prayer.date, style: timeStyle)
                 .font(.system(size: fontHeight * 0.7))

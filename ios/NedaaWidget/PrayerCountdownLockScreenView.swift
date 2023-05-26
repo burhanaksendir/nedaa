@@ -77,8 +77,6 @@ struct RectangularView: View {
     var body: some View {
         GeometryReader { geometry in
             ZStack {
-                AccessoryWidgetBackground()
-                    .cornerRadius(6)
                 dataToShow(entry: entry, geometry: geometry)
             }
         }
@@ -92,7 +90,6 @@ struct CircularView: View {
     var body: some View {
         GeometryReader { geometry in
             ZStack {
-                AccessoryWidgetBackground()
                 dataToShow(entry: entry, geometry: geometry)
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
