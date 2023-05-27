@@ -77,7 +77,7 @@ struct RectangularView: View {
     var body: some View {
         GeometryReader { geometry in
             ZStack {
-                dataToShow(entry: entry, geometry: geometry)
+                dataToShow(entry: entry, geometry: geometry, widgetFamily:  .accessoryCircular)
             }
         }
     }
@@ -90,33 +90,35 @@ struct CircularView: View {
     var body: some View {
         GeometryReader { geometry in
             ZStack {
-                dataToShow(entry: entry, geometry: geometry)
+                dataToShow(entry: entry, geometry: geometry, widgetFamily:  .accessoryCircular)
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
     }
 }
 
-func dataToShow(entry: CountdownLockScreenViewProvider.Entry, geometry: GeometryProxy) -> some View {
-    Group {
+@available(iOSApplicationExtension 16.0, *)
+func dataToShow(entry: CountdownLockScreenViewProvider.Entry, geometry: GeometryProxy, widgetFamily: WidgetFamily  ) -> some View {
+    let fontSize: Double = widgetFamily == WidgetFamily.accessoryCircular ? 0.25 : 0.6
+    return Group {
         if let nextPrayer = entry.nextPrayer, let previousPrayer = entry.previousPrayer {
             // Check if the previous prayer was within the last 30 minutes
             if Calendar.current.dateComponents([.minute], from: previousPrayer.date, to: Date()).minute ?? 0 < 30 && (entry.configuration.showTimer == true) {
                 VStack {
                     Text(NSLocalizedString(previousPrayer.name, comment: "Previous prayer"))
                         .multilineTextAlignment(.center)
-                        .font(.system(size: geometry.size.width * 0.2))
+                        .font(.system(size: geometry.size.width * fontSize))
                     Text(previousPrayer.date, style: .timer)
                         .multilineTextAlignment(.center)
                         .lineLimit(1)
                         .minimumScaleFactor(0.4)
-                        .font(.system(size: geometry.size.width * 0.2))
+                        .font(.system(size: geometry.size.width * fontSize))
                 }
             }
             else {
                 VStack {
                     Text(NSLocalizedString(nextPrayer.name, comment: "Next prayer"))
-                        .font(.system(size: geometry.size.width * 0.2))
+                        .font(.system(size: geometry.size.width * fontSize))
                         .lineLimit(1)
                         .minimumScaleFactor(0.5)
                     
@@ -126,13 +128,12 @@ func dataToShow(entry: CountdownLockScreenViewProvider.Entry, geometry: Geometry
                             .multilineTextAlignment(.center)
                             .lineLimit(1)
                             .minimumScaleFactor(0.5)
-                            .font(.system(size: geometry.size.width * 0.2))
                     }
                     else {
                         Text(nextPrayer.date, style: .time)
                             .lineLimit(1)
                             .minimumScaleFactor(0.5)
-                            .font(.system(size: geometry.size.width * 0.2))
+                            .font(.system(size: geometry.size.width * fontSize))
                     }
                 }
             }

@@ -51,8 +51,8 @@ struct PrayerDataService {
             
         };
         let today = Date().toLocalTime(timezone: timeZoneObj)
-        let prayers =  getDayPrayerTimes(for: today)
-        guard var prayerTimes = prayers else {
+        let prayers =   getDayPrayerTimes(for: today, showSunrise: showSunrise)
+        guard let prayerTimes = prayers else {
             return nil
         }
         
