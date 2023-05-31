@@ -45,23 +45,43 @@ class DBRepository {
   Database? db;
 
   Future<void> open() async {
-    // Get a location using getDatabasesPath
     var databasesPath = await getDatabasesPath();
-    // TODO: delete the previous database and create a new one or move the database to the new location
-    // using the app group which is used to share data between the app and the widget
+    String oldPath = p.join(databasesPath, dbName);
+
+    // On iOS, we need to store the database in app group directory
+    // so that it can be accessed by the app extension
     if (Platform.isIOS) {
       final directory =
           await AppGroupDirectory.getAppGroupDirectory(appGroupId);
       if (directory != null) {
         databasesPath = directory.path;
       }
+
+      String newPath = p.join(databasesPath, dbName);
+
+      // for old users, the database is stored in the old location
+      if (await databaseExists(oldPath)) {
+        // Copy the database to the new location
+        await copyDatabase(oldPath, newPath);
+        // Delete the old database
+        await deleteDatabase(oldPath);
+      }
+
+      db = await openDatabase(newPath, version: kVersion1,
+          onCreate: (Database db, int version) async {
+        _createDb(db);
+      });
+    } else {
+      db = await openDatabase(oldPath, version: kVersion1,
+          onCreate: (Database db, int version) async {
+        _createDb(db);
+      });
     }
-    String path = p.join(databasesPath, dbName);
-    await _deleteDatabase();
-    db = await openDatabase(path, version: kVersion1,
-        onCreate: (Database db, int version) async {
-      _createDb(db);
-    });
+  }
+
+  Future<void> copyDatabase(String sourcePath, String destinationPath) async {
+    final File sourceFile = File(sourcePath);
+    await sourceFile.copy(destinationPath);
   }
 
   static Future _createDb(Database db) async {
