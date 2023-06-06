@@ -49,10 +49,18 @@
 	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>This app uses your location to provide accurate prayer times and reminders based on your current location. Your location data will be used while you are using the app and may also be used in the background to send you notifications about upcoming prayers. Your location data will not be shared with any third parties.</string>
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>This app uses your location to provide accurate prayer times and reminders based on your current location. Your location data will be used only for this purpose and will not be shared with any third parties.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>This app uses your location to provide accurate prayer times and reminders based on your current location. Your location data will be used only while you are using the app and will not be shared with any third parties.</string>
+	<key>NSUserActivityTypes</key>
+	<array>
+		<string>ConfigurationIntent</string>
+	</array>
+	<key>UIApplicationSupportsIndirectInputEvents</key>
+	<true/>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>
@@ -71,9 +79,5 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>This app uses your location to provide accurate prayer times and reminders based on your current location. Your location data will be used while you are using the app and may also be used in the background to send you notifications about upcoming prayers. Your location data will not be shared with any third parties.</string>
-	<key>UIApplicationSupportsIndirectInputEvents</key>
-	<true/>
 </dict>
 </plist>

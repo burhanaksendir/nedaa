@@ -12,5 +12,4 @@ flutter analyze
 
 # Check outdated dependencies
 echo "Checking outdated dependencies..."
-flutter pub outdated --mode=null-safety
-
+flutter pub outdated

@@ -1,5 +1,9 @@
 import 'dart:convert';
+import 'dart:io';
 
+import 'package:app_group_directory/app_group_directory.dart';
+import 'package:home_widget/home_widget.dart';
+import 'package:nedaa/constants/app_constans.dart';
 import 'package:nedaa/modules/prayer_times/models/prayer_times.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -41,14 +45,43 @@ class DBRepository {
   Database? db;
 
   Future<void> open() async {
-    // Get a location using getDatabasesPath
     var databasesPath = await getDatabasesPath();
-    String path = p.join(databasesPath, dbName);
-    await _deleteDatabase();
-    db = await openDatabase(path, version: kVersion1,
-        onCreate: (Database db, int version) async {
-      _createDb(db);
-    });
+    String oldPath = p.join(databasesPath, dbName);
+
+    // On iOS, we need to store the database in app group directory
+    // so that it can be accessed by the app extension
+    if (Platform.isIOS) {
+      final directory =
+          await AppGroupDirectory.getAppGroupDirectory(appGroupId);
+      if (directory != null) {
+        databasesPath = directory.path;
+      }
+
+      String newPath = p.join(databasesPath, dbName);
+
+      // for old users, the database is stored in the old location
+      if (await databaseExists(oldPath)) {
+        // Copy the database to the new location
+        await copyDatabase(oldPath, newPath);
+        // Delete the old database
+        await deleteDatabase(oldPath);
+      }
+
+      db = await openDatabase(newPath, version: kVersion1,
+          onCreate: (Database db, int version) async {
+        _createDb(db);
+      });
+    } else {
+      db = await openDatabase(oldPath, version: kVersion1,
+          onCreate: (Database db, int version) async {
+        _createDb(db);
+      });
+    }
+  }
+
+  Future<void> copyDatabase(String sourcePath, String destinationPath) async {
+    final File sourceFile = File(sourcePath);
+    await sourceFile.copy(destinationPath);
   }
 
   static Future _createDb(Database db) async {
@@ -114,6 +147,14 @@ class DBRepository {
       await db!.transaction((txn) async {
         for (DayPrayerTimes prayerTime in prayerTimes) {
           await _savePrayerTimes(txn, DBDayPrayerTimes(prayerTime));
+        }
+        // update the widget after updating the database
+        for (var name in iOSWidgetNames) {
+          await HomeWidget.updateWidget(
+            name: name,
+            iOSName: name,
+            androidName: 'NedaaWidget',
+          );
         }
       });
     }
