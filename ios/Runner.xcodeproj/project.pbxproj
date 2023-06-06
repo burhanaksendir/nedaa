@@ -11,6 +11,8 @@
 		352493452A20816000986E3A /* AllPrayersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 352493442A20816000986E3A /* AllPrayersView.swift */; };
 		3558854728D0CDCA00A4AF43 /* iqama1.m4r in Resources */ = {isa = PBXBuildFile; fileRef = 3558854628D0CDCA00A4AF43 /* iqama1.m4r */; };
 		3558854928D0D21400A4AF43 /* athan1.m4r in Resources */ = {isa = PBXBuildFile; fileRef = 3558854828D0D21400A4AF43 /* athan1.m4r */; };
+		359E118B2A2F565000FAFF3F /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 359E118E2A2F565000FAFF3F /* InfoPlist.strings */; };
+		359E118C2A2F565000FAFF3F /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 359E118E2A2F565000FAFF3F /* InfoPlist.strings */; };
 		35C8AEA828D21DE900E14B6F /* beep.m4r in Resources */ = {isa = PBXBuildFile; fileRef = 35C8AEA728D21DE900E14B6F /* beep.m4r */; };
 		35C8AEAA28D21DF500E14B6F /* medina_athan.m4r in Resources */ = {isa = PBXBuildFile; fileRef = 35C8AEA928D21DF500E14B6F /* medina_athan.m4r */; };
 		35C8AEAE28D220D900E14B6F /* takbir.m4r in Resources */ = {isa = PBXBuildFile; fileRef = 35C8AEAD28D220D900E14B6F /* takbir.m4r */; };
@@ -86,6 +88,8 @@
 		3558854628D0CDCA00A4AF43 /* iqama1.m4r */ = {isa = PBXFileReference; lastKnownFileType = file; path = iqama1.m4r; sourceTree = "<group>"; };
 		3558854828D0D21400A4AF43 /* athan1.m4r */ = {isa = PBXFileReference; lastKnownFileType = file; path = athan1.m4r; sourceTree = "<group>"; };
 		358D316428B6A2DE00472A8D /* Runner.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Runner.entitlements; sourceTree = "<group>"; };
+		359E118D2A2F565000FAFF3F /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		359E118F2A2F565500FAFF3F /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		35C8AEA728D21DE900E14B6F /* beep.m4r */ = {isa = PBXFileReference; lastKnownFileType = file; path = beep.m4r; sourceTree = "<group>"; };
 		35C8AEA928D21DF500E14B6F /* medina_athan.m4r */ = {isa = PBXFileReference; lastKnownFileType = file; path = medina_athan.m4r; sourceTree = "<group>"; };
 		35C8AEAD28D220D900E14B6F /* takbir.m4r */ = {isa = PBXFileReference; lastKnownFileType = file; path = takbir.m4r; sourceTree = "<group>"; };
@@ -246,6 +250,7 @@
 				1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */,
 				74858FAE1ED2DC5600515810 /* AppDelegate.swift */,
 				74858FAD1ED2DC5600515810 /* Runner-Bridging-Header.h */,
+				359E118E2A2F565000FAFF3F /* InfoPlist.strings */,
 			);
 			path = Runner;
 			sourceTree = "<group>";
@@ -339,6 +344,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				35ED90A42A1E008E001D7EDF /* Assets.xcassets in Resources */,
+				359E118C2A2F565000FAFF3F /* InfoPlist.strings in Resources */,
 				35CEB4662A1F50F900B4CF73 /* Localizable.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -350,6 +356,7 @@
 				35D92DA12877327500FEC8B3 /* knock.m4r in Resources */,
 				97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */,
 				3558854928D0D21400A4AF43 /* athan1.m4r in Resources */,
+				359E118B2A2F565000FAFF3F /* InfoPlist.strings in Resources */,
 				35D92DA02877327500FEC8B3 /* athan8.m4r in Resources */,
 				35D92DA32877328A00FEC8B3 /* athan6.m4r in Resources */,
 				3B3967161E833CAA004F5970 /* AppFrameworkInfo.plist in Resources */,
@@ -476,6 +483,15 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		359E118E2A2F565000FAFF3F /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				359E118D2A2F565000FAFF3F /* en */,
+				359E118F2A2F565500FAFF3F /* ar */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
 		35CEB4682A1F50F900B4CF73 /* Localizable.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -577,7 +593,7 @@
 				CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 21;
+				CURRENT_PROJECT_VERSION = 28;
 				DEVELOPMENT_TEAM = MBFRA8P6N9;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Runner/Info.plist;
@@ -614,7 +630,7 @@
 				CODE_SIGN_ENTITLEMENTS = NedaaWidgetExtension.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 21;
+				CURRENT_PROJECT_VERSION = 28;
 				DEVELOPMENT_TEAM = MBFRA8P6N9;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -655,7 +671,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 21;
+				CURRENT_PROJECT_VERSION = 28;
 				DEVELOPMENT_TEAM = MBFRA8P6N9;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -692,7 +708,7 @@
 				CODE_SIGN_ENTITLEMENTS = NedaaWidgetExtension.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 21;
+				CURRENT_PROJECT_VERSION = 28;
 				DEVELOPMENT_TEAM = MBFRA8P6N9;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -838,7 +854,7 @@
 				CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 21;
+				CURRENT_PROJECT_VERSION = 28;
 				DEVELOPMENT_TEAM = MBFRA8P6N9;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Runner/Info.plist;
@@ -874,7 +890,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 21;
+				CURRENT_PROJECT_VERSION = 28;
 				DEVELOPMENT_TEAM = MBFRA8P6N9;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Runner/Info.plist;
