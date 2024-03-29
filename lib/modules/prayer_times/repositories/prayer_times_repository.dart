@@ -3,7 +3,7 @@ import 'package:nedaa/modules/prayer_times/repositories/db_repository.dart';
 import 'package:nedaa/modules/settings/models/calculation_method.dart';
 import 'package:nedaa/modules/settings/models/user_location.dart';
 import 'package:nedaa/utils/helper.dart';
-import 'package:nedaa/utils/services/rest_api_service.dart';
+import 'package:nedaa/services/rest_api_service.dart';
 
 class CurrentPrayerTimesState {
   DayPrayerTimes today;

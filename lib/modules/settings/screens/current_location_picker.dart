@@ -7,7 +7,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:nedaa/modules/settings/bloc/user_settings_bloc.dart';
 import 'package:nedaa/modules/settings/models/user_location.dart';
 import 'package:nedaa/utils/location_permission_utils.dart';
-import 'package:nedaa/utils/services/rest_api_service.dart';
+import 'package:nedaa/services/rest_api_service.dart';
 
 class CurrentLocationPicker extends StatefulWidget {
   const CurrentLocationPicker({Key? key}) : super(key: key);
