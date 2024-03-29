@@ -38,39 +38,39 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
       },
     );
     on<ThemeEvent>(
-      (event, emit) => {
+      (event, emit) {
         emit(SettingsState(
           appLanguage: state.appLanguage,
           appTheme: event.theme,
           font: state.font,
           isFirstRun: state.isFirstRun,
           sendCrashReports: state.sendCrashReports,
-        )),
-        settingsRepository.setTheme(event.theme)
+        ));
+        settingsRepository.setTheme(event.theme);
       },
     );
     on<FirstRunEvent>(
-      (event, emit) => {
+      (event, emit) {
         emit(SettingsState(
           appLanguage: state.appLanguage,
           appTheme: state.appTheme,
           font: state.font,
           isFirstRun: false,
           sendCrashReports: state.sendCrashReports,
-        )),
-        settingsRepository.setIsFirstRun(false)
+        ));
+        settingsRepository.setIsFirstRun(false);
       },
     );
     on<SendCrashReportsEvent>(
-      (event, emit) => {
+      (event, emit) {
         emit(SettingsState(
           appLanguage: state.appLanguage,
           appTheme: state.appTheme,
           font: state.font,
           isFirstRun: state.isFirstRun,
           sendCrashReports: event.sendCrashReports,
-        )),
-        settingsRepository.setSendCrashReports(state.sendCrashReports)
+        ));
+        settingsRepository.setSendCrashReports(state.sendCrashReports);
       },
     );
   }
