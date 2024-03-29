@@ -7,12 +7,10 @@ import 'package:intl/intl.dart';
 import 'package:nedaa/modules/prayer_times/bloc/prayer_times_bloc.dart';
 import 'package:nedaa/modules/settings/models/prayer_type.dart';
 import 'package:nedaa/utils/arabic_digits.dart';
-import 'package:nedaa/utils/custom_stream_duration.dart';
 import 'package:nedaa/utils/helper.dart';
 import 'package:nedaa/utils/timer.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:slide_countdown/slide_countdown.dart';
-import 'dart:ui' as ui;
 
 const timerDelay = Duration(seconds: 20);
 
@@ -103,21 +101,6 @@ class _PrayerTimerState extends State<PrayerTimer> {
       PrayerType.isha: t.isha,
     };
 
-    CustomStreamDuration streamDuration = CustomStreamDuration(
-      timerDuration ?? Duration.zero,
-      countUp: shouldCountUp,
-      onDone: () {
-        if (allTimerState != null) {
-          setState(() {
-            timerDuration = _getTimerDuration(
-                allTimerState, timerState?.shouldCountUp ?? false);
-            shouldCountUp = timerState?.shouldCountUp ?? false;
-            counterKey = UniqueKey();
-          });
-        }
-      },
-    );
-
     var formatted = DateFormat("hh:mm a", t.localeName);
     return GestureDetector(
         onTap: () {
@@ -173,24 +156,22 @@ class _PrayerTimerState extends State<PrayerTimer> {
                   (timerState == null || timerDuration == null)
                       ? Container()
                       : SlideCountdown(
-                          streamDuration: streamDuration,
+                          duration: timerDuration,
                           slideDirection: shouldCountUp
                               ? SlideDirection.up
                               : SlideDirection.down,
+                          countUpAtDuration: shouldCountUp,
+                          countUp: shouldCountUp,
+                          infinityCountUp: shouldCountUp,
                           key: counterKey,
-                          textStyle:
-                              Theme.of(context).textTheme.headlineSmall ??
-                                  const TextStyle(color: Colors.black),
+                          style: Theme.of(context).textTheme.headlineSmall ??
+                              const TextStyle(color: Colors.black),
                           decoration: BoxDecoration(
                             color: Colors.transparent,
                             borderRadius: BorderRadius.circular(8),
                           ),
                           digitsNumber:
                               t.localeName == 'ar' ? arabicDigits : null,
-                          textDirection:
-                              Directionality.of(context) == ui.TextDirection.ltr
-                                  ? ui.TextDirection.ltr
-                                  : ui.TextDirection.rtl,
                         ),
                   SizedBox(height: MediaQuery.of(context).size.height * 0.01),
                   Text(
