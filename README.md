@@ -6,7 +6,7 @@
   </a>
 </p>
 
-<p align="center">Prayer Times Altert</p>
+<p align="center">Prayer Times Alter</p>
 
 <p align="center"> 
   <a target="_blank" href="https://itunes.apple.com/us/app/nedaa-%D9%86%D8%AF%D8%A7%D8%A1/id1641552391">

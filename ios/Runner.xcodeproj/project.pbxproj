@@ -284,10 +284,10 @@
 				97C146EA1CF9000F007C117D /* Sources */,
 				97C146EB1CF9000F007C117D /* Frameworks */,
 				97C146EC1CF9000F007C117D /* Resources */,
+				353254E52A1998BE009C7397 /* Embed Foundation Extensions */,
 				9705A1C41CF9048500538489 /* Embed Frameworks */,
 				3B06AD1E1E4923F5004D2608 /* Thin Binary */,
 				C6C0A8E007672BCC8BFAE856 /* [CP] Embed Pods Frameworks */,
-				353254E52A1998BE009C7397 /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
@@ -306,7 +306,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 1430;
-				LastUpgradeCheck = 1300;
+				LastUpgradeCheck = 1510;
 				ORGANIZATIONNAME = "";
 				TargetAttributes = {
 					35ED90972A1E008D001D7EDF = {
