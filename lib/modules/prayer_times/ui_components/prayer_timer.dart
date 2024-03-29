@@ -161,6 +161,7 @@ class _PrayerTimerState extends State<PrayerTimer> {
                               ? SlideDirection.up
                               : SlideDirection.down,
                           countUpAtDuration: shouldCountUp,
+                          // TODO: Check if this is fixed. currently, SlideCountdown shows a wrong value when we count up
                           countUp: shouldCountUp,
                           infinityCountUp: shouldCountUp,
                           key: counterKey,
