@@ -29,8 +29,9 @@ class OptionsDialog<T> extends StatelessWidget {
     final EdgeInsets effectiveTitlePadding =
         titlePadding.resolve(textDirection);
 
-    final double paddingScaleFactor =
-        _paddingScaleFactor(MediaQuery.of(context).textScaleFactor);
+    const fontSize = 20.0;
+    final double paddingScaleFactor = _paddingScaleFactor(
+        MediaQuery.of(context).textScaler.scale(fontSize) / fontSize);
 
     var titleWidget = Padding(
       padding: EdgeInsets.only(
