@@ -3,13 +3,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:motion_toast/motion_toast.dart';
-import 'package:motion_toast/resources/arrays.dart';
 import 'package:nedaa/modules/prayer_times/bloc/prayer_times_bloc.dart';
 import 'package:nedaa/modules/settings/bloc/user_settings_bloc.dart';
 import 'package:nedaa/modules/settings/models/calculation_method.dart';
 import 'package:nedaa/modules/settings/models/user_location.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:nedaa/utils/services/rest_api_service.dart';
+import 'package:nedaa/services/rest_api_service.dart';
 import 'package:nedaa/widgets/general_dialog.dart';
 
 Future<bool> checkLocationServiceEnabled() async {
@@ -90,10 +89,11 @@ Future<UserLocation> updateUserLocation(BuildContext context, double latitude,
     double longitude, bool Function() isMounted) async {
   var t = AppLocalizations.of(context);
 
+  // Set the locale for the address translation
+  setLocaleIdentifier(t?.localeName ?? 'en');
   List<Placemark> placemarks = await placemarkFromCoordinates(
     latitude,
     longitude,
-    localeIdentifier: t!.localeName,
   );
   Placemark placemark = placemarks[0];
 
