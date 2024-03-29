@@ -148,14 +148,8 @@ class DBRepository {
         for (DayPrayerTimes prayerTime in prayerTimes) {
           await _savePrayerTimes(txn, DBDayPrayerTimes(prayerTime));
         }
-        // update the widget after updating the database
-        for (var name in iOSWidgetNames) {
-          await HomeWidget.updateWidget(
-            name: name,
-            iOSName: name,
-            androidName: 'NedaaWidget',
-          );
-        }
+
+        await _updateWidgets();
       });
     }
   }
@@ -198,6 +192,21 @@ class DBRepository {
   Future<void> close() async {
     if (db != null) {
       await db!.close();
+    }
+  }
+
+// Updates the widget after fetch parayer times
+  Future _updateWidgets() async {
+    // FIXME: currently we only have a widget for iOS
+    // so this will throw an exception on Android
+    if (!Platform.isIOS) return;
+
+    for (var name in iOSWidgetNames) {
+      await HomeWidget.updateWidget(
+        name: name,
+        iOSName: name,
+        androidName: 'NedaaWidget',
+      );
     }
   }
 }
