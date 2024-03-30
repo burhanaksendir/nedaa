@@ -14,6 +14,9 @@ jobs:
     # This job will run on macos virtual machine
     runs-on: macos-latest
     steps:
+    - uses: maxim-lobanov/setup-xcode@v1
+      with:
+        xcode-version: '15.1'
     
     
     - uses: actions/checkout@v3
