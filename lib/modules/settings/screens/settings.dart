@@ -39,10 +39,12 @@ class _SettingsState extends State<Settings> {
 
   _updateAddressTranslation(BuildContext context, Location currentUserLocation,
       String timezone, String language) async {
+    // Set the locale for the address translation
+    setLocaleIdentifier(language);
     Placemark placemark = await placemarkFromCoordinates(
-            currentUserLocation.latitude, currentUserLocation.longitude,
-            localeIdentifier: language)
-        .then((value) => value[0]);
+      currentUserLocation.latitude,
+      currentUserLocation.longitude,
+    ).then((value) => value[0]);
     if (!mounted) return;
 
     context.read<UserSettingsBloc>().add(
