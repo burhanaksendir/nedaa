@@ -20,7 +20,7 @@ jobs:
     # Setup Java environment in order to build the Android app.
     - uses: actions/setup-java@v4
       with:
-        java-version: '21'
+        java-version: '17'
         distribution: 'zulu'
 
    
