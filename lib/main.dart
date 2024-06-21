@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -120,7 +118,6 @@ void main() async {
     taskId,
     frequency: const Duration(days: 2),
   );
-  
 
   // Wait 0.5 seconds before removing the splash screen
   await Future.delayed(const Duration(milliseconds: 500));
