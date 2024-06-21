@@ -28,15 +28,14 @@ import 'package:workmanager/workmanager.dart';
 const taskId = 'io.nedaa.schedule';
 String appVersion = "";
 
+// This dispatcher is set up to execute the same task for both Android and iOS.
+// The task identified by 'taskId' will be executed whenever it is triggered.
 @pragma('vm:entry-point')
 void callbackDispatcher() {
   Workmanager().executeTask((task, inputData) async {
     try {
-      if (task == taskId && Platform.isAndroid) {
-        debugPrint('android task $task');
-        await _task();
-      } else if (task == Workmanager.iOSBackgroundTask) {
-        debugPrint('iOSBackgroundTask $task');
+      if (task == taskId) {
+        debugPrint('Executing scheduled task: $task');
         await _task();
       }
     } catch (e) {
@@ -114,13 +113,14 @@ void main() async {
           false // If enabled it will post a notification whenever the task is running. Handy for debugging tasks
       );
   await Workmanager().cancelAll();
-  if (Platform.isAndroid) {
-    Workmanager().registerPeriodicTask(
-      taskId,
-      taskId,
-      frequency: const Duration(days: 2),
-    );
-  }
+
+  // The periodic task registration for Android has been removed as the same task is now handled uniformly for both Android and iOS.
+  Workmanager().registerPeriodicTask(
+    taskId,
+    taskId,
+    frequency: const Duration(days: 2),
+  );
+  
 
   // Wait 0.5 seconds before removing the splash screen
   await Future.delayed(const Duration(milliseconds: 500));
