@@ -3,61 +3,79 @@ name: Flutter CI
 on:
   push:
     branches:
-    - master
+      - master
   pull_request:
     branches:
       - master
 
-    
 jobs:
-  build:
-    # This job will run on macos virtual machine
-    runs-on: macos-13
+  test-and-build-android:
+    # This job will run on an Ubuntu virtual machine
+    runs-on: ubuntu-latest
     steps:
-    - uses: maxim-lobanov/setup-xcode@v1
-      with:
-        xcode-version: '15.0.1'
-    
-    
-    - uses: actions/checkout@v3
-    # Setup Java environment in order to build the Android app.
-    - uses: actions/setup-java@v4
-      with:
-        java-version: '17'
-        distribution: 'zulu'
+      - uses: actions/checkout@v4
 
-   
-    # Setup the flutter environment.
-    - uses: subosito/flutter-action@v2
-      with:
-         flutter-version: '3.19.3' # you can also specify exact version of flutter
-         channel: 'stable'
-    
-    - run: flutter doctor -v
-    # Get flutter dependencies.
-    - run: flutter pub get
-    
-    # Check for any formatting issues in the code.
-    - run: dart format --set-exit-if-changed .
-    
-    # Statically analyze the Dart code for any errors.
-    - run: flutter analyze .
-    
-    # Run widget tests for our flutter project.
-    #- run: flutter test
-    
-    # Setup android keys for signing (dummpy keys to test signing and release build for android)
-    - name: create keystore
-      run: printf "welcome\nwelcome\nyes\nyes\nyes\nyes\nyes\nyes\nyes" | keytool -genkey -v -keystore ./android/test.jks -keyalg RSA -keysize 2048 -validity 10000 -alias nedaa-android -storetype JKS
-    - name: create key.properties
-      run: printf "storePassword=welcome\nkeyPassword=welcome\nkeyAlias=nedaa-android\nstoreFile=../test.jks" > ./android/key.properties
-    # Build apk.
-    - run: flutter build apk
-    # Build ipa.
-    - run: flutter build ios --release --no-codesign
-    
-    # Upload generated apk to the artifacts.
-    #- uses: actions/upload-artifact@v1
-     # with:
-      #  name: release-apk
-      #  path: build/app/outputs/apk/release/app-release.apk
+      # Setup Java environment in order to build the Android app.
+      - uses: actions/setup-java@v4
+        with:
+          java-version: "17"
+          distribution: "zulu"
+
+      # Setup the flutter environment.
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: "stable"
+          flutter-version-file: pubspec.yaml
+
+      - run: flutter doctor -v
+      # Get flutter dependencies.
+      - run: flutter pub get
+
+      # Check for any formatting issues in the code.
+      - run: dart format --set-exit-if-changed .
+
+      # Statically analyze the Dart code for any errors.
+      - run: flutter analyze .
+
+      # Run widget tests for our flutter project.
+      # - run: flutter test
+
+      # Setup android keys for signing (dummy keys to test signing and release build for android)
+      - name: create keystore
+        run: printf "welcome\nwelcome\nyes\nyes\nyes\nyes\nyes\nyes\nyes" | keytool -genkey -v -keystore ./android/test.jks -keyalg RSA -keysize 2048 -validity 10000 -alias nedaa-android -storetype JKS
+
+      - name: create key.properties
+        run: printf "storePassword=welcome\nkeyPassword=welcome\nkeyAlias=nedaa-android\nstoreFile=../test.jks" > ./android/key.properties
+
+      # Build apk.
+      - run: flutter build apk
+
+      # Upload generated apk to the artifacts.
+      # - uses: actions/upload-artifact@v1
+      #   with:
+      #     name: release-apk
+      #     path: build/app/outputs/apk/release/app-release.apk
+
+  build-ios:
+    needs: test-and-build-android
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v3
+
+      # Setup Xcode environment
+      - uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: "15.0.1"
+
+      # Setup the flutter environment.
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: "stable"
+          flutter-version-file: pubspec.yaml
+
+      - run: flutter doctor -v
+      # Get flutter dependencies.
+      - run: flutter pub get
+
+      # Build ipa.
+      - run: flutter build ios --release --no-codesign

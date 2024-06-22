@@ -129,7 +129,7 @@ class _PrayerTimerState extends State<PrayerTimer> {
             child: CircularPercentIndicator(
               addAutomaticKeepAlive: false,
               progressColor: Theme.of(context).colorScheme.primary,
-              backgroundColor: Theme.of(context).colorScheme.background,
+              backgroundColor: Theme.of(context).colorScheme.surface,
               radius: MediaQuery.of(context).size.width * 0.9 / 3.5,
               lineWidth: 3.5,
               // show the percentage only for the upcoming prayer
