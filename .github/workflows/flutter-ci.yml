@@ -70,8 +70,8 @@ jobs:
       # Setup the flutter environment.
       - uses: subosito/flutter-action@v2
         with:
-          flutter-version: "3.19.3" # you can also specify exact version of flutter
           channel: "stable"
+          flutter-version-file: pubspec.yaml
 
       - run: flutter doctor -v
       # Get flutter dependencies.
