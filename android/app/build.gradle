@@ -31,7 +31,7 @@ if (keystorePropertiesFile.exists()) {
 
 
 android {
-    compileSdkVersion 34
+    compileSdk 34
 
     compileOptions {
         coreLibraryDesugaringEnabled true
@@ -50,7 +50,7 @@ android {
 
     defaultConfig {
         applicationId "io.nedaa.nedaaApp"
-        minSdkVersion 19
+        minSdkVersion 21
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
@@ -68,17 +68,28 @@ android {
     }
 
     buildTypes {
+        debug {
+            minifyEnabled true
+        }
         release {
             // Signing with the debug keys for now, so `flutter run --release` works.
             signingConfig signingConfigs.release
         }
     }
-
-    lintOptions {
-        // FIXME: workaround for failing release builds, might be related to
-        //        changing the gradle version
+    namespace 'io.nedaa.nedaaApp'
+    lint {
         checkReleaseBuilds false
     }
+
+    buildFeatures {
+        compose true
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion '1.4.7'
+    }
+
+
 }
 
 flutter {
@@ -86,9 +97,16 @@ flutter {
 }
 
 dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.21"
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.21'
     // TODO: check why androidx crashes the app without the following dependencies:
     implementation 'androidx.window:window:1.0.0'
     implementation 'androidx.window:window-java:1.0.0'
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.5'
+
+    implementation 'androidx.work:work-runtime:2.8.1'
+    implementation 'androidx.work:work-runtime-ktx:2.8.1'
+    implementation 'androidx.glance:glance-appwidget:1.0.0'
+    implementation 'androidx.glance:glance-material:1.0.0'
+    implementation 'androidx.glance:glance-material3:1.0.0'
+    implementation 'androidx.compose.material3:material3:1.2.1'
 }
